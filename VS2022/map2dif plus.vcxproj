@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{CA4D37D5-5968-4F3A-9D56-06B21F9441D1}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.35004.147</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\../tools/out.VC143.DEBUG\</OutDir>
+    <IntDir>.\../tools/out.VC143.DEBUG/map2dif plus\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\../tools/out.VC143.RELEASE\</OutDir>
+    <IntDir>.\../tools/out.VC143.RELEASE/map2dif plus\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <TypeLibraryName>.\../tools/out.VC143.DEBUG/map2dif plus.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../engine;../lib/zlib;../lib/lungif;../lib/lpng;../lib/ljpeg;../lib/openal/win32;../tools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>TORQUE_DEBUG;TORQUE_NO_OGGVORBIS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <PrecompiledHeaderOutputFile>.\../tools/out.VC143.DEBUG/map2dif plus/map2dif plus.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\../tools/out.VC143.DEBUG/map2dif plus/</AssemblerListingLocation>
+      <ObjectFileName>.\../tools/out.VC143.DEBUG/map2dif plus/</ObjectFileName>
+      <ProgramDataBaseFileName>.\../tools/out.VC143.DEBUG/map2dif plus/</ProgramDataBaseFileName>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;WINMM.LIB;WSOCK32.LIB;ljpeg_DEBUG.lib;lpng_DEBUG.lib;lungif_DEBUG.lib;zlib_DEBUG.lib;engine_DEBUG.lib;Imm32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>../tools/map2dif_plus_DEBUG.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>../lib/out.VC143.DEBUG;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>LIBC;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\../tools/out.VC143.DEBUG/map2dif plus_DEBUG.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <TypeLibraryName>.\../tools/out.VC143.RELEASE/map2dif plus.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>../engine;../lib/zlib;../lib/lungif;../lib/lpng;../lib/ljpeg;../lib/openal/win32;../tools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>TORQUE_NO_OGGVORBIS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <PrecompiledHeaderOutputFile>.\../tools/out.VC143.RELEASE/map2dif plus/map2dif plus.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\../tools/out.VC143.RELEASE/map2dif plus/</AssemblerListingLocation>
+      <ObjectFileName>.\../tools/out.VC143.RELEASE/map2dif plus/</ObjectFileName>
+      <ProgramDataBaseFileName>.\../tools/out.VC143.RELEASE/map2dif plus/</ProgramDataBaseFileName>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>COMCTL32.LIB;COMDLG32.LIB;USER32.LIB;ADVAPI32.LIB;GDI32.LIB;WINMM.LIB;WSOCK32.LIB;ljpeg.lib;lpng.lib;lungif.lib;zlib.lib;engine.lib;Imm32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>../tools/map2dif_plus.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>../lib/out.VC143.RELEASE;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>LIBC;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\../tools/out.VC143.RELEASE/map2dif plus.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\tools\map2dif plus\bspNode.cc">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
+      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
+      <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </DebugInformationFormat>
+    </ClCompile>
+    <ClCompile Include="..\tools\map2dif plus\convert.cc" />
+    <ClCompile Include="..\tools\map2dif plus\createLightmaps.cc" />
+    <ClCompile Include="..\tools\map2dif plus\csgBrush.cc" />
+    <ClCompile Include="..\tools\map2dif plus\editFloorPlanRes.cc" />
+    <ClCompile Include="..\tools\map2dif plus\editGeometry.cc">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
+      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
+      <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </DebugInformationFormat>
+    </ClCompile>
+    <ClCompile Include="..\tools\map2dif plus\editInteriorRes.cc" />
+    <ClCompile Include="..\tools\map2dif plus\entityTypes.cc" />
+    <ClCompile Include="..\tools\map2dif plus\exportGeometry.cc">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
+      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreaded</RuntimeLibrary>
+      <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </DebugInformationFormat>
+    </ClCompile>
+    <ClCompile Include="..\tools\map2dif plus\lmapPacker.cc" />
+    <ClCompile Include="..\tools\map2dif plus\main.cc" />
+    <ClCompile Include="..\tools\map2dif plus\morianUtil.cc" />
+    <ClCompile Include="..\tools\map2dif plus\navGraph.cc" />
+    <ClCompile Include="vc7fix.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\tools\map2dif plus\bspNode.h" />
+    <ClInclude Include="..\tools\map2dif plus\convert.h" />
+    <ClInclude Include="..\tools\map2dif plus\createLightmaps.h" />
+    <ClInclude Include="..\tools\map2dif plus\csgBrush.h" />
+    <ClInclude Include="..\tools\map2dif plus\editFloorPlanRes.h" />
+    <ClInclude Include="..\tools\map2dif plus\editGeometry.h" />
+    <ClInclude Include="..\tools\map2dif plus\editInteriorRes.h" />
+    <ClInclude Include="..\tools\map2dif plus\entityTypes.h" />
+    <ClInclude Include="..\tools\map2dif plus\lmapPacker.h" />
+    <ClInclude Include="..\tools\map2dif plus\morianBasics.h" />
+    <ClInclude Include="..\tools\map2dif plus\morianGame.h" />
+    <ClInclude Include="..\tools\map2dif plus\morianUtil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="ljpeg.vcxproj">
+      <Project>{2b1eecaa-19cd-41cb-9b2b-87c6317ec1b2}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="lpng.vcxproj">
+      <Project>{d82fb876-bfd9-41de-9403-d13bdbe7fcb1}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="lungif.vcxproj">
+      <Project>{e42ab819-339b-48c8-ae28-605cf4f9fd34}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Torque Tool Lib.vcxproj">
+      <Project>{b0c44bd5-406d-4095-a5f6-2f36733014e7}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="zlib.vcxproj">
+      <Project>{1037e828-89d0-4b23-8055-b3197eb515aa}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

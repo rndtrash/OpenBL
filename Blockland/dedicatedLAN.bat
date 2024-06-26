@@ -1,0 +1,1 @@
+start blockland.exe -dedicatedLAN -mission base/data/missions/bedroom.mis

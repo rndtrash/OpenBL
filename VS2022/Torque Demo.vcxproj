@@ -1,0 +1,973 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{B1004AB2-F57B-4330-A303-6DB62C433C93}</ProjectGuid>
+    <RootNamespace>Torque Demo</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.35004.147</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\../engine/out.VC143.DEBUG\</OutDir>
+    <IntDir>.\../engine/out.VC143.DEBUG\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\../engine/out.VC143.RELEASE\</OutDir>
+    <IntDir>.\../engine/out.VC143.RELEASE\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <TypeLibraryName>.\../engine/out.VC143.DEBUG/Torque Demo.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../lib/xiph/include;../lib/SDL/include;../lib/directx8;../lib/vorbis/include;../lib/zlib;../lib/lungif;../lib/lpng;../lib/ljpeg;../lib/openal/win32;../engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>UNICODE;TORQUE_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <PrecompiledHeaderOutputFile>.\../engine/out.VC143.DEBUG/Torque Demo.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\../engine/out.VC143.DEBUG/</AssemblerListingLocation>
+      <ObjectFileName>.\../engine/out.VC143.DEBUG/</ObjectFileName>
+      <ProgramDataBaseFileName>.\../engine/out.VC143.DEBUG/</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>WINMM.LIB;WSOCK32.LIB;ljpeg_DEBUG.lib;lpng_DEBUG.lib;lungif_DEBUG.lib;zlib_DEBUG.lib;vfw32.lib;ogg_static.lib;theora_static.lib;vorbis_static.lib;Imm32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>../Blockland/torqueDemo_DEBUG.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>../lib/xiph/win32;../lib/SDL/win32;../lib/out.VC143.DEBUG;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>LIBC;LIBCD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\../engine/out.VC143.DEBUG/torqueDemo_DEBUG.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>false</GenerateMapFile>
+      <MapExports>false</MapExports>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <TypeLibraryName>.\../engine/out.VC143.RELEASE/Torque Demo.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>../lib/xiph/include;../lib/directx8;../lib/vorbis/include;../lib/zlib;../lib/lungif;../lib/lpng;../lib/ljpeg;../lib/openal/win32;../engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>UNICODE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <PrecompiledHeaderOutputFile>.\../engine/out.VC143.RELEASE/Torque Demo.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\../engine/out.VC143.RELEASE/</AssemblerListingLocation>
+      <ObjectFileName>.\../engine/out.VC143.RELEASE/</ObjectFileName>
+      <ProgramDataBaseFileName>.\../engine/out.VC143.RELEASE/</ProgramDataBaseFileName>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>WINMM.LIB;WSOCK32.LIB;ljpeg.lib;lpng.lib;lungif.lib;zlib.lib;vfw32.lib;ogg_static.lib;theora_static.lib;vorbis_static.lib;Imm32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>../Blockland/torqueDemo.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>../lib/xiph/win32;../lib/out.VC143.RELEASE;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>LIBC;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ProgramDatabaseFile>.\../engine/out.VC143.RELEASE/torqueDemo.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TorqueDemo.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\engine\audio\audio.cc" />
+    <ClCompile Include="..\engine\audio\audioBuffer.cc" />
+    <ClCompile Include="..\engine\audio\audioDataBlock.cc" />
+    <ClCompile Include="..\engine\audio\audioFunctions.cc" />
+    <ClCompile Include="..\engine\audio\audioStreamSourceFactory.cc" />
+    <ClCompile Include="..\engine\audio\oggMixedStreamSource.cc" />
+    <ClCompile Include="..\engine\audio\vorbisStream.cc" />
+    <ClCompile Include="..\engine\audio\vorbisStreamSource.cc" />
+    <ClCompile Include="..\engine\audio\wavStreamSource.cc" />
+    <ClCompile Include="..\engine\collision\abstractPolyList.cc" />
+    <ClCompile Include="..\engine\collision\boxConvex.cc" />
+    <ClCompile Include="..\engine\collision\clippedPolyList.cc" />
+    <ClCompile Include="..\engine\collision\concretePolyList.cc" />
+    <ClCompile Include="..\engine\collision\convex.cc" />
+    <ClCompile Include="..\engine\collision\convexBrush.cc" />
+    <ClCompile Include="..\engine\collision\depthSortList.cc" />
+    <ClCompile Include="..\engine\collision\earlyOutPolyList.cc" />
+    <ClCompile Include="..\engine\collision\extrudedPolyList.cc" />
+    <ClCompile Include="..\engine\collision\gjk.cc" />
+    <ClCompile Include="..\engine\collision\optimizedPolyList.cc" />
+    <ClCompile Include="..\engine\collision\planeExtractor.cc" />
+    <ClCompile Include="..\engine\collision\polyhedron.cc" />
+    <ClCompile Include="..\engine\collision\polytope.cc" />
+    <ClCompile Include="..\engine\console\astAlloc.cc" />
+    <ClCompile Include="..\engine\console\astNodes.cc" />
+    <ClCompile Include="..\engine\console\BASgram.cc" />
+    <ClCompile Include="..\engine\console\BASscan.cc" />
+    <ClCompile Include="..\engine\console\CMDgram.cc" />
+    <ClCompile Include="..\engine\console\CMDscan.cc" />
+    <ClCompile Include="..\engine\console\codeBlock.cc" />
+    <ClCompile Include="..\engine\console\compiledEval.cc" />
+    <ClCompile Include="..\engine\console\compiler.cc" />
+    <ClCompile Include="..\engine\console\console.cc" />
+    <ClCompile Include="..\engine\console\consoleDoc.cc" />
+    <ClCompile Include="..\engine\console\consoleFunctions.cc" />
+    <ClCompile Include="..\engine\console\consoleInternal.cc" />
+    <ClCompile Include="..\engine\console\consoleLogger.cc" />
+    <ClCompile Include="..\engine\console\consoleObject.cc" />
+    <ClCompile Include="..\engine\console\consoleParser.cc" />
+    <ClCompile Include="..\engine\console\consoleTypes.cc" />
+    <ClCompile Include="..\engine\console\dynamicTypes.cc" />
+    <ClCompile Include="..\engine\console\scriptObject.cc" />
+    <ClCompile Include="..\engine\console\simBase.cc" />
+    <ClCompile Include="..\engine\console\simDictionary.cc" />
+    <ClCompile Include="..\engine\console\simManager.cc" />
+    <ClCompile Include="..\engine\console\stringStack.cc" />
+    <ClCompile Include="..\engine\console\telnetConsole.cc" />
+    <ClCompile Include="..\engine\console\telnetDebugger.cc" />
+    <ClCompile Include="..\engine\console\typeValidators.cc" />
+    <ClCompile Include="..\engine\core\bitRender.cc" />
+    <ClCompile Include="..\engine\core\bitStream.cc" />
+    <ClCompile Include="..\engine\core\bitTables.cc" />
+    <ClCompile Include="..\engine\core\chunkFile.cc" />
+    <ClCompile Include="..\engine\core\crc.cc" />
+    <ClCompile Include="..\engine\core\dataChunker.cc" />
+    <ClCompile Include="..\engine\core\dnet.cc" />
+    <ClCompile Include="..\engine\core\fileObject.cc" />
+    <ClCompile Include="..\engine\core\fileStream.cc" />
+    <ClCompile Include="..\engine\core\filterStream.cc" />
+    <ClCompile Include="..\engine\core\findMatch.cc" />
+    <ClCompile Include="..\engine\core\frameAllocator.cc" />
+    <ClCompile Include="..\engine\core\idGenerator.cc" />
+    <ClCompile Include="..\engine\core\iTickable.cc" />
+    <ClCompile Include="..\engine\core\memStream.cc" />
+    <ClCompile Include="..\engine\core\nStream.cc" />
+    <ClCompile Include="..\engine\core\nTypes.cc" />
+    <ClCompile Include="..\engine\core\resDictionary.cc" />
+    <ClCompile Include="..\engine\core\resizeStream.cc" />
+    <ClCompile Include="..\engine\core\resManager.cc" />
+    <ClCompile Include="..\engine\core\stringBuffer.cc" />
+    <ClCompile Include="..\engine\core\stringTable.cc" />
+    <ClCompile Include="..\engine\core\theoraPlayer.cc" />
+    <ClCompile Include="..\engine\core\tokenizer.cc" />
+    <ClCompile Include="..\engine\core\tVector.cc" />
+    <ClCompile Include="..\engine\core\unicode.cc" />
+    <ClCompile Include="..\engine\core\zipAggregate.cc" />
+    <ClCompile Include="..\engine\core\zipHeaders.cc" />
+    <ClCompile Include="..\engine\core\zipSubStream.cc" />
+    <ClCompile Include="..\engine\dgl\bitmapBm8.cc" />
+    <ClCompile Include="..\engine\dgl\bitmapBmp.cc" />
+    <ClCompile Include="..\engine\dgl\bitmapGif.cc" />
+    <ClCompile Include="..\engine\dgl\bitmapJpeg.cc" />
+    <ClCompile Include="..\engine\dgl\bitmapPng.cc" />
+    <ClCompile Include="..\engine\dgl\dgl.cc" />
+    <ClCompile Include="..\engine\dgl\dglMatrix.cc" />
+    <ClCompile Include="..\engine\dgl\gBitmap.cc" />
+    <ClCompile Include="..\engine\dgl\gDynamicTexture.cc" />
+    <ClCompile Include="..\engine\dgl\gFont.cc" />
+    <ClCompile Include="..\engine\dgl\gNewFont.cc" />
+    <ClCompile Include="..\engine\dgl\gPalette.cc" />
+    <ClCompile Include="..\engine\dgl\gTexManager.cc" />
+    <ClCompile Include="..\engine\dgl\gVectorField.cc" />
+    <ClCompile Include="..\engine\dgl\lensFlare.cc" />
+    <ClCompile Include="..\engine\dgl\materialList.cc" />
+    <ClCompile Include="..\engine\dgl\materialPropertyMap.cc" />
+    <ClCompile Include="..\engine\dgl\splineUtil.cc" />
+    <ClCompile Include="..\engine\dgl\stripCache.cc" />
+    <ClCompile Include="..\engine\editor\creator.cc" />
+    <ClCompile Include="..\engine\editor\editor.cc" />
+    <ClCompile Include="..\engine\editor\editTSCtrl.cc" />
+    <ClCompile Include="..\engine\editor\guiTerrPreviewCtrl.cc" />
+    <ClCompile Include="..\engine\editor\missionAreaEditor.cc" />
+    <ClCompile Include="..\engine\editor\terraformer.cc" />
+    <ClCompile Include="..\engine\editor\terraformerNoise.cc" />
+    <ClCompile Include="..\engine\editor\terraformerTexture.cc" />
+    <ClCompile Include="..\engine\editor\terrainActions.cc" />
+    <ClCompile Include="..\engine\editor\terrainEditor.cc" />
+    <ClCompile Include="..\engine\editor\worldEditor.cc" />
+    <ClCompile Include="..\engine\game\aiConnection.cc" />
+    <ClCompile Include="..\engine\game\aiPlayer.cc" />
+    <ClCompile Include="..\engine\game\aiWheeledVehicle.cc" />
+    <ClCompile Include="..\engine\game\ambientAudioManager.cc" />
+    <ClCompile Include="..\engine\game\audioEmitter.cc" />
+    <ClCompile Include="..\engine\game\badWordFilter.cc" />
+    <ClCompile Include="..\engine\game\banList.cc" />
+    <ClCompile Include="..\engine\game\camera.cc" />
+    <ClCompile Include="..\engine\game\cameraSpline.cc" />
+    <ClCompile Include="..\engine\game\collisionTest.cc" />
+    <ClCompile Include="..\engine\game\debris.cc" />
+    <ClCompile Include="..\engine\game\debugView.cc" />
+    <ClCompile Include="..\engine\game\fireballAtmosphere.cc" />
+    <ClCompile Include="..\engine\game\fps\guiClockHud.cc" />
+    <ClCompile Include="..\engine\game\fps\guiCrossHairHud.cc" />
+    <ClCompile Include="..\engine\game\fps\guiHealthBarHud.cc" />
+    <ClCompile Include="..\engine\game\fps\guiShapeNameHud.cc" />
+    <ClCompile Include="..\engine\game\fx\cameraFXMgr.cc" />
+    <ClCompile Include="..\engine\game\fx\explosion.cc" />
+    <ClCompile Include="..\engine\game\fx\fxFoliageReplicator.cc" />
+    <ClCompile Include="..\engine\game\fx\fxLight.cc" />
+    <ClCompile Include="..\engine\game\fx\fxShapeReplicator.cc" />
+    <ClCompile Include="..\engine\game\fx\fxSunLight.cc" />
+    <ClCompile Include="..\engine\game\fx\lightning.cc" />
+    <ClCompile Include="..\engine\game\fx\particleEmitter.cc" />
+    <ClCompile Include="..\engine\game\fx\particleEngine.cc" />
+    <ClCompile Include="..\engine\game\fx\precipitation.cc" />
+    <ClCompile Include="..\engine\game\fx\splash.cc" />
+    <ClCompile Include="..\engine\game\fx\underLava.cc" />
+    <ClCompile Include="..\engine\game\fx\weatherLightning.cpp" />
+    <ClCompile Include="..\engine\game\game.cc" />
+    <ClCompile Include="..\engine\game\gameBase.cc" />
+    <ClCompile Include="..\engine\game\gameConnection.cc" />
+    <ClCompile Include="..\engine\game\gameConnectionEvents.cc" />
+    <ClCompile Include="..\engine\game\gameConnectionMoves.cc" />
+    <ClCompile Include="..\engine\game\gameFunctions.cc" />
+    <ClCompile Include="..\engine\game\gameProcess.cc" />
+    <ClCompile Include="..\engine\game\gameTSCtrl.cc" />
+    <ClCompile Include="..\engine\game\guiNoMouseCtrl.cc" />
+    <ClCompile Include="..\engine\game\guiPlayerView.cc" />
+    <ClCompile Include="..\engine\game\item.cc" />
+    <ClCompile Include="..\engine\game\main.cc" />
+    <ClCompile Include="..\engine\game\missionArea.cc" />
+    <ClCompile Include="..\engine\game\missionMarker.cc" />
+    <ClCompile Include="..\engine\game\net\httpObject.cc" />
+    <ClCompile Include="..\engine\game\net\net.cc" />
+    <ClCompile Include="..\engine\game\net\netTest.cc" />
+    <ClCompile Include="..\engine\game\net\serverQuery.cc" />
+    <ClCompile Include="..\engine\game\net\tcpObject.cc" />
+    <ClCompile Include="..\engine\game\pathCamera.cc" />
+    <ClCompile Include="..\engine\game\physicalZone.cc" />
+    <ClCompile Include="..\engine\game\player.cc" />
+    <ClCompile Include="..\engine\game\projectile.cc" />
+    <ClCompile Include="..\engine\game\rigid.cc" />
+    <ClCompile Include="..\engine\game\scopeAlwaysShape.cc" />
+    <ClCompile Include="..\engine\game\shadow.cc" />
+    <ClCompile Include="..\engine\game\shapeBase.cc" />
+    <ClCompile Include="..\engine\game\shapeCollision.cc" />
+    <ClCompile Include="..\engine\game\shapeImage.cc" />
+    <ClCompile Include="..\engine\game\showTSShape.cc" />
+    <ClCompile Include="..\engine\game\sphere.cc" />
+    <ClCompile Include="..\engine\game\staticShape.cc" />
+    <ClCompile Include="..\engine\game\trigger.cc" />
+    <ClCompile Include="..\engine\game\tsStatic.cc" />
+    <ClCompile Include="..\engine\game\vehicles\flyingVehicle.cc" />
+    <ClCompile Include="..\engine\game\vehicles\guiSpeedometer.cc" />
+    <ClCompile Include="..\engine\game\vehicles\hoverVehicle.cc" />
+    <ClCompile Include="..\engine\game\vehicles\vehicle.cc" />
+    <ClCompile Include="..\engine\game\vehicles\vehicleBlocker.cc" />
+    <ClCompile Include="..\engine\game\vehicles\wheeledVehicle.cc" />
+    <ClCompile Include="..\engine\game\version.cc" />
+    <ClCompile Include="..\engine\gui\containers\guiCtrlArrayCtrl.cc" />
+    <ClCompile Include="..\engine\gui\containers\guiFrameCtrl.cc" />
+    <ClCompile Include="..\engine\gui\containers\guiPaneCtrl.cc" />
+    <ClCompile Include="..\engine\gui\containers\guiScrollCtrl.cc" />
+    <ClCompile Include="..\engine\gui\containers\guiStackCtrl.cc" />
+    <ClCompile Include="..\engine\gui\containers\guiTabBookCtrl.cc" />
+    <ClCompile Include="..\engine\gui\containers\guiWindowCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiBackgroundCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiBitmapBorderCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiBitmapButtonCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiBitmapCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiBorderButton.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiButtonBaseCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiButtonCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiCheckBoxCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiColorPicker.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiConsole.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiConsoleEditCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiConsoleTextCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiDirectoryFileListCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiDirectoryTreeCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiMLTextCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiMLTextEditCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiPopUpCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiRadioCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiSliderCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\GuiTabPageCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiTextCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiTextEditCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiTextEditSliderCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiTextListCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiTreeViewCtrl.cc" />
+    <ClCompile Include="..\engine\gui\core\guiArrayCtrl.cc" />
+    <ClCompile Include="..\engine\gui\core\guiCanvas.cc" />
+    <ClCompile Include="..\engine\gui\core\guiControl.cc" />
+    <ClCompile Include="..\engine\gui\core\guiDefaultControlRender.cc" />
+    <ClCompile Include="..\engine\gui\core\guiTSControl.cc" />
+    <ClCompile Include="..\engine\gui\core\guiTypes.cc" />
+    <ClCompile Include="..\engine\gui\editor\guiControlListPopup.cc" />
+    <ClCompile Include="..\engine\gui\editor\guiDebugger.cc" />
+    <ClCompile Include="..\engine\gui\editor\guiEditCtrl.cc" />
+    <ClCompile Include="..\engine\gui\editor\guiFilterCtrl.cc" />
+    <ClCompile Include="..\engine\gui\editor\guiGraphCtrl.cc" />
+    <ClCompile Include="..\engine\gui\editor\guiInspector.cc" />
+    <ClCompile Include="..\engine\gui\editor\guiInspectorTypes.cc" />
+    <ClCompile Include="..\engine\gui\editor\guiMenuBar.cc" />
+    <ClCompile Include="..\engine\gui\game\guiAviBitmapCtrl.cc" />
+    <ClCompile Include="..\engine\gui\game\guiChunkedBitmapCtrl.cc" />
+    <ClCompile Include="..\engine\gui\game\guiFadeinBitmapCtrl.cc" />
+    <ClCompile Include="..\engine\gui\game\guiMessageVectorCtrl.cc" />
+    <ClCompile Include="..\engine\gui\game\guiProgressCtrl.cc" />
+    <ClCompile Include="..\engine\gui\shiny\guiEffectCanvas.cc" />
+    <ClCompile Include="..\engine\gui\shiny\guiTheoraCtrl.cc" />
+    <ClCompile Include="..\engine\gui\shiny\guiTickCtrl.cc" />
+    <ClCompile Include="..\engine\gui\utility\guiBubbleTextCtrl.cc" />
+    <ClCompile Include="..\engine\gui\utility\guiInputCtrl.cc" />
+    <ClCompile Include="..\engine\gui\utility\guiMouseEventCtrl.cc" />
+    <ClCompile Include="..\engine\gui\utility\guiTransitionCtrl.cc" />
+    <ClCompile Include="..\engine\gui\utility\messageVector.cc" />
+    <ClCompile Include="..\engine\i18n\i18n.cc" />
+    <ClCompile Include="..\engine\i18n\lang.cc" />
+    <ClCompile Include="..\engine\interior\floorPlanRes.cc" />
+    <ClCompile Include="..\engine\interior\forceField.cc" />
+    <ClCompile Include="..\engine\interior\interior.cc" />
+    <ClCompile Include="..\engine\interior\interiorCollision.cc" />
+    <ClCompile Include="..\engine\interior\interiorDebug.cc" />
+    <ClCompile Include="..\engine\interior\interiorInstance.cc" />
+    <ClCompile Include="..\engine\interior\interiorIO.cc" />
+    <ClCompile Include="..\engine\interior\interiorLightAnim.cc" />
+    <ClCompile Include="..\engine\interior\interiorLMManager.cc" />
+    <ClCompile Include="..\engine\interior\interiorMap.cc" />
+    <ClCompile Include="..\engine\interior\interiorMapRes.cc" />
+    <ClCompile Include="..\engine\interior\interiorRender.cc" />
+    <ClCompile Include="..\engine\interior\interiorRes.cc" />
+    <ClCompile Include="..\engine\interior\interiorResObjects.cc" />
+    <ClCompile Include="..\engine\interior\interiorSubObject.cc" />
+    <ClCompile Include="..\engine\interior\lightUpdateGrouper.cc" />
+    <ClCompile Include="..\engine\interior\mirrorSubObject.cc" />
+    <ClCompile Include="..\engine\interior\pathedInterior.cc" />
+    <ClCompile Include="..\engine\math\mathTypes.cc" />
+    <ClCompile Include="..\engine\math\mathUtils.cc" />
+    <ClCompile Include="..\engine\math\mBox.cc" />
+    <ClCompile Include="..\engine\math\mConsoleFunctions.cc" />
+    <ClCompile Include="..\engine\math\mMathAMD.cc" />
+    <ClCompile Include="..\engine\math\mMathFn.cc" />
+    <ClCompile Include="..\engine\math\mMathSSE.cc" />
+    <ClCompile Include="..\engine\math\mMath_C.cc" />
+    <ClCompile Include="..\engine\math\mMatrix.cc" />
+    <ClCompile Include="..\engine\math\mPlaneTransformer.cc" />
+    <ClCompile Include="..\engine\math\mQuadPatch.cc" />
+    <ClCompile Include="..\engine\math\mQuat.cc" />
+    <ClCompile Include="..\engine\math\mRandom.cc" />
+    <ClCompile Include="..\engine\math\mSolver.cc" />
+    <ClCompile Include="..\engine\math\mSplinePatch.cc" />
+    <ClCompile Include="..\engine\platformWin32\winAsmBlit.cc" />
+    <ClCompile Include="..\engine\platformWin32\winConsole.cc" />
+    <ClCompile Include="..\engine\platformWin32\winCPUInfo.cc" />
+    <ClCompile Include="..\engine\platformWin32\winD3DVideo.cc" />
+    <ClCompile Include="..\engine\platformWin32\winDInputDevice.cc" />
+    <ClCompile Include="..\engine\platformWin32\winDirectInput.cc" />
+    <ClCompile Include="..\engine\platformWin32\winFileio.cc" />
+    <ClCompile Include="..\engine\platformWin32\winFont.cc" />
+    <ClCompile Include="..\engine\platformWin32\winGL.cc" />
+    <ClCompile Include="..\engine\platformWin32\winGLSpecial.cc" />
+    <ClCompile Include="..\engine\platformWin32\winInput.cc" />
+    <ClCompile Include="..\engine\platformWin32\winMath.cc" />
+    <ClCompile Include="..\engine\platformWin32\winMath_ASM.cc" />
+    <ClCompile Include="..\engine\platformWin32\winMemory.cc" />
+    <ClCompile Include="..\engine\platformWin32\winMutex.cc" />
+    <ClCompile Include="..\engine\platformWin32\winNet.cc" />
+    <ClCompile Include="..\engine\platformWin32\winOGLVideo.cc" />
+    <ClCompile Include="..\engine\platformWin32\winOpenAL.cc" />
+    <ClCompile Include="..\engine\platformWin32\winProcessControl.cc" />
+    <ClCompile Include="..\engine\platformWin32\winRedbook.cc" />
+    <ClCompile Include="..\engine\platformWin32\winSemaphore.cc" />
+    <ClCompile Include="..\engine\platformWin32\winStrings.cc" />
+    <ClCompile Include="..\engine\platformWin32\winThread.cc" />
+    <ClCompile Include="..\engine\platformWin32\winTime.cc" />
+    <ClCompile Include="..\engine\platformWin32\winV2Video.cc" />
+    <ClCompile Include="..\engine\platformWin32\winWindow.cc" />
+    <ClCompile Include="..\engine\platform\gameInterface.cc" />
+    <ClCompile Include="..\engine\platform\platform.cc" />
+    <ClCompile Include="..\engine\platform\platformAssert.cc" />
+    <ClCompile Include="..\engine\platform\platformCPU.cc" />
+    <ClCompile Include="..\engine\platform\platformFileIO.cc" />
+    <ClCompile Include="..\engine\platform\platformMemory.cc" />
+    <ClCompile Include="..\engine\platform\platformRedBook.cc" />
+    <ClCompile Include="..\engine\platform\platformString.cc" />
+    <ClCompile Include="..\engine\platform\platformVideo.cc" />
+    <ClCompile Include="..\engine\platform\profiler.cc" />
+    <ClCompile Include="..\engine\sceneGraph\detailManager.cc" />
+    <ClCompile Include="..\engine\sceneGraph\lightManager.cc" />
+    <ClCompile Include="..\engine\sceneGraph\sceneGraph.cc" />
+    <ClCompile Include="..\engine\sceneGraph\sceneLighting.cc" />
+    <ClCompile Include="..\engine\sceneGraph\sceneRoot.cc" />
+    <ClCompile Include="..\engine\sceneGraph\sceneState.cc" />
+    <ClCompile Include="..\engine\sceneGraph\sceneTraversal.cc" />
+    <ClCompile Include="..\engine\sceneGraph\sgUtil.cc" />
+    <ClCompile Include="..\engine\sceneGraph\shadowVolumeBSP.cc" />
+    <ClCompile Include="..\engine\sceneGraph\windingClipper.cc" />
+    <ClCompile Include="..\engine\sim\actionMap.cc" />
+    <ClCompile Include="..\engine\sim\connectionStringTable.cc" />
+    <ClCompile Include="..\engine\sim\decalManager.cc" />
+    <ClCompile Include="..\engine\sim\netConnection.cc" />
+    <ClCompile Include="..\engine\sim\netDownload.cc" />
+    <ClCompile Include="..\engine\sim\netEvent.cc" />
+    <ClCompile Include="..\engine\sim\netGhost.cc" />
+    <ClCompile Include="..\engine\sim\netInterface.cc" />
+    <ClCompile Include="..\engine\sim\netObject.cc" />
+    <ClCompile Include="..\engine\sim\netStringTable.cc" />
+    <ClCompile Include="..\engine\sim\pathManager.cc" />
+    <ClCompile Include="..\engine\sim\sceneObject.cc" />
+    <ClCompile Include="..\engine\sim\simPath.cc" />
+    <ClCompile Include="..\engine\terrain\blender.cc" />
+    <ClCompile Include="..\engine\terrain\bvQuadTree.cc" />
+    <ClCompile Include="..\engine\terrain\fluidQuadTree.cc" />
+    <ClCompile Include="..\engine\terrain\fluidRender.cc" />
+    <ClCompile Include="..\engine\terrain\fluidSupport.cc" />
+    <ClCompile Include="..\engine\terrain\sky.cc" />
+    <ClCompile Include="..\engine\terrain\sun.cc" />
+    <ClCompile Include="..\engine\terrain\terrCollision.cc" />
+    <ClCompile Include="..\engine\terrain\terrData.cc" />
+    <ClCompile Include="..\engine\terrain\terrLighting.cc" />
+    <ClCompile Include="..\engine\terrain\terrRender.cc" />
+    <ClCompile Include="..\engine\terrain\waterBlock.cc" />
+    <ClCompile Include="..\engine\ts\tsAnimate.cc" />
+    <ClCompile Include="..\engine\ts\tsCollision.cc" />
+    <ClCompile Include="..\engine\ts\tsDecal.cc" />
+    <ClCompile Include="..\engine\ts\tsDump.cc" />
+    <ClCompile Include="..\engine\ts\tsIntegerSet.cc" />
+    <ClCompile Include="..\engine\ts\tsLastDetail.cc" />
+    <ClCompile Include="..\engine\ts\tsMaterialList.cc" />
+    <ClCompile Include="..\engine\ts\tsMesh.cc" />
+    <ClCompile Include="..\engine\ts\tsPartInstance.cc" />
+    <ClCompile Include="..\engine\ts\tsShape.cc" />
+    <ClCompile Include="..\engine\ts\tsShapeAlloc.cc" />
+    <ClCompile Include="..\engine\ts\tsShapeConstruct.cc" />
+    <ClCompile Include="..\engine\ts\tsShapeInstance.cc" />
+    <ClCompile Include="..\engine\ts\tsShapeOldRead.cc" />
+    <ClCompile Include="..\engine\ts\tsSortedMesh.cc" />
+    <ClCompile Include="..\engine\ts\tsThread.cc" />
+    <ClCompile Include="..\engine\ts\tsTransform.cc" />
+    <ClCompile Include="..\engine\util\frustrumCuller.cpp" />
+    <ClCompile Include="..\engine\util\quadTreeTracer.cpp" />
+    <ClCompile Include="..\engine\util\rectClipper.cpp" />
+    <ClCompile Include="..\engine\util\triBoxCheck.cpp" />
+    <ClCompile Include="vc7fix.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\engine\audio\audio.h" />
+    <ClInclude Include="..\engine\audio\audioBuffer.h" />
+    <ClInclude Include="..\engine\audio\audioDataBlock.h" />
+    <ClInclude Include="..\engine\audio\audioStreamSource.h" />
+    <ClInclude Include="..\engine\audio\audioStreamSourceFactory.h" />
+    <ClInclude Include="..\engine\audio\oggMixedStreamSource.h" />
+    <ClInclude Include="..\engine\audio\vorbisStream.h" />
+    <ClInclude Include="..\engine\audio\vorbisStreamSource.h" />
+    <ClInclude Include="..\engine\audio\wavStreamSource.h" />
+    <ClInclude Include="..\engine\collision\abstractPolyList.h" />
+    <ClInclude Include="..\engine\collision\boxConvex.h" />
+    <ClInclude Include="..\engine\collision\clippedPolyList.h" />
+    <ClInclude Include="..\engine\collision\collision.h" />
+    <ClInclude Include="..\engine\collision\concretePolyList.h" />
+    <ClInclude Include="..\engine\collision\convex.h" />
+    <ClInclude Include="..\engine\collision\convexBrush.h" />
+    <ClInclude Include="..\engine\collision\depthSortList.h" />
+    <ClInclude Include="..\engine\collision\earlyOutPolyList.h" />
+    <ClInclude Include="..\engine\collision\extrudedPolyList.h" />
+    <ClInclude Include="..\engine\collision\gjk.h" />
+    <ClInclude Include="..\engine\collision\optimizedPolyList.h" />
+    <ClInclude Include="..\engine\collision\planeExtractor.h" />
+    <ClInclude Include="..\engine\collision\polyhedron.h" />
+    <ClInclude Include="..\engine\collision\polytope.h" />
+    <ClInclude Include="..\engine\console\ast.h" />
+    <ClInclude Include="..\engine\console\basgram.h" />
+    <ClInclude Include="..\engine\console\cmdgram.h" />
+    <ClInclude Include="..\engine\console\codeBlock.h" />
+    <ClInclude Include="..\engine\console\compiler.h" />
+    <ClInclude Include="..\engine\console\console.h" />
+    <ClInclude Include="..\engine\console\consoleInternal.h" />
+    <ClInclude Include="..\engine\console\consoleLogger.h" />
+    <ClInclude Include="..\engine\console\consoleObject.h" />
+    <ClInclude Include="..\engine\console\consoleParser.h" />
+    <ClInclude Include="..\engine\console\consoleTypes.h" />
+    <ClInclude Include="..\engine\console\dynamicTypes.h" />
+    <ClInclude Include="..\engine\console\objectTypes.h" />
+    <ClInclude Include="..\engine\console\simBase.h" />
+    <ClInclude Include="..\engine\console\simDictionary.h" />
+    <ClInclude Include="..\engine\console\stringStack.h" />
+    <ClInclude Include="..\engine\console\telnetConsole.h" />
+    <ClInclude Include="..\engine\console\telnetDebugger.h" />
+    <ClInclude Include="..\engine\console\typeValidators.h" />
+    <ClInclude Include="..\engine\core\bitMatrix.h" />
+    <ClInclude Include="..\engine\core\bitRender.h" />
+    <ClInclude Include="..\engine\core\bitSet.h" />
+    <ClInclude Include="..\engine\core\bitStream.h" />
+    <ClInclude Include="..\engine\core\bitTables.h" />
+    <ClInclude Include="..\engine\core\bitVector.h" />
+    <ClInclude Include="..\engine\core\bitVectorW.h" />
+    <ClInclude Include="..\engine\core\chunkFile.h" />
+    <ClInclude Include="..\engine\core\color.h" />
+    <ClInclude Include="..\engine\core\coreRes.h" />
+    <ClInclude Include="..\engine\core\crc.h" />
+    <ClInclude Include="..\engine\core\dataChunker.h" />
+    <ClInclude Include="..\engine\core\dnet.h" />
+    <ClInclude Include="..\engine\core\fileio.h" />
+    <ClInclude Include="..\engine\core\fileObject.h" />
+    <ClInclude Include="..\engine\core\fileStream.h" />
+    <ClInclude Include="..\engine\core\filterStream.h" />
+    <ClInclude Include="..\engine\core\findMatch.h" />
+    <ClInclude Include="..\engine\core\frameAllocator.h" />
+    <ClInclude Include="..\engine\core\idGenerator.h" />
+    <ClInclude Include="..\engine\core\iTickable.h" />
+    <ClInclude Include="..\engine\core\llist.h" />
+    <ClInclude Include="..\engine\core\memstream.h" />
+    <ClInclude Include="..\engine\core\polyList.h" />
+    <ClInclude Include="..\engine\core\realComp.h" />
+    <ClInclude Include="..\engine\core\resizeStream.h" />
+    <ClInclude Include="..\engine\core\resManager.h" />
+    <ClInclude Include="..\engine\core\stream.h" />
+    <ClInclude Include="..\engine\core\stringBuffer.h" />
+    <ClInclude Include="..\engine\core\stringTable.h" />
+    <ClInclude Include="..\engine\core\tAlgorithm.h" />
+    <ClInclude Include="..\engine\core\theoraPlayer.h" />
+    <ClInclude Include="..\engine\core\tokenizer.h" />
+    <ClInclude Include="..\engine\core\torqueConfig.h" />
+    <ClInclude Include="..\engine\core\tSparseArray.h" />
+    <ClInclude Include="..\engine\core\tVector.h" />
+    <ClInclude Include="..\engine\core\unicode.h" />
+    <ClInclude Include="..\engine\core\zipAggregate.h" />
+    <ClInclude Include="..\engine\core\zipHeaders.h" />
+    <ClInclude Include="..\engine\core\zipSubStream.h" />
+    <ClInclude Include="..\engine\dgl\dgl.h" />
+    <ClInclude Include="..\engine\dgl\gBitmap.h" />
+    <ClInclude Include="..\engine\dgl\gChunkedTexManager.h" />
+    <ClInclude Include="..\engine\dgl\gDynamicTexture.h" />
+    <ClInclude Include="..\engine\dgl\gFont.h" />
+    <ClInclude Include="..\engine\dgl\gNewFont.h" />
+    <ClInclude Include="..\engine\dgl\gPalette.h" />
+    <ClInclude Include="..\engine\dgl\gTexManager.h" />
+    <ClInclude Include="..\engine\dgl\gVectorField.h" />
+    <ClInclude Include="..\engine\dgl\lensFlare.h" />
+    <ClInclude Include="..\engine\dgl\materialList.h" />
+    <ClInclude Include="..\engine\dgl\materialPropertyMap.h" />
+    <ClInclude Include="..\engine\dgl\splineUtil.h" />
+    <ClInclude Include="..\engine\dgl\stripCache.h" />
+    <ClInclude Include="..\engine\editor\creator.h" />
+    <ClInclude Include="..\engine\editor\editor.h" />
+    <ClInclude Include="..\engine\editor\editTSCtrl.h" />
+    <ClInclude Include="..\engine\editor\guiTerrPreviewCtrl.h" />
+    <ClInclude Include="..\engine\editor\missionAreaEditor.h" />
+    <ClInclude Include="..\engine\editor\terraformer.h" />
+    <ClInclude Include="..\engine\editor\terraformerNoise.h" />
+    <ClInclude Include="..\engine\editor\terrainActions.h" />
+    <ClInclude Include="..\engine\editor\terrainEditor.h" />
+    <ClInclude Include="..\engine\editor\worldEditor.h" />
+    <ClInclude Include="..\engine\game\aiConnection.h" />
+    <ClInclude Include="..\engine\game\aiPlayer.h" />
+    <ClInclude Include="..\engine\game\aiWheeledVehicle.h" />
+    <ClInclude Include="..\engine\game\ambientAudioManager.h" />
+    <ClInclude Include="..\engine\game\audioEmitter.h" />
+    <ClInclude Include="..\engine\game\auth.h" />
+    <ClInclude Include="..\engine\game\badWordFilter.h" />
+    <ClInclude Include="..\engine\game\banList.h" />
+    <ClInclude Include="..\engine\game\camera.h" />
+    <ClInclude Include="..\engine\game\cameraSpline.h" />
+    <ClInclude Include="..\engine\game\collisionTest.h" />
+    <ClInclude Include="..\engine\game\debris.h" />
+    <ClInclude Include="..\engine\game\debugView.h" />
+    <ClInclude Include="..\engine\game\demoGame.h" />
+    <ClInclude Include="..\engine\game\fireballAtmosphere.h" />
+    <ClInclude Include="..\engine\game\fx\cameraFXMgr.h" />
+    <ClInclude Include="..\engine\game\fx\explosion.h" />
+    <ClInclude Include="..\engine\game\fx\fxFoliageReplicator.h" />
+    <ClInclude Include="..\engine\game\fx\fxLight.h" />
+    <ClInclude Include="..\engine\game\fx\fxShapeReplicator.h" />
+    <ClInclude Include="..\engine\game\fx\fxSunLight.h" />
+    <ClInclude Include="..\engine\game\fx\lightning.h" />
+    <ClInclude Include="..\engine\game\fx\particleEmitter.h" />
+    <ClInclude Include="..\engine\game\fx\particleEngine.h" />
+    <ClInclude Include="..\engine\game\fx\precipitation.h" />
+    <ClInclude Include="..\engine\game\fx\splash.h" />
+    <ClInclude Include="..\engine\game\fx\underLava.h" />
+    <ClInclude Include="..\engine\game\fx\weatherLightning.h" />
+    <ClInclude Include="..\engine\game\game.h" />
+    <ClInclude Include="..\engine\game\gameBase.h" />
+    <ClInclude Include="..\engine\game\gameConnection.h" />
+    <ClInclude Include="..\engine\game\gameConnectionEvents.h" />
+    <ClInclude Include="..\engine\game\gameFunctions.h" />
+    <ClInclude Include="..\engine\game\gameTSCtrl.h" />
+    <ClInclude Include="..\engine\game\guiPlayerView.h" />
+    <ClInclude Include="..\engine\game\item.h" />
+    <ClInclude Include="..\engine\game\missionArea.h" />
+    <ClInclude Include="..\engine\game\missionMarker.h" />
+    <ClInclude Include="..\engine\game\moveManager.h" />
+    <ClInclude Include="..\engine\game\net\httpObject.h" />
+    <ClInclude Include="..\engine\game\net\serverQuery.h" />
+    <ClInclude Include="..\engine\game\net\tcpObject.h" />
+    <ClInclude Include="..\engine\game\objectTypes.h" />
+    <ClInclude Include="..\engine\game\pathCamera.h" />
+    <ClInclude Include="..\engine\game\physicalZone.h" />
+    <ClInclude Include="..\engine\game\player.h" />
+    <ClInclude Include="..\engine\game\projectile.h" />
+    <ClInclude Include="..\engine\game\resource.h" />
+    <ClInclude Include="..\engine\game\rigid.h" />
+    <ClInclude Include="..\engine\game\shadow.h" />
+    <ClInclude Include="..\engine\game\shapeBase.h" />
+    <ClInclude Include="..\engine\game\showTSShape.h" />
+    <ClInclude Include="..\engine\game\sphere.h" />
+    <ClInclude Include="..\engine\game\staticShape.h" />
+    <ClInclude Include="..\engine\game\trigger.h" />
+    <ClInclude Include="..\engine\game\tsStatic.h" />
+    <ClInclude Include="..\engine\game\vehicles\flyingVehicle.h" />
+    <ClInclude Include="..\engine\game\vehicles\hoverVehicle.h" />
+    <ClInclude Include="..\engine\game\vehicles\vehicle.h" />
+    <ClInclude Include="..\engine\game\vehicles\vehicleBlocker.h" />
+    <ClInclude Include="..\engine\game\vehicles\wheeledVehicle.h" />
+    <ClInclude Include="..\engine\game\version.h" />
+    <ClInclude Include="..\engine\gui\containers\guiCtrlArrayCtrl.h" />
+    <ClInclude Include="..\engine\gui\containers\guiFrameCtrl.h" />
+    <ClInclude Include="..\engine\gui\containers\guiPaneCtrl.h" />
+    <ClInclude Include="..\engine\gui\containers\guiScrollCtrl.h" />
+    <ClInclude Include="..\engine\gui\containers\guiStackCtrl.h" />
+    <ClInclude Include="..\engine\gui\containers\guiTabBookCtrl.h" />
+    <ClInclude Include="..\engine\gui\containers\guiWindowCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiBackgroundCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiBitmapButtonCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiBitmapCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiButtonBaseCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiButtonCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiCheckBoxCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiColorPicker.h" />
+    <ClInclude Include="..\engine\gui\controls\guiConsole.h" />
+    <ClInclude Include="..\engine\gui\controls\guiConsoleEditCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiConsoleTextCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiDirectoryFileListCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiDirectoryTreeCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiMLTextCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiMLTextEditCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiPopUpCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiRadioCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiSliderCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\GuiTabPageCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiTextCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiTextEditCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiTextEditSliderCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiTextListCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiTreeViewCtrl.h" />
+    <ClInclude Include="..\engine\gui\core\guiArrayCtrl.h" />
+    <ClInclude Include="..\engine\gui\core\guiCanvas.h" />
+    <ClInclude Include="..\engine\gui\core\guiControl.h" />
+    <ClInclude Include="..\engine\gui\core\guiDefaultControlRender.h" />
+    <ClInclude Include="..\engine\gui\core\guiTSControl.h" />
+    <ClInclude Include="..\engine\gui\core\guiTypes.h" />
+    <ClInclude Include="..\engine\gui\editor\guiDebugger.h" />
+    <ClInclude Include="..\engine\gui\editor\guiEditCtrl.h" />
+    <ClInclude Include="..\engine\gui\editor\guiFilterCtrl.h" />
+    <ClInclude Include="..\engine\gui\editor\guiGraphCtrl.h" />
+    <ClInclude Include="..\engine\gui\editor\guiInspector.h" />
+    <ClInclude Include="..\engine\gui\editor\guiInspectorTypes.h" />
+    <ClInclude Include="..\engine\gui\editor\guiMenuBar.h" />
+    <ClInclude Include="..\engine\gui\game\guiAviBitmapCtrl.h" />
+    <ClInclude Include="..\engine\gui\game\guiMessageVectorCtrl.h" />
+    <ClInclude Include="..\engine\gui\game\guiProgressCtrl.h" />
+    <ClInclude Include="..\engine\gui\shiny\guiEffectCanvas.h" />
+    <ClInclude Include="..\engine\gui\shiny\guiTheoraCtrl.h" />
+    <ClInclude Include="..\engine\gui\shiny\guiTickCtrl.h" />
+    <ClInclude Include="..\engine\gui\utility\guiBubbleTextCtrl.h" />
+    <ClInclude Include="..\engine\gui\utility\guiInputCtrl.h" />
+    <ClInclude Include="..\engine\gui\utility\guiMouseEventCtrl.h" />
+    <ClInclude Include="..\engine\gui\utility\guiTransitionCtrl.h" />
+    <ClInclude Include="..\engine\gui\utility\messageVector.h" />
+    <ClInclude Include="..\engine\i18n\i18n.h" />
+    <ClInclude Include="..\engine\i18n\lang.h" />
+    <ClInclude Include="..\engine\interior\floorPlanRes.h" />
+    <ClInclude Include="..\engine\interior\forceField.h" />
+    <ClInclude Include="..\engine\interior\interior.h" />
+    <ClInclude Include="..\engine\interior\interiorInstance.h" />
+    <ClInclude Include="..\engine\interior\interiorLMManager.h" />
+    <ClInclude Include="..\engine\interior\interiorMap.h" />
+    <ClInclude Include="..\engine\interior\interiorMapRes.h" />
+    <ClInclude Include="..\engine\interior\interiorRes.h" />
+    <ClInclude Include="..\engine\interior\interiorResObjects.h" />
+    <ClInclude Include="..\engine\interior\interiorSubObject.h" />
+    <ClInclude Include="..\engine\interior\itf.h" />
+    <ClInclude Include="..\engine\interior\lightUpdateGrouper.h" />
+    <ClInclude Include="..\engine\interior\mirrorSubObject.h" />
+    <ClInclude Include="..\engine\interior\pathedInterior.h" />
+    <ClInclude Include="..\engine\math\mathIO.h" />
+    <ClInclude Include="..\engine\math\mathTypes.h" />
+    <ClInclude Include="..\engine\math\mathUtils.h" />
+    <ClInclude Include="..\engine\math\mBox.h" />
+    <ClInclude Include="..\engine\math\mConstants.h" />
+    <ClInclude Include="..\engine\math\mMath.h" />
+    <ClInclude Include="..\engine\math\mMathFn.h" />
+    <ClInclude Include="..\engine\math\mMatrix.h" />
+    <ClInclude Include="..\engine\math\mPlane.h" />
+    <ClInclude Include="..\engine\math\mPlaneTransformer.h" />
+    <ClInclude Include="..\engine\math\mPoint.h" />
+    <ClInclude Include="..\engine\math\mQuadPatch.h" />
+    <ClInclude Include="..\engine\math\mQuat.h" />
+    <ClInclude Include="..\engine\math\mRandom.h" />
+    <ClInclude Include="..\engine\math\mRect.h" />
+    <ClInclude Include="..\engine\math\mSphere.h" />
+    <ClInclude Include="..\engine\math\mSplinePatch.h" />
+    <ClInclude Include="..\engine\math\mTrig.h" />
+    <ClInclude Include="..\engine\platformWin32\GLWinExtFunc.h" />
+    <ClInclude Include="..\engine\platformWin32\GLWinFunc.h" />
+    <ClInclude Include="..\engine\platformWin32\platformAL.h" />
+    <ClInclude Include="..\engine\platformWin32\platformGL.h" />
+    <ClInclude Include="..\engine\platformWin32\platformWin32.h" />
+    <ClInclude Include="..\engine\platformWin32\winConsole.h" />
+    <ClInclude Include="..\engine\platformWin32\winD3DVideo.h" />
+    <ClInclude Include="..\engine\platformWin32\winDInputDevice.h" />
+    <ClInclude Include="..\engine\platformWin32\winDirectInput.h" />
+    <ClInclude Include="..\engine\platformWin32\winOGLVideo.h" />
+    <ClInclude Include="..\engine\platformWin32\winV2Video.h" />
+    <ClInclude Include="..\engine\platform\3DFX.H" />
+    <ClInclude Include="..\engine\platform\event.h" />
+    <ClInclude Include="..\engine\platform\gameInterface.h" />
+    <ClInclude Include="..\engine\platform\GLCoreFunc.h" />
+    <ClInclude Include="..\engine\platform\GLExtFunc.h" />
+    <ClInclude Include="..\engine\platform\GLUFunc.h" />
+    <ClInclude Include="..\engine\platform\platform.h" />
+    <ClInclude Include="..\engine\platform\platformAssert.h" />
+    <ClInclude Include="..\engine\platform\platformAudio.h" />
+    <ClInclude Include="..\engine\platform\platformFont.h" />
+    <ClInclude Include="..\engine\platform\platformInput.h" />
+    <ClInclude Include="..\engine\platform\platformMutex.h" />
+    <ClInclude Include="..\engine\platform\platformRedBook.h" />
+    <ClInclude Include="..\engine\platform\platformSemaphore.h" />
+    <ClInclude Include="..\engine\platform\platformThread.h" />
+    <ClInclude Include="..\engine\platform\platformVideo.h" />
+    <ClInclude Include="..\engine\platform\profiler.h" />
+    <ClInclude Include="..\engine\platform\types.h" />
+    <ClInclude Include="..\engine\platform\typesWin32.h" />
+    <ClInclude Include="..\engine\sceneGraph\detailManager.h" />
+    <ClInclude Include="..\engine\sceneGraph\lightManager.h" />
+    <ClInclude Include="..\engine\sceneGraph\sceneGraph.h" />
+    <ClInclude Include="..\engine\sceneGraph\sceneLighting.h" />
+    <ClInclude Include="..\engine\sceneGraph\sceneRoot.h" />
+    <ClInclude Include="..\engine\sceneGraph\sceneState.h" />
+    <ClInclude Include="..\engine\sceneGraph\sgUtil.h" />
+    <ClInclude Include="..\engine\sceneGraph\shadowVolumeBSP.h" />
+    <ClInclude Include="..\engine\sceneGraph\windingClipper.h" />
+    <ClInclude Include="..\engine\sim\actionMap.h" />
+    <ClInclude Include="..\engine\sim\connectionStringTable.h" />
+    <ClInclude Include="..\engine\sim\decalManager.h" />
+    <ClInclude Include="..\engine\sim\netConnection.h" />
+    <ClInclude Include="..\engine\sim\netInterface.h" />
+    <ClInclude Include="..\engine\sim\netObject.h" />
+    <ClInclude Include="..\engine\sim\netStringTable.h" />
+    <ClInclude Include="..\engine\sim\pathManager.h" />
+    <ClInclude Include="..\engine\sim\sceneObject.h" />
+    <ClInclude Include="..\engine\sim\simPath.h" />
+    <ClInclude Include="..\engine\terrain\blender.h" />
+    <ClInclude Include="..\engine\terrain\bvQuadTree.h" />
+    <ClInclude Include="..\engine\terrain\fluid.h" />
+    <ClInclude Include="..\engine\terrain\sky.h" />
+    <ClInclude Include="..\engine\terrain\sun.h" />
+    <ClInclude Include="..\engine\terrain\terrData.h" />
+    <ClInclude Include="..\engine\terrain\terrRender.h" />
+    <ClInclude Include="..\engine\terrain\waterBlock.h" />
+    <ClInclude Include="..\engine\ts\tsDecal.h" />
+    <ClInclude Include="..\engine\ts\tsIntegerSet.h" />
+    <ClInclude Include="..\engine\ts\tsLastDetail.h" />
+    <ClInclude Include="..\engine\ts\tsMesh.h" />
+    <ClInclude Include="..\engine\ts\tsPartInstance.h" />
+    <ClInclude Include="..\engine\ts\tsShape.h" />
+    <ClInclude Include="..\engine\ts\tsShapeAlloc.h" />
+    <ClInclude Include="..\engine\ts\tsShapeConstruct.h" />
+    <ClInclude Include="..\engine\ts\tsShapeInstance.h" />
+    <ClInclude Include="..\engine\ts\tsSortedMesh.h" />
+    <ClInclude Include="..\engine\ts\tsTransform.h" />
+    <ClInclude Include="..\engine\util\fourcc.h" />
+    <ClInclude Include="..\engine\util\frustrumCuller.h" />
+    <ClInclude Include="..\engine\util\quadTreeTracer.h" />
+    <ClInclude Include="..\engine\util\rectClipper.h" />
+    <ClInclude Include="..\engine\util\safeDelete.h" />
+    <ClInclude Include="..\engine\util\triBoxCheck.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\engine\console\BASgram.y">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating TorqueBasic parser with bison...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">call "%(RootDir)%(Directory)\bison.bat" BAS BASgram.c BASgram.y "%(RootDir)%(Directory)" BASgram.cc
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\BASgram.cc;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating TorqueBasic parser with bison...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">call "%(RootDir)%(Directory)\bison.bat" BAS BASgram.c BASgram.y "%(RootDir)%(Directory)"  BASgram.cc
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\BASgram.cc;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\engine\console\BASscan.l">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating TorqueBasic lexer with flex...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(ProjectDir)..\bin\flex\flex" -PBAS -o"%(RootDir)%(Directory)\BASscan.cc" "%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\BASscan.cc;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating TorqueBasic lexer with flex...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(ProjectDir)..\bin\flex\flex" -PBAS -o"%(RootDir)%(Directory)\BASscan.cc" "%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\BASscan.cc;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\engine\console\CMDgram.y">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating TorqueScript parser with bison....</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">call "%(RootDir)%(Directory)\bison.bat" CMD CMDgram.c CMDgram.y "%(RootDir)%(Directory)" CMDgram.cc
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\CMDgram.cc;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating TorqueScript parser with bison....</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">call "%(RootDir)%(Directory)\bison.bat" CMD CMDgram.c CMDgram.y "%(RootDir)%(Directory)" CMDgram.cc
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\CMDgram.cc;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\engine\console\CMDscan.l">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating TorqueScript lexer with flex...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(ProjectDir)..\bin\flex\flex" -PCMD -o"%(RootDir)%(Directory)\CMDscan.cc" "%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\CMDscan.cc;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating TorqueScript lexer with flex...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(ProjectDir)..\bin\flex\flex" -PCMD -o"%(RootDir)%(Directory)\CMDscan.cc" "%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\CMDscan.cc;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\engine\interior\itfdump.asm">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SolutionDir)..\bin\nasm\nasmw.exe" -f win32 "%(FullPath)" -o "$(IntDir)%(Filename).obj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SolutionDir)..\bin\nasm\nasmw.exe" -f win32 "%(FullPath)" -o "$(IntDir)%(Filename).obj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\engine\math\mMathAMD_ASM.asm">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SolutionDir)..\bin\nasm\nasmw.exe" -f win32 "%(FullPath)" -o "$(IntDir)%(Filename).obj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SolutionDir)..\bin\nasm\nasmw.exe" -f win32 "%(FullPath)" -o "$(IntDir)%(Filename).obj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\engine\math\mMathSSE_ASM.asm">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SolutionDir)..\bin\nasm\nasmw.exe" -f win32 "%(FullPath)" -o "$(IntDir)%(Filename).obj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SolutionDir)..\bin\nasm\nasmw.exe" -f win32 "%(FullPath)" -o "$(IntDir)%(Filename).obj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\engine\math\mMath_ASM.asm">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SolutionDir)..\bin\nasm\nasmw.exe" -f win32 "%(FullPath)" -o "$(IntDir)%(Filename).obj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SolutionDir)..\bin\nasm\nasmw.exe" -f win32 "%(FullPath)" -o "$(IntDir)%(Filename).obj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\engine\platform\platformCPUInfo.asm">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SolutionDir)..\bin\nasm\nasmw.exe" -f win32 "%(FullPath)" -o "$(IntDir)%(Filename).obj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SolutionDir)..\bin\nasm\nasmw.exe" -f win32 "%(FullPath)" -o "$(IntDir)%(Filename).obj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\engine\terrain\blender_asm.asm">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SolutionDir)..\bin\nasm\nasmw.exe" -f win32 "%(FullPath)" -o "$(IntDir)%(Filename).obj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SolutionDir)..\bin\nasm\nasmw.exe" -f win32 "%(FullPath)" -o "$(IntDir)%(Filename).obj"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="glu2d3d.vcxproj">
+      <Project>{87bfa0fd-c761-4938-9c20-f15dd14e48e1}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="ljpeg.vcxproj">
+      <Project>{2b1eecaa-19cd-41cb-9b2b-87c6317ec1b2}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="lpng.vcxproj">
+      <Project>{d82fb876-bfd9-41de-9403-d13bdbe7fcb1}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="lungif.vcxproj">
+      <Project>{e42ab819-339b-48c8-ae28-605cf4f9fd34}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="opengl2d3d.vcxproj">
+      <Project>{66988ad4-f6f8-49ef-a4e1-3f43cc125962}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="zlib.vcxproj">
+      <Project>{1037e828-89d0-4b23-8055-b3197eb515aa}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="TorqueDemo.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
