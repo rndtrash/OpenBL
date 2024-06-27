@@ -14,6 +14,7 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <ProjectGuid>{B1004AB2-F57B-4330-A303-6DB62C433C93}</ProjectGuid>
     <RootNamespace>Torque Demo</RootNamespace>
+    <ProjectName>Blockland</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -81,7 +82,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>WINMM.LIB;WSOCK32.LIB;ljpeg_DEBUG.lib;lpng_DEBUG.lib;lungif_DEBUG.lib;zlib_DEBUG.lib;vfw32.lib;ogg_static.lib;theora_static.lib;vorbis_static.lib;Imm32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>../Blockland/torqueDemo_DEBUG.exe</OutputFile>
+      <OutputFile>../Blockland/$(ProjectName)_DEBUG.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../lib/xiph/win32;../lib/SDL/win32;../lib/out.VC143.DEBUG;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBC;LIBCD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -124,7 +125,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>WINMM.LIB;WSOCK32.LIB;ljpeg.lib;lpng.lib;lungif.lib;zlib.lib;vfw32.lib;ogg_static.lib;theora_static.lib;vorbis_static.lib;Imm32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>../Blockland/torqueDemo.exe</OutputFile>
+      <OutputFile>../Blockland/$(ProjectName).exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../lib/xiph/win32;../lib/out.VC143.RELEASE;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBC;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>

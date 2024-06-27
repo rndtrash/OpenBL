@@ -983,8 +983,10 @@ ConsoleFunction(exec, bool, 2, 4, "exec(fileName [, nocalls [,journalScript]])")
          return false;
       }
 
+#ifndef TORQUE_NO_DSO_GENERATION
       if(compiled)
       {
+
          // compile this baddie.
          Con::printf("Compiling %s...", scriptFileName);
          CodeBlock *code = new CodeBlock();
@@ -1005,6 +1007,7 @@ ConsoleFunction(exec, bool, 2, 4, "exec(fileName [, nocalls [,journalScript]])")
             return false;
          }
       }
+#endif
    }
    else
    {

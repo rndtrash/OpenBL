@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Torque Game Engine
+// Torque Game Engine 
 // Copyright (C) GarageGames.com, Inc.
 //-----------------------------------------------------------------------------
 
@@ -7,112 +7,92 @@
 #define _GUITEXTEDITCTRL_H_
 
 #ifndef _GUITYPES_H_
-#include "gui/core/guiTypes.h"
+#include "guiTypes.h"
 #endif
 #ifndef _GUITEXTCTRL_H_
-#include "gui/controls/guiTextCtrl.h"
-#endif
-#ifndef _STRINGBUFFER_H_
-#include "core/stringBuffer.h"
+#include "guiTextCtrl.h"
 #endif
 
 class GuiTextEditCtrl : public GuiTextCtrl
 {
 private:
-   typedef GuiTextCtrl Parent;
+    typedef GuiTextCtrl Parent;
 
-   static U32 smNumAwake;
+    static U32 mNumAwake;
 
 protected:
+    StringTableEntry mValidateCommand;
+    StringTableEntry mEscapeCommand;
+    AudioProfile* mDeniedSound;
 
-   StringBuffer mTextBuffer;
+    // for animating the cursor
+    S32      mNumFramesElapsed;
+    U32   mTimeLastCursorFlipped;
+    ColorI   mCursorColor;
+    bool      mCursorOn;
 
-   StringTableEntry mValidateCommand;
-   StringTableEntry mEscapeCommand;
-   AudioProfile*  mDeniedSound;
+    bool       mInsertOn;
+    S32      mMouseDragStart;
+    Point2I   mTextOffset;
+    bool      mDragHit;
+    bool     mTabComplete;
+    S32      mScrollDir;
 
-   // for animating the cursor
-   S32      mNumFramesElapsed;
-   U32      mTimeLastCursorFlipped;
-   ColorI   mCursorColor;
-   bool     mCursorOn;
+    //undo members
+    char      mUndoText[GuiTextCtrl::MAX_STRING_LENGTH + 1];
+    S32      mUndoBlockStart;
+    S32      mUndoBlockEnd;
+    S32      mUndoCursorPos;
+    void saveUndoState();
 
-   //Edit Cursor
-   GuiCursor*  mEditCursor;
+    S32      mBlockStart;
+    S32      mBlockEnd;
+    S32      mCursorPos;
+    S32 setCursorPos(const Point2I& offset);
 
-   bool     mInsertOn;
-   S32      mMouseDragStart;
-   Point2I  mTextOffset;
-   bool     mTextOffsetReset;
-   bool     mDragHit;
-   bool     mTabComplete;
-   S32      mScrollDir;
+    bool     mHistoryDirty;
+    S32      mHistoryLast;
+    S32      mHistoryIndex;
+    S32      mHistorySize;
+    bool     mPasswordText;
 
-   //undo members
-   StringBuffer mUndoText;
-   S32      mUndoBlockStart;
-   S32      mUndoBlockEnd;
-   S32      mUndoCursorPos;
-   void saveUndoState();
+    bool    mSinkAllKeyEvents;   // any non-ESC key is handled here or not at all
+    char** mHistoryBuf;
+    void updateHistory(const char* txt, bool moveIndex);
 
-   S32      mBlockStart;
-   S32      mBlockEnd;
-   S32      mCursorPos;
-   S32 setCursorPos(const Point2I &offset);
-
-   bool                 mHistoryDirty;
-   S32                  mHistoryLast;
-   S32                  mHistoryIndex;
-   S32                  mHistorySize;
-   bool                 mPasswordText;
-   StringTableEntry     mPasswordMask;
-
-   bool    mSinkAllKeyEvents;   // any non-ESC key is handled here or not at all
-   UTF8    **mHistoryBuf;
-   void updateHistory(StringBuffer *txt, bool moveIndex);
-
-   void playDeniedSound();
-   void execConsoleCallback();
+    void playDeniedSound();
 
 public:
-   GuiTextEditCtrl();
-   ~GuiTextEditCtrl();
-   DECLARE_CONOBJECT(GuiTextEditCtrl);
-   static void initPersistFields();
+    GuiTextEditCtrl();
+    ~GuiTextEditCtrl();
+    DECLARE_CONOBJECT(GuiTextEditCtrl);
+    static void initPersistFields();
 
-   bool onAdd();
-   bool onWake();
-   void onSleep();
+    bool onAdd();
+    bool onWake();
+    void onSleep();
 
-   void getText(char *dest);  // dest must be of size
-                              // StructDes::MAX_STRING_LEN + 1
-   bool initCursors();
-   void getCursor(GuiCursor *&cursor, bool &showCursor, const GuiEvent &lastGuiEvent);
+    void getText(char* dest);  // dest must be of size
+    // StructDes::MAX_STRING_LEN + 1
 
-   void setText(S32 tag);
-   virtual void setText(const char *txt);
-   S32   getCursorPos()   { return( mCursorPos ); }
-   void  reallySetCursorPos( const S32 newPos );
-   
-   const char *getScriptValue();
-   void setScriptValue(const char *value);
+    void setText(S32 tag);
+    virtual void setText(const char* txt);
+    S32   getCursorPos() { return(mCursorPos); }
+    void  reallySetCursorPos(const S32 newPos);
 
-   bool onKeyDown(const GuiEvent &event);
-   void onMouseDown(const GuiEvent &event);
-   void onMouseDragged(const GuiEvent &event);
-   void onMouseUp(const GuiEvent &event);
+    bool onKeyDown(const GuiEvent& event);
+    void onMouseDown(const GuiEvent& event);
+    void onMouseDragged(const GuiEvent& event);
+    void onMouseUp(const GuiEvent& event);
 
-   virtual void setFirstResponder();
-   virtual void onLoseFirstResponder();
+    void onLoseFirstResponder();
 
-   void parentResized(const Point2I &oldParentExtent, const Point2I &newParentExtent);
-   bool hasText();
+    void parentResized(const Point2I& oldParentExtent, const Point2I& newParentExtent);
+    bool hasText();
 
-   void onStaticModified(const char* slotName);
-
-   void onPreRender();
-   void onRender(Point2I offset, const RectI &updateRect);
-   virtual void drawText( const RectI &drawRect, bool isFocused );
+    void onPreRender();
+    void onRender(Point2I offset, const RectI& updateRect);
+    virtual void DrawText(const RectI& drawRect, bool isFocused);
 };
 
 #endif //_GUI_TEXTEDIT_CTRL_H

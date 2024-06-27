@@ -38,6 +38,10 @@
 ///    See also the TORQUE_SHIPPING block below
 //#define TORQUE_ENABLE_PROFILER
 
+
+/// Determines if the game compiles .dso files
+#define TORQUE_NO_DSO_GENERATION
+
 /// Define me to enable unicode support.
 #define TORQUE_UNICODE
 
