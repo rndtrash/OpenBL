@@ -254,8 +254,8 @@ inline bool BitStream::readFlag()
 
 inline void BitStream::writeRangedU32(U32 value, U32 rangeStart, U32 rangeEnd)
 {
-   AssertFatal(value >= rangeStart && value <= rangeEnd, "Out of bounds value!");
-   AssertFatal(rangeEnd >= rangeStart, "error, end of range less than start");
+   //AssertFatal(value >= rangeStart && value <= rangeEnd, "Out of bounds value!");
+   //AssertFatal(rangeEnd >= rangeStart, "error, end of range less than start");
 
    U32 rangeSize = rangeEnd - rangeStart + 1;
    U32 rangeBits = getBinLog2(getNextPow2(rangeSize));

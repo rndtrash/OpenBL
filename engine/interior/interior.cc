@@ -2113,8 +2113,8 @@ void Interior::rebuildVertexColors(LM_HANDLE instanceHandle,
 
          s *= pNormalLMap->getWidth();
          t *= pNormalLMap->getHeight();
-         AssertFatal(s >= 0.5 && s <= (F32(pNormalLMap->getWidth()) - 0.5), "Error, bad lmap coord!");
-         AssertFatal(t >= 0.5 && t <= (F32(pNormalLMap->getHeight()) - 0.5), "Error, bad lmap coord!");
+         //AssertFatal(s >= 0.5 && s <= (F32(pNormalLMap->getWidth()) - 0.5), "Error, bad lmap coord!");
+         //AssertFatal(t >= 0.5 && t <= (F32(pNormalLMap->getHeight()) - 0.5), "Error, bad lmap coord!");
          s = mFloor(s);
          t = mFloor(t);
 

@@ -74,5 +74,14 @@ enc_temp_folder/
 # Torque default build output directory
 out.*.*/
 
-# Torque engine game directory
-example/
+# Game output binary, journal file, log
+Blockland/Blockland*.exe
+Blockland/*.log
+Blockland/*.jrn
+
+# Game preferences
+Blockland/base/config/client/prefs.cs
+Blockland/base/config/server/prefs.cs
+
+# Game font cache
+Blockland/base/ui/cache/
