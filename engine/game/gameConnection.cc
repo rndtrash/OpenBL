@@ -30,6 +30,7 @@ const U32 GameConnection::MinRequiredProtocolVersion = 12;
 //----------------------------------------------------------------------------
 
 IMPLEMENT_CONOBJECT(GameConnection);
+bool GameConnection::mFirstPerson = true;
 S32 GameConnection::mLagThresholdMS = 0;
 
 //----------------------------------------------------------------------------
@@ -1370,6 +1371,7 @@ ConsoleMethod( GameConnection, delete, void, 2, 3, "(string reason=NULL) Disconn
 //--------------------------------------------------------------------------
 void GameConnection::consoleInit()
 {
+   Con::addVariable("firstPerson", TypeBool, &mFirstPerson);
    Con::addVariable("Pref::Net::LagThreshold", TypeS32, &mLagThresholdMS);
    Con::addVariable("specialFog", TypeBool, &SceneGraph::useSpecial);
 }

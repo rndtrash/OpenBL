@@ -344,6 +344,7 @@
     <ClCompile Include="..\engine\gui\controls\guiPopUpCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\guiRadioCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\guiSliderCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiSwatchCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\GuiTabPageCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\guiTextCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\guiTextEditCtrl.cc" />
@@ -700,6 +701,7 @@
     <ClInclude Include="..\engine\gui\controls\guiPopUpCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\guiRadioCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\guiSliderCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiSwatchCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\GuiTabPageCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\guiTextCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\guiTextEditCtrl.h" />

@@ -67,7 +67,7 @@ private:
    /// @{
 
    ///
-   bool  mFirstPerson;     ///< Are we currently first person or not.
+   static bool  mFirstPerson;     ///< Are we currently first person or not.
    bool  mUpdateFirstPerson; ///< Set to notify client or server of first person change.
    bool  mUpdateCameraFov; ///< Set to notify server of camera FOV change.
    F32   mCameraFov;       ///< Current camera fov (in degrees).
