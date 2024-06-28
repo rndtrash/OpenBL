@@ -172,7 +172,7 @@ namespace Con
       /// 12/29/04 - BJG - 33->34 Removed some opcodes, part of namespace upgrade.
       /// 12/30/04 - BJG - 34->35 Reordered some things, further general shuffling.
       /// 11/03/05 - BJG - 35->36 Integrated new debugger code.
-      DSOVersion = 36,
+      DSOVersion = 90,
 
       MaxLineLength = 512,  ///< Maximum length of a line of console input.
       MaxDataTypes = 256    ///< Maximum number of registered data types.

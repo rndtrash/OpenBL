@@ -1,0 +1,446 @@
+new GuiChunkedBitmapCtrl (MainMenuGui)
+{
+	profile = "GuiContentProfile";
+	horizSizing = "width";
+	vertSizing = "height";
+	position = "0 0";
+	extent = "640 480";
+	minExtent = "8 8";
+	visible = 1;
+	useVariable = 0;
+	tile = 0;
+	new GuiBitmapCtrl (MM_BG)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "width";
+		vertSizing = "height";
+		position = "0 0";
+		extent = "640 480";
+		minExtent = "8 2";
+		visible = 1;
+		bitmap = "";
+		wrap = 0;
+		lockAspectRatio = 1;
+		alignLeft = 0;
+		overflowImage = 1;
+		keepCached = 0;
+	};
+	new GuiFadeinBitmapCtrl (mm_Fade)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "width";
+		vertSizing = "height";
+		position = "0 0";
+		extent = "640 480";
+		minExtent = "8 2";
+		visible = 1;
+		bitmap = "";
+		wrap = 0;
+		lockAspectRatio = 1;
+		alignLeft = 0;
+		overflowImage = 1;
+		keepCached = 0;
+		fadeinTime = 2000;
+		waitTime = 2000;
+		fadeoutTime = 100;
+	};
+	new GuiTextCtrl ("")
+	{
+		profile = "MM_RightProfile";
+		horizSizing = "left";
+		vertSizing = "top";
+		position = "498 460";
+		extent = "137 20";
+		minExtent = "8 2";
+		visible = 1;
+		text = "\xa9 2009 Blockland LLC";
+		maxLength = 255;
+	};
+	new GuiBitmapButtonCtrl (MM_QuitButton)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "0 422";
+		extent = "224 40";
+		minExtent = "8 2";
+		visible = 1;
+		command = "quit();";
+		text = " ";
+		groupNum = -1;
+		buttonType = "PushButton";
+		bitmap = "./btnQuit";
+		lockAspectRatio = 1;
+		alignLeft = 1;
+		overflowImage = 0;
+		mKeepCached = 1;
+		mColor = "255 255 255 255";
+	};
+	new GuiBitmapButtonCtrl (MM_JoinButton)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "0 200";
+		extent = "224 40";
+		minExtent = "8 2";
+		visible = 1;
+		command = "Canvas.PushDialog(JoinServerGui);";
+		text = " ";
+		groupNum = -1;
+		buttonType = "PushButton";
+		bitmap = "./btnJoinGame";
+		lockAspectRatio = 1;
+		alignLeft = 1;
+		overflowImage = 0;
+		mKeepCached = 1;
+		mColor = "255 255 255 255";
+	};
+	new GuiBitmapButtonCtrl (MM_OptionsButton)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "0 280";
+		extent = "224 40";
+		minExtent = "8 2";
+		visible = 1;
+		command = "Canvas.pushDialog(optionsDlg);";
+		text = " ";
+		groupNum = -1;
+		buttonType = "PushButton";
+		bitmap = "./btnOptions";
+		lockAspectRatio = 1;
+		alignLeft = 1;
+		overflowImage = 0;
+		mKeepCached = 1;
+		mColor = "255 255 255 255";
+	};
+	new GuiBitmapButtonCtrl (MM_AboutButton)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "520 390";
+		extent = "160 30";
+		minExtent = "8 2";
+		visible = 1;
+		command = "Canvas.pushDialog(aboutDlg);";
+		text = " ";
+		groupNum = -1;
+		buttonType = "PushButton";
+		bitmap = "./btnAbout";
+		lockAspectRatio = 1;
+		alignLeft = 1;
+		overflowImage = 0;
+		mKeepCached = 1;
+		mColor = "255 255 255 255";
+	};
+	new GuiBitmapButtonCtrl (MM_CreditsButton)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "520 422";
+		extent = "160 30";
+		minExtent = "8 2";
+		visible = 1;
+		command = "getHelp(\"1. Credits\");";
+		text = " ";
+		groupNum = -1;
+		buttonType = "PushButton";
+		bitmap = "./btnCredits";
+		lockAspectRatio = 1;
+		alignLeft = 1;
+		overflowImage = 0;
+		mKeepCached = 1;
+		mColor = "255 255 255 255";
+	};
+	new GuiBitmapButtonCtrl (MM_StartButton)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "0 160";
+		extent = "224 40";
+		minExtent = "8 2";
+		visible = 1;
+		command = "Canvas.pushDialog(startMissionGui);";
+		text = " ";
+		groupNum = -1;
+		buttonType = "PushButton";
+		bitmap = "./btnStartServer";
+		lockAspectRatio = 1;
+		alignLeft = 1;
+		overflowImage = 0;
+		mKeepCached = 1;
+		mColor = "255 255 255 255";
+	};
+	new GuiSwatchCtrl ("")
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "69 406";
+		extent = "200 48";
+		minExtent = "8 2";
+		visible = 1;
+		color = "255 255 255 0";
+	};
+	new GuiBitmapButtonCtrl (MM_PlayerButton)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "0 240";
+		extent = "224 40";
+		minExtent = "8 2";
+		visible = 1;
+		command = "Canvas.pushDialog(AvatarGui);";
+		text = " ";
+		groupNum = -1;
+		buttonType = "PushButton";
+		bitmap = "./btnPlayer";
+		lockAspectRatio = 1;
+		alignLeft = 1;
+		overflowImage = 0;
+		mKeepCached = 1;
+		mColor = "255 255 255 255";
+	};
+	new GuiBitmapCtrl ("")
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "3 12";
+		extent = "404 80";
+		minExtent = "8 2";
+		visible = 1;
+		bitmap = "./title.png";
+		wrap = 0;
+		lockAspectRatio = 1;
+		alignLeft = 1;
+		overflowImage = 0;
+		keepCached = 0;
+	};
+	new GuiSwatchCtrl ("")
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "184 199";
+		extent = "76 41";
+		minExtent = "8 2";
+		visible = 1;
+		color = "255 255 255 0";
+	};
+	new GuiSwatchCtrl ("")
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "120 240";
+		extent = "140 80";
+		minExtent = "8 2";
+		visible = 1;
+		color = "255 255 255 0";
+	};
+	new GuiSwatchCtrl ("")
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "200 160";
+		extent = "60 39";
+		minExtent = "8 2";
+		visible = 1;
+		color = "255 255 255 0";
+	};
+	new GuiTextCtrl (MM_Version)
+	{
+		profile = "MM_LeftProfile";
+		horizSizing = "right";
+		vertSizing = "bottom";
+		position = "3 1";
+		extent = "165 16";
+		minExtent = "8 2";
+		visible = 1;
+		text = "Version 25";
+		maxLength = 255;
+	};
+	new GuiBitmapCtrl (DemoBanner)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "299 14";
+		extent = "181 120";
+		minExtent = "8 2";
+		visible = 0;
+		bitmap = "./demobanner";
+		wrap = 0;
+		lockAspectRatio = 1;
+		alignLeft = 0;
+		overflowImage = 0;
+		keepCached = 0;
+	};
+	new GuiBitmapCtrl (MM_AuthBar)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "center";
+		vertSizing = "top";
+		position = "164 452";
+		extent = "312 48";
+		minExtent = "8 2";
+		visible = 1;
+		bitmap = "./authBar";
+		wrap = 0;
+		lockAspectRatio = 1;
+		alignLeft = 0;
+		overflowImage = 0;
+		keepCached = 0;
+		new GuiTextCtrl (MM_AuthText)
+		{
+			profile = "MM_CenterProfile";
+			horizSizing = "center";
+			vertSizing = "bottom";
+			position = "18 5";
+			extent = "275 18";
+			minExtent = "8 2";
+			visible = 1;
+			text = "Demo Mode";
+			maxLength = 255;
+		};
+		new GuiBitmapButtonCtrl (MM_AuthRetryButton)
+		{
+			profile = "BlockButtonProfile";
+			horizSizing = "right";
+			vertSizing = "bottom";
+			position = "5 5";
+			extent = "51 18";
+			minExtent = "8 2";
+			visible = 0;
+			command = "auth_Init_Client();";
+			text = "Retry";
+			groupNum = -1;
+			buttonType = "PushButton";
+			bitmap = "./button2";
+			lockAspectRatio = 0;
+			alignLeft = 0;
+			overflowImage = 0;
+			mKeepCached = 0;
+			mColor = "255 255 255 255";
+		};
+		new GuiBitmapButtonCtrl (MM_AuthKeyButton)
+		{
+			profile = "BlockButtonProfile";
+			horizSizing = "left";
+			vertSizing = "bottom";
+			position = "256 5";
+			extent = "51 18";
+			minExtent = "8 2";
+			visible = 1;
+			command = "keyGui::changePrompt();";
+			text = "Key";
+			groupNum = -1;
+			buttonType = "PushButton";
+			bitmap = "./button2";
+			lockAspectRatio = 0;
+			alignLeft = 0;
+			overflowImage = 0;
+			mKeepCached = 0;
+			mColor = "255 255 255 255";
+		};
+		new GuiBitmapButtonCtrl (MM_AuthNameButton)
+		{
+			profile = "BlockButtonProfile";
+			horizSizing = "left";
+			vertSizing = "bottom";
+			position = "5 5";
+			extent = "51 18";
+			minExtent = "8 2";
+			visible = 1;
+			command = "canvas.pushDialog(regNameGui);";
+			text = "Name";
+			groupNum = -1;
+			buttonType = "PushButton";
+			bitmap = "./button2";
+			lockAspectRatio = 0;
+			alignLeft = 0;
+			overflowImage = 0;
+			mKeepCached = 0;
+			mColor = "255 255 255 255";
+		};
+	};
+	new GuiBitmapButtonCtrl (buyNowButton_W)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "339 94";
+		extent = "120 40";
+		minExtent = "8 2";
+		visible = 0;
+		command = "gotoWebPage(\"http://blockland.us/Store.html\");";
+		text = " ";
+		groupNum = -1;
+		buttonType = "PushButton";
+		bitmap = "./buynoww";
+		lockAspectRatio = 0;
+		alignLeft = 0;
+		overflowImage = 0;
+		mKeepCached = 0;
+		mColor = "255 255 255 255";
+	};
+	new GuiBitmapButtonCtrl (buyNowButton_B)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "339 94";
+		extent = "120 40";
+		minExtent = "8 2";
+		visible = 0;
+		command = "gotoWebPage(\"http://blockland.us/Store.html\");";
+		text = " ";
+		groupNum = -1;
+		buttonType = "PushButton";
+		bitmap = "./buynowb";
+		lockAspectRatio = 0;
+		alignLeft = 0;
+		overflowImage = 0;
+		mKeepCached = 0;
+		mColor = "255 255 255 255";
+	};
+	new GuiBitmapButtonCtrl (MM_TutorialButton)
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "0 120";
+		extent = "224 40";
+		minExtent = "8 2";
+		visible = 1;
+		command = "MM_Tutorial();";
+		text = " ";
+		groupNum = -1;
+		buttonType = "PushButton";
+		bitmap = "./btnTutorial";
+		lockAspectRatio = 1;
+		alignLeft = 1;
+		overflowImage = 0;
+		mKeepCached = 1;
+		mColor = "255 255 255 255";
+	};
+	new GuiSwatchCtrl ("")
+	{
+		profile = "GuiDefaultProfile";
+		horizSizing = "relative";
+		vertSizing = "relative";
+		position = "132 102";
+		extent = "128 58";
+		minExtent = "8 2";
+		visible = 1;
+		color = "255 255 255 0";
+	};
+};
