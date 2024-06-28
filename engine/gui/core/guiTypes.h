@@ -96,6 +96,9 @@ public:
 
    ColorI mBevelColorHL;                          ///< Used for the high-light part of the bevel
    ColorI mBevelColorLL;                          ///< Used for the low-light part of the bevel
+                                                   
+   bool mOutlineFont;                              ///< Determines if the font should be outlined
+   ColorI mOutlineColor;                           ///< Font outline color
 
    // font members
    StringTableEntry  mFontType;                    ///< Font face name for the control

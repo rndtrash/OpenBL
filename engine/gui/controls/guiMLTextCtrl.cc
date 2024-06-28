@@ -184,6 +184,30 @@ void GuiMLTextCtrl::drawAtomText(bool sel, U32 start, U32 end, Atom *atom, Line 
    StringBuffer tmpBuff = mTextBuffer.substring(start, end-start);
    tmpBuff.get(tmp, (end - start) * 3 + 1 );
 
+   // If doFontOutline is a part of the profile
+   if (mProfile->mOutlineFont) {
+
+       // set the font outline color from the profile
+       dglSetBitmapModulation(mProfile->mOutlineColor);
+
+       // push the text to the right a bit to make way for the outline
+       drawPoint.x += 1;
+
+       for (S32 i = -1; i <= 1; ++i)
+       {
+           for (S32 j = -1; j <= 1; ++j)
+           {
+               if (i != 0 || j != 0) {
+                   // draw text at 8 surrounding points, minus the center.
+                   dglDrawTextN(font, drawPoint + Point2I(i, j), tmp, end - start);
+               }
+           }
+       }
+
+       // restore the original font color, before the center text is drawn
+       dglSetBitmapModulation(mProfile->mFontColor);
+   }
+
    if(!sel)
    {
       if(atom->style->shadowOffset.x || atom->style->shadowOffset.y)

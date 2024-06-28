@@ -185,6 +185,8 @@ void TextureDictionary::create()
    for(U32 i = 0; i < smHashTableSize; i++)
       smTable[i] = NULL;
 
+   Con::addVariable("$pref::Interior::TexDetail", TypeS32, &sgInteriorTextureDetailLevel);
+
    Con::addVariable("$pref::OpenGL::force16BitTexture",    TypeBool, &sgForce16BitTexture);
    Con::addVariable("$pref::OpenGL::forcePalettedTexture", TypeBool, &sgForcePalettedTexture);
    Con::addVariable("$pref::OpenGL::allowCompression",     TypeBool, &sgAllowTexCompression);

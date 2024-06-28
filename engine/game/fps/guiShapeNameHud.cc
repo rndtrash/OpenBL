@@ -241,6 +241,20 @@ void GuiShapeNameHud::drawName(Point2I offset, const char *name, F32 opacity)
    offset.x -= mProfile->mFont->getStrWidth((const UTF8 *)name) / 2;
    offset.y -= mProfile->mFont->getHeight();
 
+   // In the original game, GuiShapeNameHud doesn't have a check for the outline in the profile, and its color is always black.
+   dglSetBitmapModulation(ColorI(0, 0, 0, 255));
+   
+   for (S32 i = -1; i <= 1; ++i)
+   {
+       for (S32 j = -1; j <= 1; ++j)
+       {
+           if (i != 0 || j != 0) {
+               // draw text at 8 surrounding points, minus the center.
+               dglDrawText(mProfile->mFont, offset + Point2I(i, j), name);
+           }
+       }
+   }
+   
    // Deal with opacity and draw.
    mTextColor.alpha = opacity;
    dglSetBitmapModulation(mTextColor);

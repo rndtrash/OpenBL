@@ -1376,6 +1376,27 @@ void GuiControl::renderJustifiedText(Point2I offset, Point2I extent, const char 
    else
       start.y = ( extent.y - font->getHeight() ) / 2;
 
+   // If doFontOutline is a part of the profile
+   if (mProfile->mOutlineFont) {
+
+       // set the font outline color from the profile
+       dglSetBitmapModulation(mProfile->mOutlineColor);
+
+       for (S32 i = -1; i <= 1; ++i)
+       {
+           for (S32 j = -1; j <= 1; ++j)
+           {
+               if (i != 0 || j != 0) {
+                   // draw text at 8 surrounding points, minus the center.
+                   dglDrawText(font, (start + offset) + Point2I(i, j), text);
+               }
+           }
+       }
+
+       // restore the original font color, before the center text is drawn
+       dglSetBitmapModulation(mProfile->mFontColor);
+   }
+
    dglDrawText( font, start + offset, text, mProfile->mFontColors );
 }
 

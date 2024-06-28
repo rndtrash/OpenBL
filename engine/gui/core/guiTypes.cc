@@ -145,6 +145,9 @@ GuiControlProfile::GuiControlProfile(void) :
       mBevelColorHL = def->mBevelColorHL;
       mBevelColorLL = def->mBevelColorLL;
 
+      mOutlineFont  = def->mOutlineFont;
+      mOutlineColor = def->mOutlineColor;
+
       // default font
       mFontType      = def->mFontType;
       mFontSize      = def->mFontSize;
@@ -198,6 +201,9 @@ void GuiControlProfile::initPersistFields()
 
    addField("bevelColorHL", TypeColorI,     Offset(mBevelColorHL, GuiControlProfile));
    addField("bevelColorLL", TypeColorI,     Offset(mBevelColorLL, GuiControlProfile));
+
+   addField("doFontOutline",    TypeColorI, Offset(mOutlineFont, GuiControlProfile));
+   addField("fontOutlineColor", TypeColorI, Offset(mOutlineColor, GuiControlProfile));
 
    addField("fontType",      TypeString,     Offset(mFontType, GuiControlProfile));
    addField("fontSize",      TypeS32,        Offset(mFontSize, GuiControlProfile));
