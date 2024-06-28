@@ -37,13 +37,14 @@ ConsoleFunction( createEffectCanvas, bool, 2, 2, "(string windowTitle)"
                 "Create the game window/canvas, with the specified window title.")
 {
    AssertISV(!Canvas, "createEffectCanvas: canvas has already been instantiated");
-
+/*
 #if !defined(TORQUE_OS_MAC) // macs can only run one instance in general.
 #if !defined(TORQUE_DEBUG) && !defined(INTERNAL_RELEASE)
    if(!Platform::excludeOtherInstances("TorqueTest"))
       return false;
 #endif
 #endif
+*/
    Platform::initWindow(Point2I(800, 600), argv[1]);
 
    // create the canvas, and add it to the manager

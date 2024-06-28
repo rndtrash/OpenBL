@@ -25,6 +25,11 @@ protected:
    Point2I startPoint;
    bool mWrap;
 
+   bool mLockAspectRatio;
+   bool mAlignLeft;
+   bool mOverflowImage;
+   ColorI mColor;
+
 public:
    //creation methods
    DECLARE_CONOBJECT(GuiBitmapCtrl);
@@ -44,6 +49,9 @@ public:
 
    void onRender(Point2I offset, const RectI &updateRect);
    void setValue(S32 x, S32 y);
+
+   void setColor(ColorI color);
+   ColorI getColor();
 };
 
 #endif

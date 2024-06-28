@@ -37,6 +37,11 @@ protected:
    TextureHandle mTextureDepressed;
    TextureHandle mTextureInactive;
 
+   bool mLockAspectRatio;
+   bool mAlignLeft;
+   bool mOverflowImage;
+   ColorI mColor;
+
    void renderButton(TextureHandle &texture, Point2I &offset, const RectI& updateRect);
 
 public:
@@ -53,6 +58,9 @@ public:
    void setBitmap(const char *name);
 
    void onRender(Point2I offset, const RectI &updateRect);
+
+   void setColor(ColorI color);
+   ColorI getColor();
 };
 
 class GuiBitmapButtonTextCtrl : public GuiBitmapButtonCtrl

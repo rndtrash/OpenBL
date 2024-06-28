@@ -1379,6 +1379,9 @@ void GuiControl::renderJustifiedText(Point2I offset, Point2I extent, const char 
    // If doFontOutline is a part of the profile
    if (mProfile->mOutlineFont) {
 
+       // push the text to the right a bit to make way for the outline
+       offset.x += 1;
+
        // set the font outline color from the profile
        dglSetBitmapModulation(mProfile->mOutlineColor);
 

@@ -1086,6 +1086,30 @@ void GuiTextEditCtrl::DrawText(const RectI& drawRect, bool isFocused)
         textBuffer[mBlockEnd] = temp;
     }
 
+    // If doFontOutline is a part of the profile
+    if (mProfile->mOutlineFont) {
+
+        // set the font outline color from the profile
+        dglSetBitmapModulation(mProfile->mOutlineColor);
+
+        // push the text to the right a bit to make way for the outline
+        tempOffset.x += 1;
+
+        for (S32 i = -1; i <= 1; ++i)
+        {
+            for (S32 j = -1; j <= 1; ++j)
+            {
+                if (i != 0 || j != 0) {
+                    // draw text at 8 surrounding points, minus the center.
+                    dglDrawText(mFont, tempOffset + Point2I(i, j), textBuffer, mProfile->mFontColors);
+                }
+            }
+        }
+
+        // restore the original font color, before the center text is drawn
+        dglSetBitmapModulation(mProfile->mFontColor);
+    }
+
     //draw the portion after the highlite
     dglSetBitmapModulation(fontColor);
     dglDrawText(mFont, tempOffset, &textBuffer[mBlockEnd], mProfile->mFontColors);

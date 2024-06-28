@@ -35,6 +35,10 @@ GuiBitmapButtonCtrl::GuiBitmapButtonCtrl()
 {
    mBitmapName = StringTable->insert("");
    mBounds.extent.set(140, 30);
+   mColor = ColorI(255, 255, 255, 255);
+   mLockAspectRatio = 0;
+   mOverflowImage = 0;
+   mAlignLeft = 0;
 }
 
 
@@ -43,6 +47,10 @@ void GuiBitmapButtonCtrl::initPersistFields()
 {
    Parent::initPersistFields();
    addField("bitmap", TypeFilename, Offset(mBitmapName, GuiBitmapButtonCtrl));
+   addField("lockAspectRatio", TypeBool, Offset(mLockAspectRatio, GuiBitmapButtonCtrl)); // not implemented yet
+   addField("alignLeft", TypeBool, Offset(mAlignLeft, GuiBitmapButtonCtrl));             // not implemented yet
+   addField("overflowImage", TypeBool, Offset(mOverflowImage, GuiBitmapButtonCtrl));     // not implemented yet
+   addField("mColor", TypeColorI, Offset(mColor, GuiBitmapButtonCtrl));
 }
 
 
@@ -165,14 +173,72 @@ void GuiBitmapButtonCtrl::renderButton(TextureHandle &texture, Point2I &offset, 
    {
       RectI rect(offset, mBounds.extent);
       dglClearBitmapModulation();
+      dglSetBitmapModulation(mColor);
       dglDrawBitmapStretch(texture, rect);
-      renderChildControls( offset, updateRect);
+
+      Point2I textPos = offset;
+      if (mDepressed)
+          textPos += Point2I(1, 1);
+      
+      // Make sure we take the profile's textOffset into account.
+      textPos += mProfile->mTextOffset;
+
+      dglSetBitmapModulation(mProfile->mFontColor);
+      renderJustifiedText(offset, mBounds.extent, mButtonText);
+
+      renderChildControls(offset, updateRect);
    }
    else
       Parent::onRender(offset, updateRect);
 }
 
+
+//--------------------------------------------------------------------------
+void GuiBitmapButtonCtrl::setColor(ColorI color)
+{
+    mColor = color;
+}
+
+//--------------------------------------------------------------------------
+ColorI GuiBitmapButtonCtrl::getColor()
+{
+    return mColor;
+}
+
+//--------------------------------------------------------------------------
+ConsoleMethod(GuiBitmapButtonCtrl, setColor, void, 3, 3, "color") {
+    F32 r, g, b, a;
+    dSscanf(argv[2], "%f %f %f %f", &r, &g, &b, &a);
+
+    U8 red = static_cast<U8>(mClampF(r, 0.0f, 1.0f) * 255.0f);
+    U8 green = static_cast<U8>(mClampF(g, 0.0f, 1.0f) * 255.0f);
+    U8 blue = static_cast<U8>(mClampF(b, 0.0f, 1.0f) * 255.0f);
+    U8 alpha = static_cast<U8>(mClampF(a, 0.0f, 1.0f) * 255.0f);
+
+    ColorI color(red, green, blue, alpha);
+    object->setColor(color);
+}
+
+//--------------------------------------------------------------------------
+ConsoleMethod(GuiBitmapButtonCtrl, getColor, const char*, 2, 2, "") {
+    char* temp = Con::getReturnBuffer(64);
+
+    ColorF color = (ColorF)object->getColor();
+
+    dSprintf(temp, 64, "%f %f %f %f",
+        color.red,
+        color.green,
+        color.blue,
+        color.alpha
+    );
+
+    return temp;
+}
+
 //------------------------------------------------------------------------------
+
+// Note: It looks like Blockland didn't use GuiBitmapButtonTextCtrl, and instead rendered text directly in GuiBitmapButtonCtrl.
+
 IMPLEMENT_CONOBJECT(GuiBitmapButtonTextCtrl);
 
 void GuiBitmapButtonTextCtrl::onRender(Point2I offset, const RectI& updateRect)

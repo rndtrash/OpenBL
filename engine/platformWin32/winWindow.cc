@@ -100,6 +100,7 @@ static const char *getMessageName(S32 msg)
    }
 }
 
+/*
 //--------------------------------------
 bool Platform::excludeOtherInstances(const char *mutexName)
 {
@@ -122,6 +123,7 @@ bool Platform::excludeOtherInstances(const char *mutexName)
 
    return true;
 }
+*/
 
 //--------------------------------------
 void Platform::AlertOK(const char *windowTitle, const char *message)

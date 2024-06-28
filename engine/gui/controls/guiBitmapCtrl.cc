@@ -16,6 +16,10 @@ GuiBitmapCtrl::GuiBitmapCtrl(void)
    mBitmapName = StringTable->insert("");
 	startPoint.set(0, 0);
 	mWrap = false;
+    mColor = ColorI(255, 255, 255, 255);
+    mLockAspectRatio = 0;
+    mOverflowImage = 0;
+    mAlignLeft = 0;
 }
 
 
@@ -25,6 +29,10 @@ void GuiBitmapCtrl::initPersistFields()
    addGroup("Misc");		
    addField("bitmap", TypeFilename, Offset(mBitmapName, GuiBitmapCtrl));
    addField("wrap",   TypeBool,     Offset(mWrap,       GuiBitmapCtrl));
+   addField("lockAspectRatio", TypeBool, Offset(mLockAspectRatio, GuiBitmapCtrl)); // not implemented yet
+   addField("alignLeft", TypeBool, Offset(mAlignLeft, GuiBitmapCtrl));             // not implemented yet
+   addField("overflowImage", TypeBool, Offset(mOverflowImage, GuiBitmapCtrl));     // not implemented yet
+   addField("mColor", TypeColorI, Offset(mColor, GuiBitmapCtrl));
    endGroup("Misc");		
 }
 
@@ -111,6 +119,7 @@ void GuiBitmapCtrl::onRender(Point2I offset, const RectI &updateRect)
    if (mTextureHandle)
    {
       dglClearBitmapModulation();
+      dglSetBitmapModulation(mColor);
 		if(mWrap)
 		{
  			TextureObject* texture = (TextureObject *) mTextureHandle;
@@ -163,4 +172,42 @@ void GuiBitmapCtrl::setValue(S32 x, S32 y)
   	while (y < 0)
   		y += 256;
   	startPoint.y = y % 256;
+}
+
+void GuiBitmapCtrl::setColor(ColorI color)
+{
+    mColor = color;
+}
+
+ColorI GuiBitmapCtrl::getColor()
+{
+    return mColor;
+}
+
+ConsoleMethod(GuiBitmapCtrl, setColor, void, 3, 3, "color") {
+    F32 r, g, b, a;
+    dSscanf(argv[2], "%f %f %f %f", &r, &g, &b, &a);
+
+    U8 red = static_cast<U8>(mClampF(r, 0.0f, 1.0f) * 255.0f);
+    U8 green = static_cast<U8>(mClampF(g, 0.0f, 1.0f) * 255.0f);
+    U8 blue = static_cast<U8>(mClampF(b, 0.0f, 1.0f) * 255.0f);
+    U8 alpha = static_cast<U8>(mClampF(a, 0.0f, 1.0f) * 255.0f);
+
+    ColorI color(red, green, blue, alpha);
+    object->setColor(color);
+}
+
+ConsoleMethod(GuiBitmapCtrl, getColor, const char*, 2, 2, "") {
+    char* temp = Con::getReturnBuffer(64);
+
+    ColorF color = (ColorF)object->getColor();
+
+    dSprintf(temp, 64, "%f %f %f %f",
+        color.red,
+        color.green,
+        color.blue,
+        color.alpha
+    );
+
+    return temp;
 }
