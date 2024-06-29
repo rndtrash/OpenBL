@@ -322,15 +322,15 @@ bool CodeBlock::read(StringTableEntry fileName, Stream &st)
    st.read(&size);
    if(size)
    {
-      functionStrings = new char[size];
-      st.read(size, functionStrings);
+      globalFloats = new F64[size];
+      for(U32 i = 0; i < size; i++)
+         st.read(&globalFloats[i]);
    }
    st.read(&size);
    if(size)
    {
-      globalFloats = new F64[size];
-      for(U32 i = 0; i < size; i++)
-         st.read(&globalFloats[i]);
+      functionStrings = new char[size];
+      st.read(size, functionStrings);
    }
    st.read(&size);
    if(size)
