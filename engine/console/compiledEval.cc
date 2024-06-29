@@ -312,6 +312,12 @@ const char *CodeBlock::exec(U32 ip, const char *functionName, Namespace *thisNam
 breakContinue:
       switch(instruction)
       {
+      case NOOP1:
+      case NOOP2:
+      case NOOP3:
+      case NOOP4:
+          break;
+
          case OP_FUNC_DECL:
             if(!noCalls)
             {
@@ -1102,6 +1108,7 @@ breakContinue:
             break;
 
          case OP_ADVANCE_STR_NUL:
+         case OP_ADVANCE_STR_NUL2:
             STR.advanceChar(0);
             break;
 
