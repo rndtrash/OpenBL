@@ -1108,7 +1108,6 @@ breakContinue:
             break;
 
          case OP_ADVANCE_STR_NUL:
-         case OP_ADVANCE_STR_NUL2:
             STR.advanceChar(0);
             break;
 
