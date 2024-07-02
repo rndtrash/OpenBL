@@ -36,32 +36,32 @@ namespace Compiler
       OP_SAVEVAR_STR = 0x07, // confirmed
       OP_SETCUROBJECT = 0x08, // confirmed
       OP_STR_TO_FLT = 0x09, // confirmed
-      NOOP3 = 0x0A, // confirmed
-      OP_MUL = 0x0B,
+      OP_STR_TO_NONE = 0x0A, // confirmed
+      OP_JMPIFF = 0x0B, // confirmed
       OP_END_OBJECT = 0x0C, // confirmed
-      OP_CMPLE = 0x0D, // confirmed
-      OP_CMPLT = 0x0E, // confirmed
-      OP_DIV = 0x0F,
-      OP_FLT_TO_UINT = 0x10,
-      OP_ADD = 0x11,
-      OP_SUB = 0x12,
-      UNKNOWN = 0x13,
-      OP_NEG = 0x14,
+      OP_CMPLT = 0x0D, // confirmed
+      OP_CMPLE = 0x0E, // confirmed
+      OP_JMPIFFNOT = 0x0F, // confirmed
+      OP_JMPIF = 0x10,  // confirmed
+      OP_SETCURFIELD = 0x11, // confirmed
+      OP_SETCURFIELD_ARRAY = 0x12, // confirmed
+      OP_JMPIF_NP = 0x13, // confirmed
+      OP_JMP = 0x14, // confirmed
       OP_MOD = 0x15, // confirmed
       OP_LOADFIELD_UINT = 0x16, // confirmed
       OP_STR_TO_UINT = 0x17, // confirmed
 
-      OP_NOTF = 0x18,
+      OP_JMPIFNOT_NP = 0x18, // confirmed
 
       OP_CMPEQ = 0x19, // confirmed
-      OP_CMPGE = 0x1A, // confirmed
+      OP_CMPGR = 0x1A, // confirmed
       OP_CMPNE = 0x1B, // confirmed
       OP_OR = 0x1C, // confirmed
 
       OP_AND = 0x1D, // confirmed
       OP_XOR = 0x1E, // confirmed
       OP_RETURN = 0x1F, // confirmed
-      OP_CMPGR = 0x20, // confirmed
+      OP_CMPGE = 0x20, // confirmed
       OP_BITAND = 0x21, // confirmed
 
       OP_ONESCOMPLEMENT = 0x22, // confirmed
@@ -74,7 +74,7 @@ namespace Compiler
       OP_SAVEFIELD_STR = 0x28, // confirmed
 
       OP_LOADVAR_STR = 0x29,  // confirmed
-      OP_JMPIFF = 0x2A,
+      OP_LOADFIELD_FLT = 0x2A, // confirmed
       OP_LOADFIELD_STR = 0x2B, // confirmed
 
       OP_SAVEFIELD_UINT = 0x2C, // confirmed
@@ -85,25 +85,24 @@ namespace Compiler
 
       OP_BREAK = 0x30, // confirmed
       OP_SAVEVAR_UINT = 0x31, // confirmed
-      OP_JMPIF = 0x32,
 
-      OP_JMPIFNOT_NP = 0x33,
-      OP_UINT_TO_NONE = 0x34,
-      OP_LOADFIELD_FLT = 0x35,
+      OP_SUB = 0x32, // confirmed
+      OP_MUL = 0x33, // confirmed
+      OP_DIV = 0x34, // confirmed
+      OP_NEG = 0x35, // confirmed
 
       OP_SETCURVAR = 0x36, // confirmed
       OP_SETCURVAR_CREATE = 0x37, // confirmed
       OP_SETCUROBJECT_NEW = 0x38, // confirmed
       OP_SETCURVAR_ARRAY = 0x39, // confirmed
-      OP_FLT_TO_STR = 0x3A,
-      UNKNOWN4 = 0x3B,
-      OP_UINT_TO_FLT = 0x3C,
+      OP_NOT = 0x3A, // confirmed
+      OP_NOTF = 0x3B, // confirmed
+      OP_ADD = 0x3C, // confirmed
       OP_SETCURVAR_ARRAY_CREATE = 0x3D, // confirmed
       OP_LOADVAR_UINT = 0x3E, // confirmed
-
-      OP_LOADIMMED_UINT = 0x3F,
-      OP_SETCURFIELD_ARRAY = 0x40,
-      NOOP4 = 0x41, // confirmed
+      OP_FLT_TO_UINT = 0x3F, // confirmed
+      OP_FLT_TO_STR = 0x40, // confirmed
+      OP_INVALID = 0x41, // confirmed
       OP_ADVANCE_STR = 0x42,  // confirmed
       OP_ADVANCE_STR_APPENDCHAR = 0x43, // confirmed
 
@@ -114,26 +113,16 @@ namespace Compiler
       OP_ADVANCE_STR_COMMA = 0x47, // confirmed
       OP_ADVANCE_STR_NUL = 0x48, // confirmed
       OP_FLT_TO_NONE = 0x49,  // confirmed
-      OP_SETCURFIELD = 0x4A,
+      OP_UINT_TO_FLT = 0x4A, // confirmed
       OP_UINT_TO_STR = 0x4B, // confirmed
-      OP_STR_TO_NONE = 0x4C,
-
+      OP_UINT_TO_NONE = 0x4C, // confirmed
+      OP_LOADIMMED_UINT = 0x4D, // confirmed
       OP_LOADIMMED_FLT = 0x4E, // confirmed
 
       OP_TAG_TO_STR = 0x4F, // confirmed
       OP_LOADIMMED_STR = 0x50, // confirmed
-
+      OP_LOADIMMED_IDENT = 0x51, // confirmed
       OP_CALLFUNC_RESOLVE = 0x52, // confirmed
-
-      OP_INVALID,
-
-      // unknown opcodes:
-      OP_JMPIFFNOT,
-      OP_JMPIF_NP,
-      OP_JMP,
-      OP_NOT,
-      OP_LOADIMMED_IDENT,
-
    };
 
    //------------------------------------------------------------

@@ -438,10 +438,10 @@ bool CodeBlock::compile(const char *codeFileName, StringTableEntry fileName, con
 
    // Write string table data...
    getGlobalStringTable().write(st);
-   getFunctionStringTable().write(st);
-
-   // Write float table data...
    getGlobalFloatTable().write(st);
+
+   // Write function table data...
+   getFunctionStringTable().write(st);
    getFunctionFloatTable().write(st);
 
    smBreakLineCount = 0;

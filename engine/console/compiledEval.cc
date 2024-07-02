@@ -314,8 +314,6 @@ breakContinue:
       {
       case NOOP1:
       case NOOP2:
-      case NOOP3:
-      case NOOP4:
           break;
 
          case OP_FUNC_DECL:
