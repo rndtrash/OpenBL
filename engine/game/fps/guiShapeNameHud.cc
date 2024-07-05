@@ -242,7 +242,7 @@ void GuiShapeNameHud::drawName(Point2I offset, const char *name, F32 opacity)
    offset.y -= mProfile->mFont->getHeight();
 
    // In the original game, GuiShapeNameHud doesn't have a check for the outline in the profile, and its color is always black.
-   dglSetBitmapModulation(ColorI(0, 0, 0, 255));
+   dglSetBitmapModulation(ColorF(0, 0, 0, opacity));
    
    for (S32 i = -1; i <= 1; ++i)
    {

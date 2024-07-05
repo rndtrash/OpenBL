@@ -141,11 +141,41 @@ void GuiBitmapCtrl::onRender(Point2I offset, const RectI &updateRect)
    				dglDrawBitmapStretchSR(texture,dstRegion, srcRegion, false);
 				}
 		}
-		else
-      {
-         RectI rect(offset, mBounds.extent);
-	      dglDrawBitmapStretch(mTextureHandle, rect);
-      }
+        else if (mLockAspectRatio)
+        {
+            RectI rect;
+            TextureObject* texture = (TextureObject*)mTextureHandle;
+
+            float extentAspectRatio = (float)mBounds.extent.x / (float)mBounds.extent.y;
+            float bitmapAspectRatio = (float)texture->bitmapWidth / (float)texture->bitmapHeight;
+
+            if (extentAspectRatio <= bitmapAspectRatio)
+            {
+                rect.extent.y = mBounds.extent.x / bitmapAspectRatio;
+                rect.extent.x = mBounds.extent.x;
+                rect.point.y = (mBounds.extent.y - rect.extent.y) * 0.5;
+                rect.point.x = 0;
+            }
+            else
+            {
+                rect.extent.x = mBounds.extent.y * bitmapAspectRatio;
+                rect.extent.y = mBounds.extent.y;
+                rect.point.y = 0;
+                rect.point.x = 0;
+                if (!mAlignLeft)
+                {
+                    rect.point.x = (mBounds.extent.x - rect.extent.x) * 0.5;
+                }
+            }
+            rect.point.y += offset.y;
+            rect.point.x += offset.x;
+            dglDrawBitmapStretch(texture, rect, 0);
+        }
+        else
+        {
+            RectI rect(offset, mBounds.extent);
+            dglDrawBitmapStretch(mTextureHandle, rect);
+        }
    }
 
    if (mProfile->mBorder || !mTextureHandle)
