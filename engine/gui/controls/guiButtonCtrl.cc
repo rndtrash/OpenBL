@@ -27,7 +27,7 @@ void GuiButtonCtrl::onRender(Point2I      offset,
    bool highlight = mMouseOver;
    bool depressed = mDepressed;
 
-   ColorI fontColor   = mActive ? (highlight ? mProfile->mFontColorHL : mProfile->mFontColor) : mProfile->mFontColorNA;
+   ColorI fontColor   = mActive ? mProfile->mFontColor : mProfile->mFontColorNA;
    ColorI backColor   = mActive ? mProfile->mFillColor : mProfile->mFillColorNA;
    ColorI borderColor = mActive ? mProfile->mBorderColor : mProfile->mBorderColorNA;
 
@@ -36,9 +36,9 @@ void GuiButtonCtrl::onRender(Point2I      offset,
    if( mProfile->mBorder != 0 )
    {
       if (mDepressed || mStateOn)
-         renderFilledBorder( boundsRect, mProfile->mBorderColorHL, mProfile->mFillColorHL );
+         renderLoweredBox(boundsRect, mProfile);
       else
-         renderFilledBorder( boundsRect, mProfile->mBorderColor, mProfile->mFillColor );
+         renderRaisedBox(boundsRect, mProfile);
    }
 
    Point2I textPos = offset;

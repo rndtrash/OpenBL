@@ -698,7 +698,7 @@ void GuiScrollCtrl::onRender(Point2I offset, const RectI &updateRect)
       dglDrawRectFill(r, mProfile->mFillColor);
 
 	if (mProfile->mBorder)
-		renderFilledBorder(r, mProfile);
+		renderBorder(r, mProfile);
 
    // draw scroll bars
    if (mHasVScrollBar)

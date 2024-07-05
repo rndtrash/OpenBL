@@ -437,13 +437,12 @@ void GuiPopUpMenuCtrl::onRender(Point2I offset, const RectI &updateRect)
    {
       if(mInAction)
       {
-         renderFilledBorder(r, mProfile->mBorderColorHL, mProfile->mFillColor);
-         renderFilledBorder( buttonRect, mProfile->mBorderColorHL, mProfile->mFillColorNA);
+          dglDrawRectFill(r, mProfile->mFillColorHL);
+          dglDrawRect(r, mProfile->mBorderColor);
       }
       else
       {
-         renderFilledBorder(r, mProfile->mBorderColorHL, mProfile->mFillColor);
-         renderFilledBorder( buttonRect, mProfile->mBorderColorHL, mProfile->mFillColorNA);
+         renderSlightlyRaisedBox(r, mProfile);
       }
    }
 
@@ -563,7 +562,7 @@ void GuiPopUpMenuCtrl::onAction()
    GuiCanvas *root = getRoot();
    Point2I windowExt = root->mBounds.extent;
 
-   mBackground->mBounds.point.set(0,0);
+   mBackground->mBounds.point.set(0,1);
    mBackground->mBounds.extent = root->mBounds.extent;
 
    S32 textWidth = 0, width = mBounds.extent.x;
@@ -581,7 +580,7 @@ void GuiPopUpMenuCtrl::onAction()
       width = textWidth;
    }
 
-   mTl->setCellSize(Point2I(width, mFont->getHeight()+3));
+   mTl->setCellSize(Point2I(width, mFont->getHeight()+2));
 
    for(U32 j=0; j<mEntries.size(); ++j)
       mTl->addEntry(mEntries[j].id, mEntries[j].buf);
@@ -640,7 +639,7 @@ void GuiPopUpMenuCtrl::onAction()
       if(width - mBounds.extent.x > 0)
          mSc->mBounds.point.x -= width - mBounds.extent.x;
 
-   mSc->mBounds.extent.set(width-1, maxYdis);
+   mSc->mBounds.extent.set(width, maxYdis);
 
    mSc->registerObject();
    mTl->registerObject();
