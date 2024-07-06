@@ -75,10 +75,10 @@ public:
          }
          alpha = 0;
       }
-      else if (elapsed < (fadeinTime+waitTime+fadeoutTime))
+      else if (elapsed < (fadeinTime+fadeoutTime))
       {
          // fade-in
-         elapsed -= (fadeoutTime + waitTime);
+         elapsed -= fadeoutTime;
          alpha = (F32(elapsed) / F32(fadeoutTime)) * -255.0 + 255.0;
       }
       else
@@ -89,7 +89,7 @@ public:
              done = true;
              Con::executef(this, 1, "onDone");
          }
-         alpha = fadeoutTime ? 255 : 0;
+         alpha = fadeoutTime ? 0 : 255;
       }
       mColor = ColorI(255, 255, 255, alpha);
    }
