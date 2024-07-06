@@ -16,6 +16,7 @@ class GuiFadeinBitmapCtrl : public GuiBitmapCtrl
 public:
    U32 wakeTime;
    bool done;
+   bool wait;
    U32 fadeinTime;
    U32 waitTime;
    U32 fadeoutTime;
@@ -27,6 +28,7 @@ public:
       waitTime    = 2000;
       fadeoutTime = 1000;
       done        = false;
+      wait        = false;
    }
    void onPreRender()
    {
@@ -48,6 +50,8 @@ public:
       if(!Parent::onWake())
          return false;
       wakeTime = Platform::getRealMilliseconds();
+      done = false;
+      wait = false;
       return true;
    }
    void onRender(Point2I offset, const RectI &updateRect)
@@ -58,28 +62,36 @@ public:
       U32 alpha;
       if (elapsed < fadeinTime)
       {
-         // fade-in
-         alpha = 255 - (255 * (F32(elapsed) / F32(fadeinTime)));
+          // fade out
+          alpha = 255 * F32(elapsed) / F32(fadeinTime);
       }
       else if (elapsed < (fadeinTime+waitTime))
       {
          // wait
+         if (!wait)
+         {
+            Con::executef(this, 1, "onWait");
+            wait = true;
+         }
          alpha = 0;
       }
       else if (elapsed < (fadeinTime+waitTime+fadeoutTime))
       {
-         // fade out
-         elapsed -= (fadeinTime+waitTime);
-         alpha = 255 * F32(elapsed) / F32(fadeoutTime);
+         // fade-in
+         elapsed -= (fadeoutTime + waitTime);
+         alpha = (F32(elapsed) / F32(fadeoutTime)) * -255.0 + 255.0;
       }
       else
       {
          // done state
+         if (!done)
+         {
+             done = true;
+             Con::executef(this, 1, "onDone");
+         }
          alpha = fadeoutTime ? 255 : 0;
-         done = true;
       }
-      ColorI color(0,0,0,alpha);
-      dglDrawRectFill(offset, mBounds.extent + offset, color);
+      mColor = ColorI(255, 255, 255, alpha);
    }
    static void initPersistFields()
    {
@@ -90,6 +102,13 @@ public:
       addField("done", TypeBool, Offset(done, GuiFadeinBitmapCtrl));
    }
 };
+
+ConsoleMethod(GuiFadeinBitmapCtrl, reset, bool, 2, 2, "") {
+    object->wakeTime = Platform::getRealMilliseconds();
+    object->done = false;
+    object->wait = false;
+    return true;
+}
 
 IMPLEMENT_CONOBJECT(GuiFadeinBitmapCtrl);
 
