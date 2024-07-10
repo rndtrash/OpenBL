@@ -29,9 +29,9 @@ void GuiBitmapCtrl::initPersistFields()
    addGroup("Misc");		
    addField("bitmap", TypeFilename, Offset(mBitmapName, GuiBitmapCtrl));
    addField("wrap",   TypeBool,     Offset(mWrap,       GuiBitmapCtrl));
-   addField("lockAspectRatio", TypeBool, Offset(mLockAspectRatio, GuiBitmapCtrl)); // not implemented yet
-   addField("alignLeft", TypeBool, Offset(mAlignLeft, GuiBitmapCtrl));             // not implemented yet
-   addField("overflowImage", TypeBool, Offset(mOverflowImage, GuiBitmapCtrl));     // not implemented yet
+   addField("lockAspectRatio", TypeBool, Offset(mLockAspectRatio, GuiBitmapCtrl));
+   addField("alignLeft", TypeBool, Offset(mAlignLeft, GuiBitmapCtrl));            
+   addField("overflowImage", TypeBool, Offset(mOverflowImage, GuiBitmapCtrl));    
    addField("mColor", TypeColorI, Offset(mColor, GuiBitmapCtrl));
    endGroup("Misc");		
 }
@@ -162,9 +162,28 @@ void GuiBitmapCtrl::onRender(Point2I offset, const RectI &updateRect)
                 rect.extent.y = mBounds.extent.y;
                 rect.point.y = 0;
                 rect.point.x = 0;
-                if (!mAlignLeft)
+            }
+
+            if (!mAlignLeft)
+            {
+                rect.point.x = (mBounds.extent.x - rect.extent.x) * 0.5;
+            }
+
+            if (mOverflowImage)
+            {
+                if (extentAspectRatio <= bitmapAspectRatio)
                 {
+                    rect.extent.x = ((float)mBounds.extent.y / texture->bitmapHeight) * texture->bitmapWidth;
+                    rect.extent.y = mBounds.extent.y;
                     rect.point.x = (mBounds.extent.x - rect.extent.x) * 0.5;
+                    rect.point.y = 0;
+                }
+                else
+                {
+                    rect.extent.x = mBounds.extent.x;
+                    rect.extent.y = ((float)mBounds.extent.x / texture->bitmapWidth) * texture->bitmapHeight;
+                    rect.point.x = 0;
+                    rect.point.y = (mBounds.extent.y - rect.extent.y) * 0.5;
                 }
             }
             rect.point.y += offset.y;
