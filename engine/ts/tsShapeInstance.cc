@@ -650,8 +650,18 @@ void TSShapeInstance::render(S32 dl, F32 intraDL, const Point3F * objectScale)
       smRenderData.currentTransform = NULL;
       S32 start = smNoRenderNonTranslucent ? mShape->subShapeFirstTranslucentObject[ss] : mShape->subShapeFirstObject[ss];
       S32 end   = smNoRenderTranslucent ? mShape->subShapeFirstTranslucentObject[ss] : mShape->subShapeFirstObject[ss] + mShape->subShapeNumObjects[ss];
-      for (i=start; i<end; i++)
-         mMeshObjects[i].render(od,mMaterialList);
+      for (i = start; i < end; i++)
+      {
+          bool shouldRenderNode = true;
+          for (S32 nodeIndex = 0; nodeIndex < mHiddenNodes.size(); nodeIndex++)
+          {
+              // check our hidden nodes vector if what we're rendering is in it and should be hidden
+              if (mHiddenNodes[nodeIndex] == i)
+                  shouldRenderNode = false;
+          }
+          if (shouldRenderNode)
+              mMeshObjects[i].render(od, mMaterialList);
+      }
    }
 
    // if we have a matrix pushed, pop it now
@@ -1697,8 +1707,18 @@ void TSShapeInstance::renderShadow(S32 dl, const MatrixF & mat, S32 dim, U32 * b
    smRenderData.currentTransform = NULL;
    S32 start = mShape->subShapeFirstObject[ss];
    S32 end   = start + mShape->subShapeNumObjects[ss];
-   for (i=start; i<end; i++)
-      mMeshObjects[i].renderShadow(od,mat,dim,bits,mMaterialList);
+   for (i = start; i < end; i++)
+   {
+       bool shouldRenderNode = true;
+       for (S32 nodeIndex = 0; nodeIndex < mHiddenNodes.size(); nodeIndex++)
+       {
+           // check our hidden nodes vector if what we're rendering is in it and should be hidden
+           if (mHiddenNodes[nodeIndex] == i)
+               shouldRenderNode = false;
+       }
+       if (shouldRenderNode)
+           mMeshObjects[i].renderShadow(od, mat, dim, bits, mMaterialList);
+   }
 
    // if we have a marix pushed, pop it now
    if (smRenderData.currentTransform)

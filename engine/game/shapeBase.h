@@ -539,6 +539,9 @@ class ShapeBase : public GameBase
    friend void physicalZoneFind(SceneObject*, void *);
 
 public:
+   void hideNode(const char* nodeName);
+   void unHideNode(const char* nodeName);
+
    enum PublicConstants {
       ThreadSequenceBits = 6,
       MaxSequenceIndex = (1 << ThreadSequenceBits) - 1,
@@ -956,7 +959,8 @@ public:
       ShieldMask      = Parent::NextFreeMask << 5,
       InvincibleMask  = Parent::NextFreeMask << 6,
       SkinMask        = Parent::NextFreeMask << 7,
-      SoundMaskN      = Parent::NextFreeMask << 8,       ///< Extends + MaxSoundThreads bits
+      HiddenNodeMask  = Parent::NextFreeMask << 8,
+      SoundMaskN      = Parent::NextFreeMask << 9,       ///< Extends + MaxSoundThreads bits
       ThreadMaskN     = SoundMaskN  << MaxSoundThreads,  ///< Extends + MaxScriptThreads bits
       ImageMaskN      = ThreadMaskN << MaxScriptThreads, ///< Extends + MaxMountedImage bits
       NextFreeMask    = ImageMaskN  << MaxMountedImages

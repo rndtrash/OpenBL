@@ -75,6 +75,8 @@ class TSShapeInstance
 {
    public:
 
+   Vector<S32> mHiddenNodes;
+
    struct ObjectInstance;
    friend class TSThread;
    friend class TSLastDetail;

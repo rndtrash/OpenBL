@@ -1216,6 +1216,9 @@
     <ClCompile Include="..\engine\gui\controls\guiSwatchCtrl.cc">
       <Filter>Source Files\gui\controls</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\gui\controls\guiObjectView.cc">
+      <Filter>Source Files\gui\controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\collision\abstractPolyList.h">
@@ -2212,6 +2215,9 @@
       <Filter>Source Files\i18n</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\gui\controls\guiSwatchCtrl.h">
+      <Filter>Source Files\gui\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\gui\controls\guiObjectView.h">
       <Filter>Source Files\gui\controls</Filter>
     </ClInclude>
   </ItemGroup>

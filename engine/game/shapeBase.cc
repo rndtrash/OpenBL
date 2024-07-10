@@ -2936,7 +2936,7 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
 
    if(!stream->writeFlag(mask & (NameMask | DamageMask | SoundMask |
          ThreadMask | ImageMask | CloakMask | MountedMask | InvincibleMask |
-         ShieldMask | SkinMask)))
+         ShieldMask | SkinMask | HiddenNodeMask)))
       return retMask;
 
    if (stream->writeFlag(mask & DamageMask)) {
@@ -2987,7 +2987,7 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
    }
 
    // Group some of the uncommon stuff together.
-   if (stream->writeFlag(mask & (NameMask | ShieldMask | CloakMask | InvincibleMask | SkinMask))) {
+   if (stream->writeFlag(mask & (NameMask | ShieldMask | CloakMask | InvincibleMask | SkinMask | HiddenNodeMask))) {
       if (stream->writeFlag(mask & CloakMask)) {
          // cloaking
          stream->writeFlag( mCloaked );
@@ -3019,6 +3019,17 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
 
          con->packStringHandleU(stream, mSkinNameHandle);
 
+      }
+
+      if (stream->writeFlag(mask & HiddenNodeMask)) {
+          if (mShapeInstance != NULL)
+          {
+              stream->writeInt(mShapeInstance->mHiddenNodes.size(), 8);
+              for (int x = 0; x < mShapeInstance->mHiddenNodes.size(); x++)
+              {
+                  stream->writeInt(mShapeInstance->mHiddenNodes[x], 8);
+              }
+          }
       }
    }
 
@@ -3217,6 +3228,18 @@ void ShapeBase::unpackUpdate(NetConnection *con, BitStream *stream)
          }
 
       }
+
+      if (stream->readFlag()) { // HiddenNodeMask  
+          if (mShapeInstance != NULL)
+          {
+              mShapeInstance->mHiddenNodes.clear();
+              int count = stream->readInt(8);
+              for (int x = 0; x < count; x++)
+              {
+                  mShapeInstance->mHiddenNodes.push_back(stream->readInt(8));
+              }
+          }
+      }
    }
 
    if (stream->readFlag()) {
@@ -3285,6 +3308,44 @@ void ShapeBase::setHidden(bool hidden)
 
       mHidden = hidden;
    }
+}
+
+//-----------------------------------------------------------
+
+void ShapeBase::hideNode(const char* nodeName)
+{
+    S32 nodeIndex = mShapeInstance->getShape()->findObject(nodeName);
+    if (nodeIndex != -1)
+    {
+        for (S32 i = 0; i < mShapeInstance->mHiddenNodes.size(); i++)
+        {
+            if (mShapeInstance->mHiddenNodes[i] == nodeIndex)
+            {
+                return;
+            }
+        }
+        mShapeInstance->mHiddenNodes.push_back(nodeIndex);
+        setMaskBits(HiddenNodeMask);
+    }
+}
+
+//-----------------------------------------------------------
+
+void ShapeBase::unHideNode(const char* nodeName)
+{
+    S32 nodeIndex = mShapeInstance->getShape()->findObject(nodeName);
+    if (nodeIndex != -1)
+    {
+        for (S32 i = 0; i < mShapeInstance->mHiddenNodes.size(); i++)
+        {
+            if (mShapeInstance->mHiddenNodes[i] == nodeIndex)
+            {
+                mShapeInstance->mHiddenNodes.erase(i);
+                setMaskBits(HiddenNodeMask);
+                return;
+            }
+        }
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -4123,6 +4184,17 @@ ConsoleMethod( ShapeBase, getShapeName, const char*, 2, 2, "")
 ConsoleMethod( ShapeBase, getSkinName, const char*, 2, 2, "")
 {
    return object->getSkinName();
+}
+
+
+ConsoleMethod(ShapeBase, hideNode, void, 3, 3, "( string nodeName )")
+{
+    object->hideNode(argv[2]);
+}
+
+ConsoleMethod(ShapeBase, unHideNode, void, 3, 3, "( string nodeName )")
+{
+    object->unHideNode(argv[2]);
 }
 
 //----------------------------------------------------------------------------

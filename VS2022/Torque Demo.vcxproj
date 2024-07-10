@@ -341,6 +341,7 @@
     <ClCompile Include="..\engine\gui\controls\guiDirectoryTreeCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\guiMLTextCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\guiMLTextEditCtrl.cc" />
+    <ClCompile Include="..\engine\gui\controls\guiObjectView.cc" />
     <ClCompile Include="..\engine\gui\controls\guiPopUpCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\guiRadioCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\guiSliderCtrl.cc" />
@@ -698,6 +699,7 @@
     <ClInclude Include="..\engine\gui\controls\guiDirectoryTreeCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\guiMLTextCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\guiMLTextEditCtrl.h" />
+    <ClInclude Include="..\engine\gui\controls\guiObjectView.h" />
     <ClInclude Include="..\engine\gui\controls\guiPopUpCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\guiRadioCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\guiSliderCtrl.h" />
