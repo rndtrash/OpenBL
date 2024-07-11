@@ -395,9 +395,9 @@ bool Interior::prepForRendering(const char* path)
          mEnvironMaps[i] = NULL;
       }
    }
-   mWhite        = new TextureHandle("common/lighting/whiteAlpha255", MeshTexture);
-   mWhiteRGB     = new TextureHandle("common/lighting/whiteNoAlpha", MeshTexture);
-   mLightFalloff = new TextureHandle("common/lighting/lightFalloffMono", BitmapTexture, true);
+   mWhite        = new TextureHandle("base/lighting/whiteAlpha255", MeshTexture);
+   mWhiteRGB     = new TextureHandle("base/lighting/whiteNoAlpha", MeshTexture);
+   mLightFalloff = new TextureHandle("base/lighting/lightFalloffMono", BitmapTexture, true);
 
    mPreppedForRender = matListSuccess;
 

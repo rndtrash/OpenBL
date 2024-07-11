@@ -870,7 +870,7 @@ bool TerrainBlock::onAdd()
 
       mTextureCallbackKey = TextureManager::registerEventCallback(terrainTextureEventCB, this);
 
-      mDynLightTexture = TextureHandle("common/lighting/lightFalloffMono", BitmapTexture, true);
+      mDynLightTexture = TextureHandle("base/lighting/lightFalloffMono", BitmapTexture, true);
 
       if (dglDoesSupportVertexBuffer())
          mVertexBuffer = glAllocateVertexBufferEXT(VertexBufferSize,GL_V12MTVFMT_EXT,true);

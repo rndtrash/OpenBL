@@ -202,7 +202,7 @@ bool InteriorMap::onAdd()
       }
    }
 
-   mWhite = new TextureHandle("common/lighting/whiteAlpha255", MeshTexture);
+   mWhite = new TextureHandle("base/lighting/whiteAlpha255", MeshTexture);
 
 	// Reset the World Box.
 	resetWorldBox();

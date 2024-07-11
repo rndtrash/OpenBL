@@ -1070,7 +1070,8 @@ void ShapeBase::getMuzzleTransform(U32 imageSlot,MatrixF* mat)
 void ShapeBase::getRenderMountTransform(U32 mountPoint,MatrixF* mat)
 {
    // Returns mount point to world space transform
-   if (mountPoint < ShapeBaseData::NumMountPoints) {
+   // TODO: Prevent orbit cam emitters from showing up if the client is orbiting
+   if (mountPoint < ShapeBaseData::NumMountPoints && mShapeInstance != NULL) {
       S32 ni = mDataBlock->mountPointNode[mountPoint];
       if (ni != -1) {
          MatrixF mountTransform = mShapeInstance->mNodeTransforms[ni];

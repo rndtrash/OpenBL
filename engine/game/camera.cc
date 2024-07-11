@@ -121,7 +121,7 @@ void Camera::getCameraTransform(F32* pos, MatrixF* mat)
    if(obj && static_cast<ShapeBaseData*>(obj->getDataBlock())->observeThroughObject)
       obj->getCameraTransform(pos, mat);
    else
-      getEyeTransform(mat);
+      getRenderEyeTransform(mat);
 }
 
 F32 Camera::getCameraFov()
@@ -170,6 +170,12 @@ void Camera::processTick(const Move* move)
       // If using editor then force camera into fly mode
       if(gEditingMission && mode != FlyMode)
          setFlyMode();
+
+      //Prevent interpolating the wrong way round a circle.
+      if (mRot.z > M_PI_F)
+          mRot.z -= M_2PI_F;
+      if (mRot.z < -M_PI_F)
+          mRot.z += M_2PI_F;
 
       // Update orientation
       delta.rotVec = mRot;
@@ -308,7 +314,6 @@ void Camera::setRenderPosition(const Point3F& pos,const Point3F& rot)
    temp.mul(zRot, xRot);
    temp.setColumn(3, pos);
    Parent::setRenderTransform(temp);
-   mRot = rot;
 }
 
 //----------------------------------------------------------------------------
