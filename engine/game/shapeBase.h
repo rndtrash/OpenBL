@@ -960,7 +960,8 @@ public:
       InvincibleMask  = Parent::NextFreeMask << 6,
       SkinMask        = Parent::NextFreeMask << 7,
       HiddenNodeMask  = Parent::NextFreeMask << 8,
-      SoundMaskN      = Parent::NextFreeMask << 9,       ///< Extends + MaxSoundThreads bits
+      NameColorMask   = Parent::NextFreeMask << 9,
+      SoundMaskN      = Parent::NextFreeMask << 10,      ///< Extends + MaxSoundThreads bits
       ThreadMaskN     = SoundMaskN  << MaxSoundThreads,  ///< Extends + MaxScriptThreads bits
       ImageMaskN      = ThreadMaskN << MaxScriptThreads, ///< Extends + MaxMountedImage bits
       NextFreeMask    = ImageMaskN  << MaxMountedImages
@@ -993,6 +994,11 @@ public:
    /// @{
    void setShapeName(const char*);
    const char* getShapeName();
+
+   void setShapeNameColor(ColorF color);
+   ColorF getShapeNameColor();
+   ColorF mShapeNameColor;
+
    void setSkinName(const char*);
    const char* getSkinName();
    /// @}

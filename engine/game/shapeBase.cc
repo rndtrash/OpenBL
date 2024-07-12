@@ -2936,7 +2936,7 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
 
    if(!stream->writeFlag(mask & (NameMask | DamageMask | SoundMask |
          ThreadMask | ImageMask | CloakMask | MountedMask | InvincibleMask |
-         ShieldMask | SkinMask | HiddenNodeMask)))
+         ShieldMask | SkinMask | HiddenNodeMask | NameColorMask)))
       return retMask;
 
    if (stream->writeFlag(mask & DamageMask)) {
@@ -3031,6 +3031,10 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
               }
           }
       }
+   }
+
+   if (stream->writeFlag(mask & NameColorMask)) {
+       stream->write(mShapeNameColor);
    }
 
    if (mask & MountedMask) {
@@ -3242,6 +3246,10 @@ void ShapeBase::unpackUpdate(NetConnection *con, BitStream *stream)
       }
    }
 
+   if (stream->readFlag()) { // NameColorMask
+       stream->read(&mShapeNameColor);
+   }
+
    if (stream->readFlag()) {
       if (stream->readFlag()) {
          S32 gIndex = stream->readInt(NetConnection::GhostIdBitSize);
@@ -3346,6 +3354,22 @@ void ShapeBase::unHideNode(const char* nodeName)
             }
         }
     }
+}
+
+//-----------------------------------------------------------
+
+void ShapeBase::setShapeNameColor(ColorF color)
+{
+    mShapeNameColor = color;
+    setMaskBits(NameColorMask);
+    return;
+}
+
+//-----------------------------------------------------------
+
+ColorF ShapeBase::getShapeNameColor()
+{
+    return mShapeNameColor;
 }
 
 //--------------------------------------------------------------------------
@@ -4197,6 +4221,12 @@ ConsoleMethod(ShapeBase, unHideNode, void, 3, 3, "( string nodeName )")
     object->unHideNode(argv[2]);
 }
 
+ConsoleMethod(ShapeBase, setShapeNameColor, void, 3, 3, "( string RGB )")
+{
+    F32 r, g, b;
+    dSscanf(argv[2], "%f %f %f", &r, &g, &b);
+    object->setShapeNameColor(ColorF(r, g, b));
+}
 //----------------------------------------------------------------------------
 void ShapeBase::consoleInit()
 {

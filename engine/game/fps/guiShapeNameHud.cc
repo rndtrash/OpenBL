@@ -38,7 +38,7 @@ class GuiShapeNameHud : public GuiControl
    bool     mShowFill;
 
 protected:
-   void drawName( Point2I offset, const char *buf, F32 opacity);
+   void drawName( Point2I offset, const char *buf, ColorF color, F32 opacity);
 
 public:
    GuiShapeNameHud();
@@ -210,8 +210,10 @@ void GuiShapeNameHud::onRender( Point2I, const RectI &updateRect)
             F32 opacity = (shapeDist < fadeDistance)? 1.0:
                1.0 - (shapeDist - fadeDistance) / (visDistance - fadeDistance);
 
+            mTextColor = shape->getShapeNameColor();
+
             // Render the shape's name
-            drawName(Point2I((S32)projPnt.x, (S32)projPnt.y),shape->getShapeName(),opacity);
+            drawName(Point2I((S32)projPnt.x, (S32)projPnt.y),shape->getShapeName(), mTextColor, opacity);
          }
       }
    }
@@ -235,15 +237,17 @@ void GuiShapeNameHud::onRender( Point2I, const RectI &updateRect)
 ///                  specified y position.)
 /// @param   name    String name to display.
 /// @param   opacity Opacity of name (a fraction).
-void GuiShapeNameHud::drawName(Point2I offset, const char *name, F32 opacity)
+void GuiShapeNameHud::drawName(Point2I offset, const char *name, ColorF color, F32 opacity)
 {
    // Center the name
    offset.x -= mProfile->mFont->getStrWidth((const UTF8 *)name) / 2;
    offset.y -= mProfile->mFont->getHeight();
 
-   // In the original game, GuiShapeNameHud doesn't have a check for the outline in the profile, and its color is always black.
-   dglSetBitmapModulation(ColorF(0, 0, 0, opacity));
-   
+   if (color.red < 0.4 && color.green < 0.4)
+       dglSetBitmapModulation(ColorF(255, 255, 255, opacity));
+   else 
+       dglSetBitmapModulation(ColorF(0, 0, 0, opacity));
+
    for (S32 i = -1; i <= 1; ++i)
    {
        for (S32 j = -1; j <= 1; ++j)
@@ -257,7 +261,7 @@ void GuiShapeNameHud::drawName(Point2I offset, const char *name, F32 opacity)
    
    // Deal with opacity and draw.
    mTextColor.alpha = opacity;
-   dglSetBitmapModulation(mTextColor);
+   dglSetBitmapModulation(color);
    dglDrawText(mProfile->mFont, offset, name);
    dglClearBitmapModulation();
 }
