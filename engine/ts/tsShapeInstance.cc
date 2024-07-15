@@ -196,6 +196,11 @@ void TSShapeInstance::buildInstanceData(TSShape * _shape, bool loadMaterials)
    mMeshObjects.setSize(numObjects);
    for (i=0; i<numObjects; i++)
    {
+      // Initialize, set the size to the # of objects so that we can assign objects values by using their index in the list of objects
+
+      mHiddenNodes.push_back(false);
+      mNodeColors.push_back(ColorF(0.0, 0.0, 0.0, 0.0));
+
       const TSObject * obj = &mShape->objects[i];
       MeshObjectInstance * objInst = &mMeshObjects[i];
 
@@ -652,14 +657,13 @@ void TSShapeInstance::render(S32 dl, F32 intraDL, const Point3F * objectScale)
       S32 end   = smNoRenderTranslucent ? mShape->subShapeFirstTranslucentObject[ss] : mShape->subShapeFirstObject[ss] + mShape->subShapeNumObjects[ss];
       for (i = start; i < end; i++)
       {
-          bool shouldRenderNode = true;
-          for (S32 nodeIndex = 0; nodeIndex < mHiddenNodes.size(); nodeIndex++)
-          {
-              // check our hidden nodes vector if what we're rendering is in it and should be hidden
-              if (mHiddenNodes[nodeIndex] == i)
-                  shouldRenderNode = false;
-          }
-          if (shouldRenderNode)
+          TSMesh* mesh = mMeshObjects[i].getMesh(od);
+          mesh->colorShiftColor = mNodeColors[i];
+
+          //temp
+          mesh->doColorShift = true;
+
+          if (!mHiddenNodes[i])
               mMeshObjects[i].render(od, mMaterialList);
       }
    }
@@ -1709,14 +1713,7 @@ void TSShapeInstance::renderShadow(S32 dl, const MatrixF & mat, S32 dim, U32 * b
    S32 end   = start + mShape->subShapeNumObjects[ss];
    for (i = start; i < end; i++)
    {
-       bool shouldRenderNode = true;
-       for (S32 nodeIndex = 0; nodeIndex < mHiddenNodes.size(); nodeIndex++)
-       {
-           // check our hidden nodes vector if what we're rendering is in it and should be hidden
-           if (mHiddenNodes[nodeIndex] == i)
-               shouldRenderNode = false;
-       }
-       if (shouldRenderNode)
+       if (!mHiddenNodes[i])
            mMeshObjects[i].renderShadow(od, mat, dim, bits, mMaterialList);
    }
 

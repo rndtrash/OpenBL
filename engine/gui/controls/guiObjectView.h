@@ -24,6 +24,9 @@
 #ifndef _CAMERA_H_
 #include "game/camera.h"
 #endif
+#ifndef _COLOR_H_
+#include "core/color.h"
+#endif
 
 class TSThread;
 
@@ -131,6 +134,7 @@ class GuiObjectView : public GuiTSCtrl
 
 		void hideNode(const char* parentName, const char* nodeName);
 		void unHideNode(const char* parentName, const char* nodeName);
+		void setNodeColor(const char* parentName, const char* nodeName, ColorF color);
 };
 
 #endif // _GUIOBJECTVIEW_H_

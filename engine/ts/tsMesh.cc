@@ -53,6 +53,9 @@ bool TSMesh::smUseOneStrip  = false; // join triangle strips into one long strip
 S32  TSMesh::smMinStripSize = 1;     // smallest number of _faces_ allowed per strip (all else put in tri list)
 bool TSMesh::smUseEncodedNormals = false;
 
+bool TSMesh::doColorShift = false;
+ColorF TSMesh::colorShiftColor = ColorF(0.0, 0.0, 0.0, 0.0);
+
 // quick function to force object to face camera -- currently throws out roll :(
 void forceFaceCamera()
 {
@@ -311,10 +314,60 @@ void TSMesh::render(S32 frame, S32 matFrame, TSMaterialList * materials)
             (TSDrawPrimitive::MaterialMask|TSDrawPrimitive::NoMaterial)) != 0)
          setMaterial(draw.matIndex,materials);
 
+      if (TSMesh::doColorShift)
+      {
+          // what do these args belong to?
+          /*
+          if ((local_20[0] == 0) || (*(local_20[0] + 0x34) == '\0')) {
+              if (0.99 <= TSMesh::colorShiftColor.alpha) {
+                  glEnable(0x0DE1);
+                  glTexEnvi(0x2300, 0x2200, 0x2100);
+              }
+              else {
+                  glEnable(0x0B57);
+                  glColor4f(1.0, 1.0, 1.0, TSMesh::colorShiftColor.alpha);
+                  glEnable(0x0DE1);
+                  glEnable(0x0BE2);
+                  glBlendFunc(0x302, 0x303);
+                  glDisable(0x1801);
+                  glTexEnvi(0x2300, 0x2200, 0x2100);
+              }
+          }
+          else
+          {
+          */
+              glEnable(0x0B57);
+              glColor4f(TSMesh::colorShiftColor.red, TSMesh::colorShiftColor.green, TSMesh::colorShiftColor.blue, TSMesh::colorShiftColor.alpha);
+              glEnable(0x0DE1);
+              if (TSMesh::colorShiftColor.alpha < 0.99) {
+                  glEnable(0x0BE2);
+                  glBlendFunc(0x302, 0x303);
+                  glDisable(0x1801);
+                  glDepthMask(0);
+              }
+              glTexEnvi(0x2300, 0x2200, 0x2101);
+          //}
+      }
+
       S32 drawType = getDrawType(draw.matIndex>>30);
 
       glDrawElements(drawType,draw.numElements,GL_UNSIGNED_SHORT,&indices[draw.start]);
    }
+
+   /*
+   if (TSMesh::doColorShift != '\0') {
+       if (TSMesh::colorShiftColor.alpha < 0.99) {
+           glDisable(0x0BE2);
+           glBlendFunc(1, 0);
+           glEnable(0x1801);
+           glDepthMask(1);
+       }
+       glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+       glDisable(0x0B57);
+       glTexEnvi(0x2300, 0x2200, 0x2100);
+       glDisable(0x0DE1);
+   }
+   */
 
    // unlock...
    if (lockArrays)

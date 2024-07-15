@@ -24,6 +24,9 @@
 #ifndef _ABSTRACTPOLYLIST_H_
 #include "collision/abstractPolyList.h"
 #endif
+#ifndef _COLOR_H_
+#include "core/color.h"
+#endif
 
 // when working with 3dsmax, we want some things to be vectors that otherwise
 // are pointers to non-resizeable blocks of memory
@@ -80,6 +83,9 @@ class TSMesh
    static F32 overrideFadeVal;
 
   public:
+
+   static ColorF colorShiftColor;
+   static bool doColorShift;
 
    enum
    {

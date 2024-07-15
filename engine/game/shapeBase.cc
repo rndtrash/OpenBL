@@ -2936,7 +2936,7 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
 
    if(!stream->writeFlag(mask & (NameMask | DamageMask | SoundMask |
          ThreadMask | ImageMask | CloakMask | MountedMask | InvincibleMask |
-         ShieldMask | SkinMask | HiddenNodeMask | NameColorMask)))
+         ShieldMask | SkinMask | HiddenNodeMask | NodeColorMask | NameColorMask)))
       return retMask;
 
    if (stream->writeFlag(mask & DamageMask)) {
@@ -2987,7 +2987,7 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
    }
 
    // Group some of the uncommon stuff together.
-   if (stream->writeFlag(mask & (NameMask | ShieldMask | CloakMask | InvincibleMask | SkinMask | HiddenNodeMask))) {
+   if (stream->writeFlag(mask & (NameMask | ShieldMask | CloakMask | InvincibleMask | SkinMask | HiddenNodeMask | NodeColorMask))) {
       if (stream->writeFlag(mask & CloakMask)) {
          // cloaking
          stream->writeFlag( mCloaked );
@@ -3027,7 +3027,18 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
               stream->writeInt(mShapeInstance->mHiddenNodes.size(), 8);
               for (int x = 0; x < mShapeInstance->mHiddenNodes.size(); x++)
               {
-                  stream->writeInt(mShapeInstance->mHiddenNodes[x], 8);
+                  stream->writeFlag(mShapeInstance->mHiddenNodes[x]);
+              }
+          }
+      }
+
+      if (stream->writeFlag(mask & NodeColorMask)) {
+          if (mShapeInstance != NULL)
+          {
+              stream->writeInt(mShapeInstance->mNodeColors.size(), 8);
+              for (int x = 0; x < mShapeInstance->mNodeColors.size(); x++)
+              {
+                  stream->write(mShapeInstance->mNodeColors[x]);
               }
           }
       }
@@ -3240,9 +3251,20 @@ void ShapeBase::unpackUpdate(NetConnection *con, BitStream *stream)
               int count = stream->readInt(8);
               for (int x = 0; x < count; x++)
               {
-                  mShapeInstance->mHiddenNodes.push_back(stream->readInt(8));
+                  mShapeInstance->mHiddenNodes.push_back(stream->readFlag());
               }
           }
+      }
+
+      if (stream->readFlag()) { // NodeColorMask  
+         if (mShapeInstance != NULL)
+         {
+             int count = stream->readInt(8);
+             for (int x = 0; x < count; x++)
+             {
+                 stream->read(&mShapeInstance->mNodeColors[x]);
+;            }
+         }
       }
    }
 
@@ -3325,14 +3347,7 @@ void ShapeBase::hideNode(const char* nodeName)
     S32 nodeIndex = mShapeInstance->getShape()->findObject(nodeName);
     if (nodeIndex != -1)
     {
-        for (S32 i = 0; i < mShapeInstance->mHiddenNodes.size(); i++)
-        {
-            if (mShapeInstance->mHiddenNodes[i] == nodeIndex)
-            {
-                return;
-            }
-        }
-        mShapeInstance->mHiddenNodes.push_back(nodeIndex);
+        mShapeInstance->mHiddenNodes[nodeIndex] = true;
         setMaskBits(HiddenNodeMask);
     }
 }
@@ -3344,15 +3359,9 @@ void ShapeBase::unHideNode(const char* nodeName)
     S32 nodeIndex = mShapeInstance->getShape()->findObject(nodeName);
     if (nodeIndex != -1)
     {
-        for (S32 i = 0; i < mShapeInstance->mHiddenNodes.size(); i++)
-        {
-            if (mShapeInstance->mHiddenNodes[i] == nodeIndex)
-            {
-                mShapeInstance->mHiddenNodes.erase(i);
-                setMaskBits(HiddenNodeMask);
-                return;
-            }
-        }
+        mShapeInstance->mHiddenNodes[nodeIndex] = false;
+        setMaskBits(HiddenNodeMask);
+        return;
     }
 }
 
@@ -3370,6 +3379,25 @@ void ShapeBase::setShapeNameColor(ColorF color)
 ColorF ShapeBase::getShapeNameColor()
 {
     return mShapeNameColor;
+}
+
+//-----------------------------------------------------------
+
+void ShapeBase::setNodeColor(const char* nodeName, ColorF color)
+{
+    // make sure we can find nodes 
+    S32 nodeIndex = mShapeInstance->getShape()->findObject(nodeName);
+    if (nodeIndex != -1)
+    {
+        mShapeInstance->mNodeColors[nodeIndex] = color;
+        setMaskBits(NodeColorMask);
+        return;
+    }
+    else
+    {
+        Con::printf("Error: ShapeBase::setNodeColor() - node \"%s\" not found", nodeName);
+        return;
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -4219,6 +4247,13 @@ ConsoleMethod(ShapeBase, hideNode, void, 3, 3, "( string nodeName )")
 ConsoleMethod(ShapeBase, unHideNode, void, 3, 3, "( string nodeName )")
 {
     object->unHideNode(argv[2]);
+}
+
+ConsoleMethod(ShapeBase, setNodeColor, void, 4, 4, "( string name, float color )")
+{
+    F32 r, g, b, a;
+    dSscanf(argv[3], "%f %f %f %f", &r, &g, &b, &a);
+    object->setNodeColor(argv[2], ColorF(r, g, b, a));
 }
 
 ConsoleMethod(ShapeBase, setShapeNameColor, void, 3, 3, "( string RGB )")

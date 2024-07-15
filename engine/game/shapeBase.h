@@ -541,6 +541,7 @@ class ShapeBase : public GameBase
 public:
    void hideNode(const char* nodeName);
    void unHideNode(const char* nodeName);
+   void setNodeColor(const char* nodeName, ColorF color);
 
    enum PublicConstants {
       ThreadSequenceBits = 6,
@@ -960,8 +961,9 @@ public:
       InvincibleMask  = Parent::NextFreeMask << 6,
       SkinMask        = Parent::NextFreeMask << 7,
       HiddenNodeMask  = Parent::NextFreeMask << 8,
-      NameColorMask   = Parent::NextFreeMask << 9,
-      SoundMaskN      = Parent::NextFreeMask << 10,      ///< Extends + MaxSoundThreads bits
+      NodeColorMask   = Parent::NextFreeMask << 9,
+      NameColorMask   = Parent::NextFreeMask << 10,
+      SoundMaskN      = Parent::NextFreeMask << 11,      ///< Extends + MaxSoundThreads bits
       ThreadMaskN     = SoundMaskN  << MaxSoundThreads,  ///< Extends + MaxScriptThreads bits
       ImageMaskN      = ThreadMaskN << MaxScriptThreads, ///< Extends + MaxMountedImage bits
       NextFreeMask    = ImageMaskN  << MaxMountedImages

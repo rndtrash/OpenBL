@@ -114,6 +114,17 @@ ConsoleMethod(GuiObjectView, unHideNode, void, 4, 4, "ObjectView.unHideNode(obje
 	view->unHideNode(argv[2], argv[3]);
 }
 
+// Script function handling for "setNodeColor"
+ConsoleMethod(GuiObjectView, setNodeColor, void, 5, 5, "ObjectView.setIflFrame(object name, nodeName, node color)") {
+	argc;
+	GuiObjectView* view = static_cast<GuiObjectView*>(object);
+
+	F32 r, g, b, a;
+	dSscanf(argv[4], "%f %f %f %f", &r, &g, &b, &a);
+
+	view->setNodeColor(argv[2], argv[3], ColorF(r, g, b, a));
+}
+
 ConsoleMethod( GuiObjectView, setCameraOffset, void, 5, 5, "ObjectView.setCameraOffset(x, y, z)" ){
 	argc;   GuiObjectView* view = static_cast<GuiObjectView*>( object );
 	view->setCameraOffset(dAtof(argv[2]), dAtof(argv[3]), dAtof(argv[4]));
@@ -502,14 +513,7 @@ void GuiObjectView::hideNode(const char* parentName, const char* nodeName)
 		S32 nodeIndex = mMeshObjects.mMainObject->getShape()->findObject(nodeName);
 		if (nodeIndex != -1)
 		{
-			for (S32 i = 0; i < mMeshObjects.mMainObject->mHiddenNodes.size(); i++)
-			{
-				// don't push back if there's duplicates
-				if (mMeshObjects.mMainObject->mHiddenNodes[i] == nodeIndex)
-					return;
-			}
-			// add hidden node to our list
-			mMeshObjects.mMainObject->mHiddenNodes.push_back(nodeIndex);
+			mMeshObjects.mMainObject->mHiddenNodes[nodeIndex] = true;
 		}
 		else
 		{
@@ -537,12 +541,7 @@ void GuiObjectView::unHideNode(const char* parentName, const char* nodeName)
 		S32 nodeIndex = mMeshObjects.mMainObject->getShape()->findObject(nodeName);
 		if (nodeIndex != -1)
 		{
-			for (S32 i = 0; i < mMeshObjects.mMainObject->mHiddenNodes.size(); i++)
-			{
-				// remove the node from the hidden list
-				if (mMeshObjects.mMainObject->mHiddenNodes[i] == nodeIndex)
-					mMeshObjects.mMainObject->mHiddenNodes.erase(i);
-			}
+			mMeshObjects.mMainObject->mHiddenNodes[nodeIndex] = false;
 		}
 		else
 		{
@@ -557,6 +556,28 @@ void GuiObjectView::unHideNode(const char* parentName, const char* nodeName)
 	}
 
 	// Case for "null shape instance" is missing, I currently don't know the appropriate location for it.
+}
+
+//-----------------------------------------------------------
+
+void GuiObjectView::setNodeColor(const char* parentName, const char* nodeName, ColorF color)
+{
+	// make sure we have a parent
+	S32 index = mMeshObjects.findMeshByName(parentName);
+	if (index != -1)
+	{
+		// make sure we can find nodes 
+		S32 nodeIndex = mMeshObjects.mMainObject->getShape()->findObject(nodeName);
+		if (nodeIndex != -1)
+		{
+			mMeshObjects.mMainObject->mNodeColors[nodeIndex] = color;
+		}
+		else
+		{
+			Con::printf("Error: GuiObjectView::setNodeColor() - node \"%s\" not found", nodeName);
+			return;
+		}
+	}
 }
 
 //-----------------------------------------------------------
