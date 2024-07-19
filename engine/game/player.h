@@ -239,10 +239,11 @@ class Player: public ShapeBase
 protected:
    /// Bit masks for different types of events
    enum MaskBits {
-      ActionMask   = Parent::NextFreeMask << 0,
-      MoveMask     = Parent::NextFreeMask << 1,
-      ImpactMask   = Parent::NextFreeMask << 2,
-      NextFreeMask = Parent::NextFreeMask << 3
+      ActionMask    = Parent::NextFreeMask << 0,
+      MoveMask      = Parent::NextFreeMask << 1,
+      ImpactMask    = Parent::NextFreeMask << 2,
+      IFLChangeMask = Parent::NextFreeMask << 3,
+      NextFreeMask  = Parent::NextFreeMask << 4
    };
 
    struct Range {
@@ -448,6 +449,15 @@ public:
    Player();
    ~Player();
    static void consoleInit();
+
+
+   // Player texture related stuff
+   void setDecalName(const char* decalName);
+   void setFaceName(const char* faceName);
+   void assignIFLByName(const char* iflName, const char* textureName);
+
+   StringTableEntry mFaceName;
+   StringTableEntry mDecalName;
 
    /// @name Transforms
    /// Transforms are all in object space

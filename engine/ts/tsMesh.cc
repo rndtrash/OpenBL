@@ -303,50 +303,43 @@ void TSMesh::render(S32 frame, S32 matFrame, TSMaterialList * materials)
    if (lockArrays)
       glLockArraysEXT(0,vertsPerFrame);
 
+   if (TSMesh::doColorShift) {
+       if (TSMesh::colorShiftColor.alpha < 0.99) {
+           glEnable(GL_BLEND);
+           glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+           glDisable(GL_DEPTH);
+       }
+       glEnable(GL_COLOR_MATERIAL);
+       glColor4f(TSMesh::colorShiftColor.red, TSMesh::colorShiftColor.green, TSMesh::colorShiftColor.blue, TSMesh::colorShiftColor.alpha);
+       glEnable(GL_TEXTURE_2D);
+       glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+   }
+
    for (S32 i=0; i<primitives.size(); i++)
    {
       TSDrawPrimitive & draw = primitives[i];
       AssertFatal(draw.matIndex & TSDrawPrimitive::Indexed,
                   "TSMesh::render: rendering of non-indexed meshes no longer supported");
 
-      // material change?
-      if ( ((TSShapeInstance::smRenderData.materialIndex ^ draw.matIndex) &
-            (TSDrawPrimitive::MaterialMask|TSDrawPrimitive::NoMaterial)) != 0)
-         setMaterial(draw.matIndex,materials);
 
-      if (TSMesh::doColorShift)
+      // material change?
+      if (((TSShapeInstance::smRenderData.materialIndex ^ draw.matIndex) & (TSDrawPrimitive::MaterialMask | TSDrawPrimitive::NoMaterial)) != 0)
       {
-          // what do these args belong to?
-          /*
-          if ((local_20[0] == 0) || (*(local_20[0] + 0x34) == '\0')) {
-              if (0.99 <= TSMesh::colorShiftColor.alpha) {
-                  glEnable(0x0DE1);
-                  glTexEnvi(0x2300, 0x2200, 0x2100);
-              }
-              else {
-                  glEnable(0x0B57);
-                  glColor4f(1.0, 1.0, 1.0, TSMesh::colorShiftColor.alpha);
-                  glEnable(0x0DE1);
-                  glEnable(0x0BE2);
-                  glBlendFunc(0x302, 0x303);
-                  glDisable(0x1801);
-                  glTexEnvi(0x2300, 0x2200, 0x2100);
-              }
-          }
-          else
-          {
-          */
-              glEnable(0x0B57);
-              glColor4f(TSMesh::colorShiftColor.red, TSMesh::colorShiftColor.green, TSMesh::colorShiftColor.blue, TSMesh::colorShiftColor.alpha);
-              glEnable(0x0DE1);
-              if (TSMesh::colorShiftColor.alpha < 0.99) {
-                  glEnable(0x0BE2);
-                  glBlendFunc(0x302, 0x303);
-                  glDisable(0x1801);
-                  glDepthMask(0);
-              }
-              glTexEnvi(0x2300, 0x2200, 0x2101);
-          //}
+         setMaterial(draw.matIndex, materials);
+
+         if (TSMesh::doColorShift) {
+            glEnable(GL_COLOR_MATERIAL);
+            glColor4f(TSMesh::colorShiftColor.red, TSMesh::colorShiftColor.green, TSMesh::colorShiftColor.blue, TSMesh::colorShiftColor.alpha);
+            glEnable(GL_TEXTURE_2D);
+
+            if (TSMesh::colorShiftColor.alpha < 0.99) {
+               glEnable(GL_BLEND);
+               glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+               glDisable(GL_DEPTH);
+               glDepthMask(GL_FALSE);
+            }
+            glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+         }
       }
 
       S32 drawType = getDrawType(draw.matIndex>>30);
@@ -354,20 +347,18 @@ void TSMesh::render(S32 frame, S32 matFrame, TSMaterialList * materials)
       glDrawElements(drawType,draw.numElements,GL_UNSIGNED_SHORT,&indices[draw.start]);
    }
 
-   /*
-   if (TSMesh::doColorShift != '\0') {
-       if (TSMesh::colorShiftColor.alpha < 0.99) {
-           glDisable(0x0BE2);
-           glBlendFunc(1, 0);
-           glEnable(0x1801);
-           glDepthMask(1);
+   if (doColorShift) {
+       if (colorShiftColor.alpha < 0.99) {
+           glDisable(GL_BLEND);
+           glBlendFunc(GL_ONE, GL_ZERO);
+           glEnable(GL_DEPTH);
+           glDepthMask(GL_TRUE);
        }
        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-       glDisable(0x0B57);
-       glTexEnvi(0x2300, 0x2200, 0x2100);
-       glDisable(0x0DE1);
+       glDisable(GL_COLOR_MATERIAL);
+       glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+       glDisable(GL_TEXTURE_2D);
    }
-   */
 
    // unlock...
    if (lockArrays)

@@ -805,6 +805,9 @@ Player::Player()
    mLastWaterPos.set( 0.0, 0.0, 0.0 );
 
    mMountPending = 0;
+
+   mFaceName = StringTable->insert("");
+   mDecalName = StringTable->insert("");
 }
 
 Player::~Player()
@@ -972,6 +975,9 @@ bool Player::onNewDataBlock(GameBaseData* dptr)
             mShapeInstance->setSequence(mRecoilThread,mDataBlock->recoilSequence[s],0);
             mShapeInstance->setTimeScale(mRecoilThread,0);
          }
+
+   assignIFLByName("face.ifl", mFaceName);
+   assignIFLByName("decal.ifl", mDecalName);
 
    // Initialize the primary thread, the actual sequence is
    // set later depending on player actions.
@@ -3436,6 +3442,12 @@ U32 Player::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
 {
    U32 retMask = Parent::packUpdate(con, mask, stream);
 
+   if (stream->writeFlag(mask & IFLChangeMask))
+   {
+       stream->writeString(mFaceName);
+       stream->writeString(mDecalName);
+   }
+
    if (stream->writeFlag((mask & ImpactMask) && !(mask & InitialUpdateMask)))
       stream->writeInt(mImpactSound, PlayerData::ImpactBits);
 
@@ -3504,6 +3516,16 @@ U32 Player::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
 void Player::unpackUpdate(NetConnection *con, BitStream *stream)
 {
    Parent::unpackUpdate(con,stream);
+
+
+   if (stream->readFlag()) // IFLChangeMask
+   {
+       mFaceName = stream->readSTString();
+       mDecalName = stream->readSTString();
+
+       assignIFLByName("face.ifl", mFaceName);
+       assignIFLByName("decal.ifl", mDecalName);
+   }
 
    if (stream->readFlag())
       mImpactSound = stream->readInt(PlayerData::ImpactBits);
@@ -4262,3 +4284,63 @@ bool Player::isControlObject()
    return ( obj == this );
 }
 
+void Player::setFaceName(const char* faceName)
+{
+    if (!dStrcmp(mFaceName, faceName))
+        return;
+
+    mFaceName = StringTable->insert(faceName);
+    setMaskBits(IFLChangeMask);
+}
+
+void Player::setDecalName(const char* decalName)
+{
+    if (!dStrcmp(mDecalName, decalName))
+        return;
+
+    mDecalName = StringTable->insert(decalName);
+    setMaskBits(IFLChangeMask);
+}
+
+void Player::assignIFLByName(const char* iflName, const char* textureName)
+{
+    if (mShapeInstance != NULL)
+    {
+        // get our shape and its respective ifl data
+        TSShape* shape = mShapeInstance->getShape();
+        S32 iflIndex = shape->findIflMaterial(shape->findName(iflName));
+
+        // if we have a material list, and if our ifl is not invalid
+        if (mShapeInstance->ownMaterialList() && iflIndex != -1)
+        {
+            // get its frames (in this case, list of images that can be chosen as a face/decal)
+            S32 start = shape->iflMaterials[iflIndex].firstFrame;
+            S32 end   = start + shape->iflMaterials[iflIndex].numFrames;
+
+            for (S32 i = start; i < end; i++)
+            {
+                const char* materialName = mShapeInstance->getMaterialList()->getMaterialName(i);
+
+                // format our texture name string
+                // example: "faces/smiley" -> "smiley"
+                const char* filePath = dStrrchr(materialName, '/') + 1;
+
+                // if we find it, that's our frame and we set it on the player
+                if (!dStricmp(filePath, textureName))
+                {
+                    mShapeInstance->mIflMaterialInstances[iflIndex].frame = i - start;
+                }
+            }
+        }
+    }
+}
+
+ConsoleMethod(Player, setFaceName, void, 3, 3, "(string imageName)")
+{
+    object->setFaceName(argv[2]);
+}
+
+ConsoleMethod(Player, setDecalName, void, 3, 3, "(string imageName)")
+{
+    object->setDecalName(argv[2]);
+}

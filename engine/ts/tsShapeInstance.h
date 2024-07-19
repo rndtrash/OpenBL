@@ -75,8 +75,14 @@ class TSShapeInstance
 {
    public:
 
+   struct NodeColorData
+   {
+       bool mDoColorShift;
+       ColorF mNodeColor;
+   };
+
    Vector<bool> mHiddenNodes;
-   Vector<ColorF> mNodeColors;
+   Vector<NodeColorData> mNodeColorData;
 
    struct ObjectInstance;
    friend class TSThread;

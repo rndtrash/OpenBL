@@ -958,12 +958,11 @@ public:
       MountedMask     = Parent::NextFreeMask << 3,
       CloakMask       = Parent::NextFreeMask << 4,
       ShieldMask      = Parent::NextFreeMask << 5,
-      InvincibleMask  = Parent::NextFreeMask << 6,
-      SkinMask        = Parent::NextFreeMask << 7,
-      HiddenNodeMask  = Parent::NextFreeMask << 8,
-      NodeColorMask   = Parent::NextFreeMask << 9,
-      NameColorMask   = Parent::NextFreeMask << 10,
-      SoundMaskN      = Parent::NextFreeMask << 11,      ///< Extends + MaxSoundThreads bits
+      SkinMask        = Parent::NextFreeMask << 6,
+      HiddenNodeMask  = Parent::NextFreeMask << 7,
+      NodeColorMask   = Parent::NextFreeMask << 8,
+      NameColorMask   = Parent::NextFreeMask << 9,
+      SoundMaskN      = Parent::NextFreeMask << 10,      ///< Extends + MaxSoundThreads bits
       ThreadMaskN     = SoundMaskN  << MaxSoundThreads,  ///< Extends + MaxScriptThreads bits
       ImageMaskN      = ThreadMaskN << MaxScriptThreads, ///< Extends + MaxMountedImage bits
       NextFreeMask    = ImageMaskN  << MaxMountedImages

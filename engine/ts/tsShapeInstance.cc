@@ -197,9 +197,8 @@ void TSShapeInstance::buildInstanceData(TSShape * _shape, bool loadMaterials)
    for (i=0; i<numObjects; i++)
    {
       // Initialize, set the size to the # of objects so that we can assign objects values by using their index in the list of objects
-
       mHiddenNodes.push_back(false);
-      mNodeColors.push_back(ColorF(0.0, 0.0, 0.0, 0.0));
+      mNodeColorData.push_back( { false, ColorF(0.0, 0.0, 0.0, 0.0)} );
 
       const TSObject * obj = &mShape->objects[i];
       MeshObjectInstance * objInst = &mMeshObjects[i];
@@ -658,10 +657,9 @@ void TSShapeInstance::render(S32 dl, F32 intraDL, const Point3F * objectScale)
       for (i = start; i < end; i++)
       {
           TSMesh* mesh = mMeshObjects[i].getMesh(od);
-          mesh->colorShiftColor = mNodeColors[i];
 
-          //temp
-          mesh->doColorShift = true;
+          mesh->doColorShift = mNodeColorData[i].mDoColorShift;
+          mesh->colorShiftColor = mNodeColorData[i].mNodeColor;
 
           if (!mHiddenNodes[i])
               mMeshObjects[i].render(od, mMaterialList);

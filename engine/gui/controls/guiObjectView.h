@@ -135,6 +135,7 @@ class GuiObjectView : public GuiTSCtrl
 		void hideNode(const char* parentName, const char* nodeName);
 		void unHideNode(const char* parentName, const char* nodeName);
 		void setNodeColor(const char* parentName, const char* nodeName, ColorF color);
+		void setIflFrame(const char* objectName, const char* iflName, int frame);
 };
 
 #endif // _GUIOBJECTVIEW_H_

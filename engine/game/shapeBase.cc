@@ -1892,7 +1892,6 @@ void ShapeBase::setupInvincibleEffect(F32 time, F32 speed)
    {
       mInvincibleTime  = time;
       mInvincibleSpeed = speed;
-      setMaskBits(InvincibleMask);
    }
 }
 
@@ -2935,7 +2934,7 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
    }
 
    if(!stream->writeFlag(mask & (NameMask | DamageMask | SoundMask |
-         ThreadMask | ImageMask | CloakMask | MountedMask | InvincibleMask |
+         ThreadMask | ImageMask | CloakMask | MountedMask |
          ShieldMask | SkinMask | HiddenNodeMask | NodeColorMask | NameColorMask)))
       return retMask;
 
@@ -2987,7 +2986,7 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
    }
 
    // Group some of the uncommon stuff together.
-   if (stream->writeFlag(mask & (NameMask | ShieldMask | CloakMask | InvincibleMask | SkinMask | HiddenNodeMask | NodeColorMask))) {
+   if (stream->writeFlag(mask & (NameMask | ShieldMask | CloakMask | SkinMask | HiddenNodeMask | NodeColorMask))) {
       if (stream->writeFlag(mask & CloakMask)) {
          // cloaking
          stream->writeFlag( mCloaked );
@@ -3010,10 +3009,6 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
          stream->writeNormalVector(mShieldNormal, ShieldNormalBits);
          stream->writeFloat( getEnergyValue(), EnergyLevelBits );
       }
-      if (stream->writeFlag(mask & InvincibleMask)) {
-         stream->write(mInvincibleTime);
-         stream->write(mInvincibleSpeed);
-      }
 
       if (stream->writeFlag(mask & SkinMask)) {
 
@@ -3035,10 +3030,11 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
       if (stream->writeFlag(mask & NodeColorMask)) {
           if (mShapeInstance != NULL)
           {
-              stream->writeInt(mShapeInstance->mNodeColors.size(), 8);
-              for (int x = 0; x < mShapeInstance->mNodeColors.size(); x++)
+              stream->writeInt(mShapeInstance->mNodeColorData.size(), 8);
+              for (int x = 0; x < mShapeInstance->mNodeColorData.size(); x++)
               {
-                  stream->write(mShapeInstance->mNodeColors[x]);
+                  stream->writeFlag(mShapeInstance->mNodeColorData[x].mDoColorShift);
+                  stream->write(mShapeInstance->mNodeColorData[x].mNodeColor);
               }
           }
       }
@@ -3213,12 +3209,6 @@ void ShapeBase::unpackUpdate(NetConnection *con, BitStream *stream)
          stream->readNormalVector(&shieldNormal, ShieldNormalBits);
          F32 energyPercent = stream->readFloat(EnergyLevelBits);
       }
-      if (stream->readFlag()) {  // InvincibleMask
-         F32 time, speed;
-         stream->read(&time);
-         stream->read(&speed);
-         setupInvincibleEffect(time, speed);
-      }
 
       if (stream->readFlag()) {  // SkinMask
 
@@ -3262,7 +3252,10 @@ void ShapeBase::unpackUpdate(NetConnection *con, BitStream *stream)
              int count = stream->readInt(8);
              for (int x = 0; x < count; x++)
              {
-                 stream->read(&mShapeInstance->mNodeColors[x]);
+                 // doColorShift
+                 mShapeInstance->mNodeColorData[x].mDoColorShift = stream->readFlag();
+                 // colorShiftColor
+                 stream->read(&mShapeInstance->mNodeColorData[x].mNodeColor);
 ;            }
          }
       }
@@ -3389,7 +3382,7 @@ void ShapeBase::setNodeColor(const char* nodeName, ColorF color)
     S32 nodeIndex = mShapeInstance->getShape()->findObject(nodeName);
     if (nodeIndex != -1)
     {
-        mShapeInstance->mNodeColors[nodeIndex] = color;
+        mShapeInstance->mNodeColorData[nodeIndex] = { true, color };
         setMaskBits(NodeColorMask);
         return;
     }
@@ -4169,11 +4162,6 @@ ConsoleMethod( ShapeBase, setCameraFov, void, 3, 3, "(float fov)")
       object->setCameraFov(dAtof(argv[2]));
 }
 
-ConsoleMethod( ShapeBase, setInvincibleMode, void, 4, 4, "(float time, float speed)")
-{
-   object->setupInvincibleEffect(dAtof(argv[2]), dAtof(argv[3]));
-}
-
 ConsoleFunction(setShadowDetailLevel, void , 2, 2, "setShadowDetailLevel(val 0...1);")
 {
    argc;
@@ -4253,6 +4241,15 @@ ConsoleMethod(ShapeBase, setNodeColor, void, 4, 4, "( string name, float color )
 {
     F32 r, g, b, a;
     dSscanf(argv[3], "%f %f %f %f", &r, &g, &b, &a);
+    
+    if (!dStrcmp(argv[2], "ALL")) {
+        for (S32 i = 0; i < object->getShape()->objects.size(); i++)
+        {
+            object->setNodeColor(object->getShape()->names[object->getShape()->objects[i].nameIndex], ColorF(r, g, b, a));
+        }
+        return;
+    }
+
     object->setNodeColor(argv[2], ColorF(r, g, b, a));
 }
 
@@ -4262,7 +4259,9 @@ ConsoleMethod(ShapeBase, setShapeNameColor, void, 3, 3, "( string RGB )")
     dSscanf(argv[2], "%f %f %f", &r, &g, &b);
     object->setShapeNameColor(ColorF(r, g, b));
 }
+
 //----------------------------------------------------------------------------
+
 void ShapeBase::consoleInit()
 {
    Con::addVariable("SB::DFDec", TypeF32, &sDamageFlashDec);

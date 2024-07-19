@@ -839,10 +839,6 @@ void TSShapeInstance::animate(S32 dl)
       sortThreads(mTransitionThreads);
    }
 
-   // animate ifl's?
-   if (dirtyFlags & IflDirty)
-      animateIfls();
-
    // animate nodes?
    if (dirtyFlags & TransformDirty)
       animateNodes(ss);

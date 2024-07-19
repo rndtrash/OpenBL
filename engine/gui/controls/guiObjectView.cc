@@ -125,6 +125,14 @@ ConsoleMethod(GuiObjectView, setNodeColor, void, 5, 5, "ObjectView.setIflFrame(o
 	view->setNodeColor(argv[2], argv[3], ColorF(r, g, b, a));
 }
 
+// Script function handling for "setNodeColor"
+ConsoleMethod(GuiObjectView, setIflFrame, void, 5, 5, "ObjectView.setIflFrame(object name, iflName, frame)") {
+	argc;
+	GuiObjectView* view = static_cast<GuiObjectView*>(object);
+	int frame = dAtoi(argv[4]);
+	view->setIflFrame(argv[2], argv[3], frame);
+}
+
 ConsoleMethod( GuiObjectView, setCameraOffset, void, 5, 5, "ObjectView.setCameraOffset(x, y, z)" ){
 	argc;   GuiObjectView* view = static_cast<GuiObjectView*>( object );
 	view->setCameraOffset(dAtof(argv[2]), dAtof(argv[3]), dAtof(argv[4]));
@@ -570,12 +578,37 @@ void GuiObjectView::setNodeColor(const char* parentName, const char* nodeName, C
 		S32 nodeIndex = mMeshObjects.mMainObject->getShape()->findObject(nodeName);
 		if (nodeIndex != -1)
 		{
-			mMeshObjects.mMainObject->mNodeColors[nodeIndex] = color;
+			mMeshObjects.mMainObject->mNodeColorData[nodeIndex] = { true, color };
 		}
 		else
 		{
 			Con::printf("Error: GuiObjectView::setNodeColor() - node \"%s\" not found", nodeName);
 			return;
+		}
+	}
+}
+
+//-----------------------------------------------------------
+
+void GuiObjectView::setIflFrame(const char* objectName, const char* iflName, int frame)
+{
+	char iflFileNameBuffer[256];
+
+	S32 index = mMeshObjects.findMeshByName(objectName);
+	if (index != -1)
+	{
+		dStrcpy(iflFileNameBuffer, iflName);
+		dStrcat(iflFileNameBuffer, ".ifl");
+	
+		if (mMeshObjects.mMainObject->getShape()->materialList->size() == 0)
+		{
+			Con::errorf("Null MaterialList found!");
+		}
+		else
+		{
+			S32 iflIndex = mMeshObjects.mMainObject->getShape()->findName(iflFileNameBuffer);
+			iflIndex = mMeshObjects.mMainObject->getShape()->findIflMaterial(iflIndex);
+			mMeshObjects.mMainObject->mIflMaterialInstances[iflIndex].frame = frame;
 		}
 	}
 }
