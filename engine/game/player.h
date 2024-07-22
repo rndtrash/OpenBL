@@ -243,7 +243,8 @@ protected:
       MoveMask      = Parent::NextFreeMask << 1,
       ImpactMask    = Parent::NextFreeMask << 2,
       IFLChangeMask = Parent::NextFreeMask << 3,
-      NextFreeMask  = Parent::NextFreeMask << 4
+      ThreadMask    = Parent::NextFreeMask << 4,
+      NextFreeMask  = Parent::NextFreeMask << 5
    };
 
    struct Range {
@@ -315,6 +316,8 @@ protected:
    AUDIOHANDLE mMoveBubbleHandle;   ///< Audio handle for moving bubbles
    AUDIOHANDLE mWaterBreathHandle;  ///< Audio handle for underwater breath
 
+   bool mHeadUp;
+
    SimObjectPtr<ShapeBase> mControlObject; ///< Controlling object
 
    /// @name Animation threads & data
@@ -340,6 +343,7 @@ protected:
 
    TSThread* mHeadVThread;
    TSThread* mHeadHThread;
+   TSThread* mHeadUpThread;
    TSThread* mRecoilThread;
    static Range mArmRange;
    static Range mHeadVRange;
@@ -443,6 +447,7 @@ protected:
    bool collidingWithWater( Point3F &waterHeight ); ///< Are we collising with water?
    /// @}
 
+
 public:
    DECLARE_CONOBJECT(Player);
 
@@ -458,6 +463,9 @@ public:
 
    StringTableEntry mFaceName;
    StringTableEntry mDecalName;
+
+   // Raises neck of playemodel when wearing certain parts
+   void setHeadUp(bool headUp);
 
    /// @name Transforms
    /// Transforms are all in object space

@@ -2934,8 +2934,7 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
    }
 
    if(!stream->writeFlag(mask & (NameMask | DamageMask | SoundMask |
-         ThreadMask | ImageMask | CloakMask | MountedMask |
-         ShieldMask | SkinMask | HiddenNodeMask | NodeColorMask | NameColorMask)))
+         ThreadMask | ImageMask | CloakMask | MountedMask | SkinMask | HiddenNodeMask | NodeColorMask | NameColorMask)))
       return retMask;
 
    if (stream->writeFlag(mask & DamageMask)) {
@@ -2986,7 +2985,7 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
    }
 
    // Group some of the uncommon stuff together.
-   if (stream->writeFlag(mask & (NameMask | ShieldMask | CloakMask | SkinMask | HiddenNodeMask | NodeColorMask))) {
+   if (stream->writeFlag(mask & (NameMask | CloakMask | SkinMask | HiddenNodeMask | NodeColorMask))) {
       if (stream->writeFlag(mask & CloakMask)) {
          // cloaking
          stream->writeFlag( mCloaked );
@@ -3004,10 +3003,6 @@ U32 ShapeBase::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
       }
       if (stream->writeFlag(mask & NameMask)) {
          con->packStringHandleU(stream, mShapeNameHandle);
-      }
-      if (stream->writeFlag(mask & ShieldMask)) {
-         stream->writeNormalVector(mShieldNormal, ShieldNormalBits);
-         stream->writeFloat( getEnergyValue(), EnergyLevelBits );
       }
 
       if (stream->writeFlag(mask & SkinMask)) {
@@ -3201,13 +3196,6 @@ void ShapeBase::unpackUpdate(NetConnection *con, BitStream *stream)
       }
       if (stream->readFlag())  { // NameMask
          mShapeNameHandle = con->unpackStringHandleU(stream);
-      }
-      if(stream->readFlag())     // ShieldMask
-      {
-         // Cloaking, Shield, and invul masking
-         Point3F shieldNormal;
-         stream->readNormalVector(&shieldNormal, ShieldNormalBits);
-         F32 energyPercent = stream->readFloat(EnergyLevelBits);
       }
 
       if (stream->readFlag()) {  // SkinMask

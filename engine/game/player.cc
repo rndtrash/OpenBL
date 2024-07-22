@@ -808,6 +808,8 @@ Player::Player()
 
    mFaceName = StringTable->insert("");
    mDecalName = StringTable->insert("");
+
+   mHeadUp = false;
 }
 
 Player::~Player()
@@ -965,6 +967,16 @@ bool Player::onNewDataBlock(GameBaseData* dptr)
    }
    else
       mHeadHThread = 0;
+
+   headSeq = shape->findSequence("headUp");
+   if (headSeq != -1) {
+       mHeadUpThread = mShapeInstance->addThread();
+       mShapeInstance->setBlendEnabled(mHeadUpThread, true);
+       mShapeInstance->setSequence(mHeadUpThread, headSeq, 0);
+       mShapeInstance->setTimeScale(mHeadUpThread, 0);
+   }
+   else
+       mHeadUpThread = 0;
 
    // Recoil thread. The server player does not play this animation.
    mRecoilThread = 0;
@@ -2292,6 +2304,9 @@ void Player::updateAnimation(F32 dt)
    if (mRecoilThread)
       mShapeInstance->advanceTime(dt,mRecoilThread);
 
+   if (mHeadUpThread)
+       mShapeInstance->advanceTime(dt, mHeadUpThread);
+
    // If we are the client's player on this machine, then we need
    // to make sure the transforms are up to date as they are used
    // to setup the camera.
@@ -3510,6 +3525,12 @@ U32 Player::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
    }
    // Ghost need energy to predict reliably
    stream->writeFloat(getEnergyLevel() / mDataBlock->maxEnergy,EnergyLevelBits);
+
+   if (stream->writeFlag(mask & ThreadMask))
+   {
+       stream->writeFlag(mHeadUp);
+   }
+
    return retMask;
 }
 
@@ -3675,6 +3696,13 @@ void Player::unpackUpdate(NetConnection *con, BitStream *stream)
    }
    F32 energy = stream->readFloat(EnergyLevelBits) * mDataBlock->maxEnergy;
    setEnergyLevel(energy);
+
+   if (stream->readFlag()) // ThreadMask
+   {
+       mHeadUp = stream->readFlag();
+       setHeadUp(mHeadUp);
+       updateLookAnimation();
+   }
 }
 
 
@@ -4333,6 +4361,32 @@ void Player::assignIFLByName(const char* iflName, const char* textureName)
             }
         }
     }
+}
+
+void Player::setHeadUp(bool headUp)
+{
+    float pos = 0.0;
+
+    mHeadUp = headUp;
+
+    if (isServerObject())
+        setMaskBits(ThreadMask);
+
+    if (headUp) {
+        mShapeInstance->setTimeScale(mHeadUpThread, 1.0);
+        pos = 1.0;
+    }
+    else {
+        mShapeInstance->setTimeScale(mHeadUpThread, -1.0);
+        pos = 0.0;
+    }
+
+    mShapeInstance->setPos(this->mHeadUpThread, pos);
+}
+
+ConsoleMethod(Player, setHeadUp, void, 3, 3, "(bool)")
+{
+    object->setHeadUp(dAtob(argv[2]));
 }
 
 ConsoleMethod(Player, setFaceName, void, 3, 3, "(string imageName)")

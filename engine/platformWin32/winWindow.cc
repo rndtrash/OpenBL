@@ -1233,10 +1233,15 @@ class WinTimer
       S64 mPerfCountCurrent;
       S64 mPerfCountNext;
       S64 mFrequency;
+      F64 mPerfCountRemainderCurrent;
+      F64 mPerfCountRemainderNext;
       bool mUsingPerfCounter;
    public:
       WinTimer()
       {
+         SetProcessAffinityMask(GetCurrentProcess(), 1);
+      
+         mPerfCountRemainderCurrent = 0.0f;
          mUsingPerfCounter = QueryPerformanceFrequency((LARGE_INTEGER *) &mFrequency);
          if(mUsingPerfCounter)
             mUsingPerfCounter = QueryPerformanceCounter((LARGE_INTEGER *) &mPerfCountCurrent);
@@ -1248,7 +1253,10 @@ class WinTimer
          if(mUsingPerfCounter)
          {
             QueryPerformanceCounter( (LARGE_INTEGER *) &mPerfCountNext);
-            U32 elapsed = (U32) (1000.0f * F64(mPerfCountNext - mPerfCountCurrent) / F64(mFrequency));
+            F64 elapsedF64 = (1000.0 * F64(mPerfCountNext - mPerfCountCurrent) / F64(mFrequency));
+            elapsedF64 += mPerfCountRemainderCurrent;
+            U32 elapsed = mFloor(elapsedF64);
+            mPerfCountRemainderNext = elapsedF64 - F64(elapsed);
             return elapsed;
          }
          else
@@ -1261,6 +1269,7 @@ class WinTimer
       {
          mTickCountCurrent = mTickCountNext;
          mPerfCountCurrent = mPerfCountNext;
+         mPerfCountRemainderCurrent = mPerfCountRemainderNext;
       }
 };
 

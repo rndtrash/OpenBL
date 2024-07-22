@@ -957,12 +957,11 @@ public:
       NoWarpMask      = Parent::NextFreeMask << 2,
       MountedMask     = Parent::NextFreeMask << 3,
       CloakMask       = Parent::NextFreeMask << 4,
-      ShieldMask      = Parent::NextFreeMask << 5,
-      SkinMask        = Parent::NextFreeMask << 6,
-      HiddenNodeMask  = Parent::NextFreeMask << 7,
-      NodeColorMask   = Parent::NextFreeMask << 8,
-      NameColorMask   = Parent::NextFreeMask << 9,
-      SoundMaskN      = Parent::NextFreeMask << 10,      ///< Extends + MaxSoundThreads bits
+      SkinMask        = Parent::NextFreeMask << 5,
+      HiddenNodeMask  = Parent::NextFreeMask << 6,
+      NodeColorMask   = Parent::NextFreeMask << 7,
+      NameColorMask   = Parent::NextFreeMask << 8,
+      SoundMaskN      = Parent::NextFreeMask << 9,      ///< Extends + MaxSoundThreads bits
       ThreadMaskN     = SoundMaskN  << MaxSoundThreads,  ///< Extends + MaxScriptThreads bits
       ImageMaskN      = ThreadMaskN << MaxScriptThreads, ///< Extends + MaxMountedImage bits
       NextFreeMask    = ImageMaskN  << MaxMountedImages

@@ -81,11 +81,12 @@ class GuiObjectView : public GuiTSCtrl
 						S32 parentNode;
 						S32 parentIndex;
 						U32 detail;
-						TSThread *thread;
+						TSThread *threads[4];
 						S32 lastRenderTime;
 
 						void loadDSQ(const char* dsq);
-						void setSequence(const char* seq, F32 time);
+						void setSequence(S32 threadNum, const char* seq, F32 time);
+						void setThreadPos(S32 threadNum, F32 threadPos);
 
 				} mMesh[33];
 
@@ -121,6 +122,8 @@ class GuiObjectView : public GuiTSCtrl
 
 		void setCamera();
 		void setCamera(F32 rX, F32 rY, F32 rZ, F32 dist);
+		void setCameraRot(float x, float y, float z);
+		void setOrbitDist(float dist);
 		void setCameraOffset(F32 oX, F32 oY, F32 oZ);
 		bool processCameraQuery( CameraQuery *query );
 		void renderWorld( const RectI &updateRect );
@@ -129,13 +132,16 @@ class GuiObjectView : public GuiTSCtrl
 		void loadObject(const char* name, const char* shape, const char* skin, const char* parentName, const char* nodeName, S32 detail);
 		void unLoadObject(const char* name, const char* node);
 		void loadDSQ(const char* name, const char* dsq);
-		void setSequence(const char* name, const char* seq, F32 time);
+		void setSequence(const char* name, S32 threadNum, const char* seq, F32 time);
 		void Clear();
 
 		void hideNode(const char* parentName, const char* nodeName);
 		void unHideNode(const char* parentName, const char* nodeName);
 		void setNodeColor(const char* parentName, const char* nodeName, ColorF color);
-		void setIflFrame(const char* objectName, const char* iflName, int frame);
+		void setIflFrame(const char* objectName, const char* iflName, S32 frame);
+		void setThreadPos(const char* name, S32 threadNum, F32 threadPos);
+		void dumpView();
+
 };
 
 #endif // _GUIOBJECTVIEW_H_

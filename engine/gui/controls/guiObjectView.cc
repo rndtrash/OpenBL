@@ -20,7 +20,6 @@ static const S32 MaxAnimations = 6;
 
 IMPLEMENT_CONOBJECT( GuiObjectView );
 
-
 GuiObjectView::GuiObjectView() : GuiTSCtrl()
 {
 	mActive = true;
@@ -88,10 +87,10 @@ ConsoleMethod( GuiObjectView, loadDSQ, void, 4, 4, "ObjectView.loadDSQ(name, dsq
 }
 
 // Script function handling for "setSequence"
-ConsoleMethod( GuiObjectView, setSequence, void, 5, 5, "ObjectView.setSequence(name, seq, time)" ) {
+ConsoleMethod( GuiObjectView, setSequence, void, 6, 6, "ObjectView.setSequence(name, threadNum, seq, time)" ) {
 	argc;
 	GuiObjectView* view = static_cast<GuiObjectView*>( object );
-	view->setSequence(argv[2], argv[3], dAtof(argv[4]));
+	view->setSequence(argv[2], dAtoi(argv[3]), argv[4], dAtof(argv[5]));
 }
 
 // Script function handling for "setCamera"
@@ -131,6 +130,41 @@ ConsoleMethod(GuiObjectView, setIflFrame, void, 5, 5, "ObjectView.setIflFrame(ob
 	GuiObjectView* view = static_cast<GuiObjectView*>(object);
 	int frame = dAtoi(argv[4]);
 	view->setIflFrame(argv[2], argv[3], frame);
+}
+
+// Script function handling for "dumpView"
+ConsoleMethod(GuiObjectView, dumpView, void, 2, 2, "ObjectView.dumpView") {
+	GuiObjectView* view = static_cast<GuiObjectView*>(object);
+	view->dumpView();
+}
+
+// Script function handling for "setOrbitDist"
+ConsoleMethod(GuiObjectView, setOrbitDist, void, 3, 3, "ObjectView.setOrbitDist(float dist)") {
+	argc;
+	F32 dist = dAtof(argv[2]);
+	GuiObjectView* view = static_cast<GuiObjectView*>(object);
+	view->setOrbitDist(dist);
+}
+
+// Script function handling for "setCameraRot"
+ConsoleMethod(GuiObjectView, setCameraRot, void, 5, 5, "ObjectView.setCameraRot(float x, float y, float z)") {
+	argc;
+	GuiObjectView* view = static_cast<GuiObjectView*>(object);
+
+	F32 x = dAtof(argv[2]);
+	F32 y = dAtof(argv[3]);
+	F32 z = dAtof(argv[4]);
+
+	view->setCameraRot(x, y, z);
+}
+
+// Script function handling for "setThreadPos"
+ConsoleMethod(GuiObjectView, setThreadPos, void, 5, 5, "ObjectView.setThreadPos(name, threadNum, threadPos)") {
+	argc;
+	GuiObjectView* view = static_cast<GuiObjectView*>(object);
+	int threadNum = dAtoi(argv[3]);
+	float threadPos = dAtof(argv[4]);
+	view->setThreadPos(argv[2], threadNum, threadPos);
 }
 
 ConsoleMethod( GuiObjectView, setCameraOffset, void, 5, 5, "ObjectView.setCameraOffset(x, y, z)" ){
@@ -283,7 +317,7 @@ bool GuiObjectView::processCameraQuery( CameraQuery* query )
 	Point3F vec;
 	MatrixF xRot, yRot, zRot, t;
 	xRot.set( EulerF( mCameraRot.x, 0, 0 ) );
-	yRot.set( EulerF( 0, mCameraRot.y, 0 ) );
+	yRot.set( EulerF( 0, 0, 0 ) );
 	zRot.set( EulerF( 0, 0, mCameraRot.z ) );
 	mCameraMatrix.mul( zRot, xRot );
 	mCameraMatrix.mul( mCameraMatrix, yRot );
@@ -311,19 +345,18 @@ void GuiObjectView::renderWorld( const RectI &updateRect )
 
 	glEnable( GL_DEPTH_TEST );
 	glDepthFunc( GL_LEQUAL );
-    glEnable(GL_LIGHTING);
-	LightManager *lightManager = gClientSceneGraph->getLightManager();
-	LightInfo light;
-	if(lightManager)
-	{
-		light.mType = LightInfo::Ambient;
-		light.mDirection = mLightDirection;
-		light.mColor = mLightColor;
-		light.mAmbient = mAmbientColor;
-		lightManager->setMaxGLLights(1);
-		lightManager->addLight(&light);
-		lightManager->installGLLights(Box3F(-1, -1, -1, 1, 1, 1));
-	}
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+
+	GLfloat lightColor[]   = { mLightColor.red, mLightColor.green, mLightColor.blue, 1.f };
+	GLfloat ambientColor[] = { mAmbientColor.red, mAmbientColor.green, mAmbientColor.blue, 1.f };
+	GLfloat lightDir[]     = { mLightDirection.x, mLightDirection.y, mLightDirection.z, 0.f };
+
+	glLightfv(GL_LIGHT0, GL_POSITION, lightDir);
+	glLightfv(GL_LIGHT0, GL_COLOR, lightColor);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientColor);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
 
 	for (S32 i=0; i<33; i++)
 	{
@@ -337,7 +370,12 @@ void GuiObjectView::renderWorld( const RectI &updateRect )
 				mMeshObjects.mMesh[i].lastRenderTime = time;
 				F32 fdt = dt;
 
-				mMeshObjects.mMesh[i].mesh->advanceTime( fdt/1000.f, mMeshObjects.mMesh[i].thread );
+				for (S32 j = 0; j < sizeof(mMeshObjects.mMesh[i].threads) / sizeof(mMeshObjects.mMesh[i].threads[0]); j++)
+				{
+					if (mMeshObjects.mMesh[i].threads[j] != NULL)
+						mMeshObjects.mMesh[i].mesh->advanceTime(fdt / 1000.f, mMeshObjects.mMesh[i].threads[j]);
+				}
+
 				mMeshObjects.mMesh[i].mesh->animate();
 			}
 
@@ -357,14 +395,9 @@ void GuiObjectView::renderWorld( const RectI &updateRect )
 			}
 		}
 	}
-
-	if(lightManager)
-	{
-		lightManager->uninstallGLLights();
-		lightManager->removeLight(&light);
-	}
 	
 	glDisable(GL_LIGHTING);
+	glDisable(GL_LIGHT0);
 	glDisable( GL_DEPTH_TEST );
 	dglSetClipRect( updateRect );
 	dglSetCanonicalState();
@@ -491,12 +524,13 @@ void GuiObjectView::loadDSQ(const char* name, const char* dsq)
 	}
 }
 //-----------------------------------------------------------
-void GuiObjectView::setSequence(const char* name, const char* seq, F32 time)
+
+void GuiObjectView::setSequence(const char* name, S32 threadNum, const char* seq, F32 time)
 {
 	S32 index = mMeshObjects.findMeshByName(name);
 	if (index != -1)
 	{
-		mMeshObjects.mMesh[index].setSequence(seq, time);
+		mMeshObjects.mMesh[index].setSequence(threadNum, seq, time);
 	}
 	else
 	{
@@ -590,7 +624,7 @@ void GuiObjectView::setNodeColor(const char* parentName, const char* nodeName, C
 
 //-----------------------------------------------------------
 
-void GuiObjectView::setIflFrame(const char* objectName, const char* iflName, int frame)
+void GuiObjectView::setIflFrame(const char* objectName, const char* iflName, S32 frame)
 {
 	char iflFileNameBuffer[256];
 
@@ -610,6 +644,55 @@ void GuiObjectView::setIflFrame(const char* objectName, const char* iflName, int
 			iflIndex = mMeshObjects.mMainObject->getShape()->findIflMaterial(iflIndex);
 			mMeshObjects.mMainObject->mIflMaterialInstances[iflIndex].frame = frame;
 		}
+	}
+}
+
+//-----------------------------------------------------------
+
+void GuiObjectView::dumpView()
+{
+	Con::warnf("mCameraRot = %f %f %f", this->mCameraRot.x, this->mCameraRot.y, this->mCameraRot.z);
+	Con::warnf("mOrbitPos = %f %f %f", this->mOrbitPos.x, this->mOrbitPos.y, this->mOrbitPos.z);
+	Con::warnf("mOrbitDist = %f", this->mOrbitDist);
+	return;
+}
+
+//-----------------------------------------------------------
+
+void GuiObjectView::setThreadPos(const char* name, S32 threadNum, F32 threadPos)
+{
+	S32 index = mMeshObjects.findMeshByName(name);
+	if (index != -1)
+	{
+		mMeshObjects.mMesh[index].setThreadPos(threadNum, threadPos);
+	}
+	else
+	{
+		Con::printf("Error: Could not find object %s", name);
+	}
+}
+
+//-----------------------------------------------------------
+
+void GuiObjectView::setCameraRot(float x, float y, float z)
+{
+	// Make sure there is a main object in the scene
+	if (mMeshObjects.mMainObject)
+	{
+		this->mCameraRot.x = x;
+		this->mCameraRot.y = y;
+		this->mCameraRot.z = z;
+	}
+}
+
+//-----------------------------------------------------------
+
+void GuiObjectView::setOrbitDist(float dist)
+{
+	// Make sure there is a main object in the scene
+	if (mMeshObjects.mMainObject)
+	{
+		this->mOrbitDist = dist;
 	}
 }
 
@@ -700,10 +783,14 @@ void GuiObjectView::meshObjects::unLoad(S32 index)
 		mMesh[index].parentNode = -1;
 		mMesh[index].detail = -1;
 		mMesh[index].lastRenderTime = 0;
-		if (mMesh[index].thread)
+
+		for (S32 i = 0; i < sizeof(mMesh[index].threads) / sizeof(mMesh[index].threads[0]); i++)
 		{
-			mMesh[index].mesh->destroyThread(mMesh[index].thread);
-			mMesh[index].thread = 0;
+			if (mMesh[index].threads[i])
+			{
+				mMesh[index].mesh->destroyThread(mMesh[index].threads[i]);
+				mMesh[index].threads[i] = 0;
+			}
 		}
 		
 		delete mMesh[index].mesh;
@@ -780,7 +867,10 @@ GuiObjectView::meshObjects::meshs::meshs()
 	parentNode = -1;
 	detail = 0;
 	lastRenderTime = 0;
-	thread = 0;
+	threads[0] = 0;
+	threads[1] = 0;
+	threads[2] = 0;
+	threads[3] = 0;
 }
 
 GuiObjectView::meshObjects::meshs::~meshs()
@@ -791,10 +881,10 @@ GuiObjectView::meshObjects::meshs::~meshs()
 		mesh = NULL;
 	}
 
-	if (thread)
+	for (S32 i = 0; i < sizeof(threads) / sizeof(threads[0]); i++)
 	{
-		mesh->destroyThread(thread);
-		thread = 0;
+		mesh->destroyThread(threads[i]);
+		threads[i] = 0;
 	}
 }
 
@@ -825,24 +915,24 @@ void GuiObjectView::meshObjects::meshs::loadDSQ(const char* dsq)
 }
 
 //-----------------------------------------------------------
-void GuiObjectView::meshObjects::meshs::setSequence(const char* seq, F32 time)
+void GuiObjectView::meshObjects::meshs::setSequence(S32 threadNum, const char* seq, F32 time)
 {
 	S32 sequence = mesh->getShape()->findSequence(seq);
 
 	if( sequence != -1 )
 	{
-		if (thread)
+		if (threads[threadNum] != NULL)
 		{
-			mesh->destroyThread(thread);
+			mesh->destroyThread(threads[threadNum]);
 		}
 		// If you found the sequence add the thread and set sequence and scale
-		thread = mesh->addThread();
+		threads[threadNum] = mesh->addThread();
 		lastRenderTime = Platform::getVirtualMilliseconds();
-		mesh->setPos( thread, 0 );
-		mesh->setTimeScale( thread, time );
-		mesh->setSequence( thread, sequence, 0 );
+		mesh->setSequence(threads[threadNum], sequence, 0);
+		time = mClampF(time, -1.0f, 1.0f);
+		mesh->setTimeScale(threads[threadNum], time );
+		mesh->setPos(threads[threadNum], 0.5);
 		mode = 1;
-		Con::printf("Loading sequence %s", seq);
 	}
 	else
 	{
@@ -850,3 +940,18 @@ void GuiObjectView::meshObjects::meshs::setSequence(const char* seq, F32 time)
 	}
 }
 
+
+//-----------------------------------------------------------
+void GuiObjectView::meshObjects::meshs::setThreadPos(S32 threadNum, F32 threadPos)
+{
+	TSThread* meshThread = threads[threadNum];
+
+	if (meshThread != NULL)
+	{
+		mesh->setPos(meshThread, threadPos);
+	}
+	else
+	{
+		Con::printf("Error: Could not locate sequence %s");
+	}
+}
