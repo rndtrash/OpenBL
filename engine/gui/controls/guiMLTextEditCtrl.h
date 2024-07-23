@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Torque Game Engine
+// Torque Game Engine 
 // Copyright (C) GarageGames.com, Inc.
 //-----------------------------------------------------------------------------
 
@@ -15,24 +15,24 @@ class GuiMLTextEditCtrl : public GuiMLTextCtrl
    typedef GuiMLTextCtrl Parent;
 
    //-------------------------------------- Overrides
-  protected:
+protected:
    StringTableEntry mEscapeCommand;
 
    // Events
-   bool onKeyDown(const GuiEvent&event);
+   bool onKeyDown(const GuiEvent& event);
 
    // Event forwards
    void handleMoveKeys(const GuiEvent&);
    void handleDeleteKeys(const GuiEvent&);
 
    // rendering
-   void onRender(Point2I offset, const RectI &updateRect);
+   void onRender(Point2I offset, const RectI& updateRect);
 
-  public:
+public:
    GuiMLTextEditCtrl();
    ~GuiMLTextEditCtrl();
 
-   void resize(const Point2I &newPosition, const Point2I &newExtent);
+   void resize(const Point2I& newPosition, const Point2I& newExtent);
 
    DECLARE_CONOBJECT(GuiMLTextEditCtrl);
    static void initPersistFields();

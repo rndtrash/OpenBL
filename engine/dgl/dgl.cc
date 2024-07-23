@@ -10,7 +10,6 @@
 #include "math/mPoint.h"
 #include "math/mRect.h"
 #include "dgl/gFont.h"
-#include "dgl/gNewFont.h"
 #include "console/console.h"
 #include "math/mMatrix.h"
 #include "core/frameAllocator.h"
@@ -252,12 +251,17 @@ U32 dglDrawTextN(GFont*          font,
    glTexCoordPointer   ( 2, GL_FLOAT, sizeof(TextVertex), &(vert[0].t) );
 
    // first build the point, color, and coord arrays
+   
+   /*
    U32 i;
 
    FrameTemp<UTF16> ubuf(dStrlen(str) + 1);
    convertUTF8toUTF16(str, ubuf, dStrlen(str) + 1);
+   
+   for (i = 0, c = ubuf[i]; ubuf[i] && i < n; i++, c = ubuf[i])
+   */
 
-   for(i = 0,c = ubuf[i];ubuf[i] && i < n;i++,c = ubuf[i])
+   for (c = *str; str < endStr; c = *(++str))
    {
       nCharCount++;
       if(nCharCount > n)
@@ -328,7 +332,7 @@ U32 dglDrawTextN(GFont*          font,
       // Tab character
       if ( c == dT('\t') ) 
       {
-          const PlatformFont::CharInfo &ci = font->getCharInfo( dT(' ') );
+          const GFont::CharInfo &ci = font->getCharInfo( dT(' ') );
           pt.x += ci.xIncrement * GFont::TabWidthInSpaces;
           continue;
       }
@@ -336,7 +340,7 @@ U32 dglDrawTextN(GFont*          font,
       if( !font->isValidChar( c ) )  
          continue;
 
-      const PlatformFont::CharInfo &ci = font->getCharInfo(c);
+      const GFont::CharInfo &ci = font->getCharInfo(c);
       TextureObject *newObj = font->getTextureHandle(ci.bitmapIndex);
       if(newObj != lastTexture)
       {

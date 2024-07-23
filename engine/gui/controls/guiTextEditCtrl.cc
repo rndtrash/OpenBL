@@ -1092,8 +1092,18 @@ void GuiTextEditCtrl::DrawText(const RectI& drawRect, bool isFocused)
         // set the font outline color from the profile
         dglSetBitmapModulation(mProfile->mOutlineColor);
 
-        // push the text to the right a bit to make way for the outline
-        tempOffset.x += 1;
+        // set our outline alignments to prevent cutoffs
+        switch (mProfile->mAlignment)
+        {
+           case GuiControlProfile::RightJustify:
+              tempOffset.x -= 1;
+              break;
+           case GuiControlProfile::CenterJustify:
+              break;
+           default:
+              tempOffset.x += 1;
+              break;
+        }
 
         for (S32 i = -1; i <= 1; ++i)
         {

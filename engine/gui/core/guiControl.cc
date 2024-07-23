@@ -1378,12 +1378,22 @@ void GuiControl::renderJustifiedText(Point2I offset, Point2I extent, const char 
 
    // If doFontOutline is a part of the profile
    if (mProfile->mOutlineFont) {
-
-       // push the text to the right a bit to make way for the outline
-       offset.x += 1;
-
        // set the font outline color from the profile
        dglSetBitmapModulation(mProfile->mOutlineColor);
+
+       // set our outline alignments to prevent cutoffs
+       switch (mProfile->mAlignment)
+       {
+          case GuiControlProfile::RightJustify:
+             offset.x -= 1;
+             break;
+          case GuiControlProfile::CenterJustify:
+             break;
+          default:
+             // GuiControlProfile::LeftJustify
+             offset.x += 1;
+             break;
+       }
 
        for (S32 i = -1; i <= 1; ++i)
        {

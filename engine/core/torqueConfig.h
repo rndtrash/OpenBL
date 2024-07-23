@@ -43,7 +43,7 @@
 #define TORQUE_NO_DSO_GENERATION
 
 /// Define me to enable unicode support.
-#define TORQUE_UNICODE
+//#define TORQUE_UNICODE
 
 /// Define me to enable debug mode; enables a great number of additional
 /// sanity checks, as well as making AssertFatal and AssertWarn do something.

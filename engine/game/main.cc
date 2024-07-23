@@ -132,7 +132,7 @@ static bool initLibraries()
    ResourceManager->registerExtension(".dbm", constructBitmapDBM);
    ResourceManager->registerExtension(".bmp", constructBitmapBMP);
    ResourceManager->registerExtension(".bm8", constructBitmapBM8);
-   ResourceManager->registerExtension(".uft", constructFont);
+   ResourceManager->registerExtension(".gft", constructFont);
    ResourceManager->registerExtension(".dif", constructInteriorDIF);
    ResourceManager->registerExtension(".ter", constructTerrainFile);
    ResourceManager->registerExtension(".dts", constructTSShape);

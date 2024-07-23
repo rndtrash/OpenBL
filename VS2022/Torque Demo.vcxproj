@@ -61,7 +61,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../lib/xiph/include;../lib/SDL/include;../lib/directx8;../lib/vorbis/include;../lib/zlib;../lib/lungif;../lib/lpng;../lib/ljpeg;../lib/openal/win32;../engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>UNICODE;TORQUE_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TORQUE_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
@@ -227,7 +227,6 @@
     <ClCompile Include="..\engine\dgl\gBitmap.cc" />
     <ClCompile Include="..\engine\dgl\gDynamicTexture.cc" />
     <ClCompile Include="..\engine\dgl\gFont.cc" />
-    <ClCompile Include="..\engine\dgl\gNewFont.cc" />
     <ClCompile Include="..\engine\dgl\gPalette.cc" />
     <ClCompile Include="..\engine\dgl\gTexManager.cc" />
     <ClCompile Include="..\engine\dgl\gVectorField.cc" />
@@ -597,7 +596,6 @@
     <ClInclude Include="..\engine\dgl\gChunkedTexManager.h" />
     <ClInclude Include="..\engine\dgl\gDynamicTexture.h" />
     <ClInclude Include="..\engine\dgl\gFont.h" />
-    <ClInclude Include="..\engine\dgl\gNewFont.h" />
     <ClInclude Include="..\engine\dgl\gPalette.h" />
     <ClInclude Include="..\engine\dgl\gTexManager.h" />
     <ClInclude Include="..\engine\dgl\gVectorField.h" />

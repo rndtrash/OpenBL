@@ -9,11 +9,11 @@
 #include "core/fileStream.h"
 #include "dgl/gTexManager.h"
 
-S32 GOldFont::smSheetIdCount = 0;
+S32 GFont::smSheetIdCount = 0;
 
 ResourceInstance* constructFont(Stream& stream)
 {
-   GOldFont *ret = new GOldFont;
+   GFont *ret = new GFont;
    if(!ret->read(stream))
    {
       delete ret;
@@ -22,18 +22,18 @@ ResourceInstance* constructFont(Stream& stream)
 
    return ret;
 }
-const U32 GOldFont::csm_fileVersion = 1;
+const U32 GFont::csm_fileVersion = 1;
 
-Resource<GOldFont> GOldFont::create(const char *faceName, U32 size, const char *cacheDirectory, U32 charset /* = 0 */)
+Resource<GFont> GFont::create(const char *faceName, U32 size, const char *cacheDirectory, U32 charset /* = 0 */)
 {
    char buf[256];
    dSprintf(buf, sizeof(buf), "%s/%s_%d.gft", cacheDirectory, faceName, size);
    
-   Resource<GOldFont> ret = ResourceManager->load(buf);
+   Resource<GFont> ret = ResourceManager->load(buf);
    if(bool(ret))
       return ret;
    
-   GOldFont *resFont = createFont(faceName, size, charset);
+   GFont *resFont = createFont(faceName, size, charset);
    if (resFont == NULL) 
    {
       AssertISV(dStricmp(faceName, "Arial") != 0, "Error, The Arial Font must always be available!");
@@ -53,7 +53,7 @@ Resource<GOldFont> GOldFont::create(const char *faceName, U32 size, const char *
    return ResourceManager->load(buf);
 }
 
-GOldFont::GOldFont()
+GFont::GFont()
 {
    VECTOR_SET_ASSOCIATION(mCharInfoList);
 
@@ -63,13 +63,13 @@ GOldFont::GOldFont()
    mTextureSheets = NULL;
 }
 
-GOldFont::~GOldFont()
+GFont::~GFont()
 {
    delete [] mTextureSheets;
    mTextureSheets = NULL;
 }
 
-void GOldFont::insertBitmap(U16 index, U8 *src, U32 stride, U32 width, U32 height, S32 xOrigin, S32 yOrigin, S32 xIncrement)
+void GFont::insertBitmap(U16 index, U8 *src, U32 stride, U32 width, U32 height, S32 xOrigin, S32 yOrigin, S32 xIncrement)
 {
    CharInfo c;
    c.bitmapIndex = -1;
@@ -96,13 +96,13 @@ void GOldFont::insertBitmap(U16 index, U8 *src, U32 stride, U32 width, U32 heigh
 
 static S32 QSORT_CALLBACK CharInfoCompare(const void *a, const void *b)
 {
-   S32 ha = (*((GOldFont::CharInfo **) a))->height;
-   S32 hb = (*((GOldFont::CharInfo **) b))->height;
+   S32 ha = (*((GFont::CharInfo **) a))->height;
+   S32 hb = (*((GFont::CharInfo **) b))->height;
    
    return hb - ha;
 }
 
-void GOldFont::pack(U32 inFontHeight, U32 inBaseLine)
+void GFont::pack(U32 inFontHeight, U32 inBaseLine)
 {
    mFontHeight = inFontHeight;
    mBaseLine = inBaseLine;
@@ -187,21 +187,21 @@ void GOldFont::pack(U32 inFontHeight, U32 inBaseLine)
 	}
 }
 
-TextureHandle GOldFont::getTextureHandle(S32 index)
+TextureHandle GFont::getTextureHandle(S32 index)
 {
    return mTextureSheets[index];
 }
  
-void GOldFont::assignSheet(S32 sheetNum, GBitmap *bmp)
+void GFont::assignSheet(S32 sheetNum, GBitmap *bmp)
 {
    char buf[30];
    dSprintf(buf, sizeof(buf), "font_%d", smSheetIdCount++);
    mTextureSheets[sheetNum] = TextureHandle(buf, bmp);
 }
 
-U32 GOldFont::getStrWidth(const char* in_pString) const
+U32 GFont::getStrWidth(const char* in_pString) const
 {
-   AssertFatal(in_pString != NULL, "GOldFont::getStrWidth: String is NULL, height is undefined");
+   AssertFatal(in_pString != NULL, "GFont::getStrWidth: String is NULL, height is undefined");
    // If we ain't running debug...
    if (in_pString == NULL)
       return 0;
@@ -209,9 +209,9 @@ U32 GOldFont::getStrWidth(const char* in_pString) const
    return getStrNWidth(in_pString, dStrlen(in_pString));
 }
 
-U32 GOldFont::getStrWidthPrecise(const char* in_pString) const
+U32 GFont::getStrWidthPrecise(const char* in_pString) const
 {
-   AssertFatal(in_pString != NULL, "GOldFont::getStrWidth: String is NULL, height is undefined");
+   AssertFatal(in_pString != NULL, "GFont::getStrWidth: String is NULL, height is undefined");
    // If we ain't running debug...
    if (in_pString == NULL)
       return 0;
@@ -220,9 +220,9 @@ U32 GOldFont::getStrWidthPrecise(const char* in_pString) const
 }
 
 //-----------------------------------------------------------------------------
-U32 GOldFont::getStrNWidth(const char *str, U32 n) const
+U32 GFont::getStrNWidth(const char *str, U32 n) const
 {
-   AssertFatal(str != NULL, "GOldFont::getStrNWidth: String is NULL");
+   AssertFatal(str != NULL, "GFont::getStrNWidth: String is NULL");
 
    if (str == NULL)   
       return(0);
@@ -247,9 +247,9 @@ U32 GOldFont::getStrNWidth(const char *str, U32 n) const
    return(totWidth);
 }
 
-U32 GOldFont::getStrNWidthPrecise(const char *str, U32 n) const
+U32 GFont::getStrNWidthPrecise(const char *str, U32 n) const
 {
-   AssertFatal(str != NULL, "GOldFont::getStrNWidth: String is NULL");
+   AssertFatal(str != NULL, "GFont::getStrNWidth: String is NULL");
 
    if (str == NULL)   
       return(0);
@@ -286,7 +286,7 @@ U32 GOldFont::getStrNWidthPrecise(const char *str, U32 n) const
    return(totWidth);
 }
 
-U32 GOldFont::getBreakPos(const char *string, U32 slen, U32 width, bool breakOnWhitespace)
+U32 GFont::getBreakPos(const char *string, U32 slen, U32 width, bool breakOnWhitespace)
 {
    U32 ret = 0;
    U32 lastws = 0;
@@ -316,7 +316,7 @@ U32 GOldFont::getBreakPos(const char *string, U32 slen, U32 width, bool breakOnW
    return ret;
 }
 
-void GOldFont::wrapString(const char *txt, U32 lineWidth, Vector<U32> &startLineOffset, Vector<U32> &lineLen)
+void GFont::wrapString(const char *txt, U32 lineWidth, Vector<U32> &startLineOffset, Vector<U32> &lineLen)
 {
    startLineOffset.clear();
    lineLen.clear();
@@ -390,7 +390,7 @@ void GOldFont::wrapString(const char *txt, U32 lineWidth, Vector<U32> &startLine
 //
 static const U32 csm_fileVersion = 1;
 
-bool GOldFont::read(Stream& io_rStream)
+bool GFont::read(Stream& io_rStream)
 {
    // Handle versioning
    U32 version;
@@ -441,7 +441,7 @@ bool GOldFont::read(Stream& io_rStream)
 }
 
 bool
-GOldFont::write(Stream& stream) const
+GFont::write(Stream& stream) const
 {
    // Handle versioning
    stream.write(csm_fileVersion);

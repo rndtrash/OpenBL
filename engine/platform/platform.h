@@ -619,8 +619,8 @@ enum FontCharset
     TGE_BALTIC_CHARSET
 };
 
-class GOldFont;
-extern GOldFont *createFont(const char *name, dsize_t size, U32 charset = TGE_ANSI_CHARSET);
+class GFont;
+extern GFont *createFont(const char *name, dsize_t size, U32 charset = TGE_ANSI_CHARSET);
 const char *getCharSetName(const U32 charSet);
 
 //------------------------------------------------------------------------------

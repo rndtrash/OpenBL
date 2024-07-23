@@ -5,7 +5,6 @@
 
 #include "platformWin32/platformWin32.h"
 #include "platformWin32/winFont.h"
-#include "dgl/gNewFont.h"
 #include "dgl/gFont.h"
 #include "dgl/gBitmap.h"
 #include "math/mRect.h"
@@ -70,7 +69,7 @@ void CopyCharToBitmap(GBitmap *pDstBMP, HDC hSrcHDC, const RectI &r)
    }
 }
 
-GOldFont *createFont(const char *name, dsize_t size, U32 charset /* = TGE_ANSI_CHARSET */)
+GFont *createFont(const char *name, dsize_t size, U32 charset /* = TGE_ANSI_CHARSET */)
 {
    if(!name)
       return NULL;
@@ -90,7 +89,7 @@ GOldFont *createFont(const char *name, dsize_t size, U32 charset /* = TGE_ANSI_C
    if(!hNewFont)
       return NULL;
    
-   GOldFont *retFont = new GOldFont;
+   GFont *retFont = new GFont;
    static U8 scratchPad[65536];
    
    TEXTMETRIC textMetric;

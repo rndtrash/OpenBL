@@ -3,8 +3,8 @@
 // Copyright (C) GarageGames.com, Inc.
 //-----------------------------------------------------------------------------
 
-#ifndef _GOLDFONT_H_
-#define _GOLDFONT_H_
+#ifndef _GFONT_H_
+#define _GFONT_H_
 
 //Includes
 #ifndef _PLATFORM_H_
@@ -23,13 +23,11 @@
 #include "core/resManager.h"
 #endif
 
-#include "gNewFont.h"
-
 extern ResourceInstance* constructFont(Stream& stream);
 
 class TextureHandle;
 
-class GOldFont : public ResourceInstance
+class GFont : public ResourceInstance
 {
    static const U32 csm_fileVersion;
    static S32 smSheetIdCount;
@@ -75,8 +73,8 @@ private:
    void assignSheet(S32 sheetNum, GBitmap *bmp);
 
 public:
-   GOldFont();
-   virtual ~GOldFont();
+   GFont();
+   virtual ~GFont();
 
    // Queries about this font
 public:
@@ -110,24 +108,24 @@ public:
    void insertBitmap(U16 index, U8 *src, U32 stride, U32 width, U32 height, S32 xOrigin, S32 yOrigin, S32 xIncrement);
    void pack(U32 fontHeight, U32 baseLine);
 
-   static Resource<GOldFont> create(const char *face, U32 size, const char *cacheDirectory, U32 charset = 0);
+   static Resource<GFont> create(const char *face, U32 size, const char *cacheDirectory, U32 charset = 0);
 };
 
-inline bool GOldFont::isValidChar(const U8 in_charIndex) const
+inline bool GFont::isValidChar(const U8 in_charIndex) const
 {
    return mRemapTable[in_charIndex] != -1;
 }
 
-inline S16 GOldFont::getActualIndex(const U8 in_charIndex) const
+inline S16 GFont::getActualIndex(const U8 in_charIndex) const
 {
    AssertFatal(isValidChar(in_charIndex) == true,
-               avar("GOldFont::getActualIndex: invalid character: 0x%x",
+               avar("GFont::getActualIndex: invalid character: 0x%x",
                     in_charIndex));
 
    return mRemapTable[in_charIndex];
 }
 
-inline const GOldFont::CharInfo& GOldFont::getCharInfo(const U8 in_charIndex) const
+inline const GFont::CharInfo& GFont::getCharInfo(const U8 in_charIndex) const
 {
    S16 remap = getActualIndex(in_charIndex);
    AssertFatal(remap != -1, "No remap info for this character");
@@ -135,19 +133,19 @@ inline const GOldFont::CharInfo& GOldFont::getCharInfo(const U8 in_charIndex) co
    return mCharInfoList[remap];
 }
 
-inline U32 GOldFont::getCharXIncrement(const U8 in_charIndex) const
+inline U32 GFont::getCharXIncrement(const U8 in_charIndex) const
 {
    const CharInfo& rChar = getCharInfo(in_charIndex);
    return rChar.xIncrement;
 }
 
-inline U32 GOldFont::getCharWidth(const U8 in_charIndex) const
+inline U32 GFont::getCharWidth(const U8 in_charIndex) const
 {
    const CharInfo& rChar = getCharInfo(in_charIndex);
    return rChar.width;
 }
 
-inline U32 GOldFont::getCharHeight(const U8 in_charIndex) const
+inline U32 GFont::getCharHeight(const U8 in_charIndex) const
 {
    const CharInfo& rChar = getCharInfo(in_charIndex);
    return rChar.height;

@@ -7,7 +7,7 @@
 #include "platform/types.h"
 #include "console/consoleTypes.h"
 #include "console/console.h"
-#include "dgl/gNewFont.h"
+#include "dgl/gFont.h"
 #include "dgl/dgl.h"
 #include "gui/core/guiTypes.h"
 #include "dgl/gBitmap.h"

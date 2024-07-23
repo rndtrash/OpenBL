@@ -1436,7 +1436,7 @@ bool Platform::openWebBrowser( const char* webAddress )
 #ifdef UNICODE
       char *p = dStrstr((const char *)utf8WebKey, "%1"); 
 #else
-      char *p = strstr( (const char *) sWebKey  , "%1"); 
+      char *p = strstr(utf8WebKey, "%1");
 #endif
       if (p) *p = 0; 
 

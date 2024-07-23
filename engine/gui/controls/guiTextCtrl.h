@@ -7,7 +7,7 @@
 #define _GUITEXTCTRL_H_
 
 #ifndef _GFONT_H_
-#include "dgl/gNewFont.h"
+#include "dgl/gFont.h"
 #endif
 #ifndef _GUITYPES_H_
 #include "gui/core/guiTypes.h"

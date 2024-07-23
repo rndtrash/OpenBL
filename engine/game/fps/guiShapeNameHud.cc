@@ -4,7 +4,7 @@
 //-----------------------------------------------------------------------------
 
 #include "dgl/dgl.h"
-#include "dgl/gNewFont.h"
+#include "dgl/gFont.h"
 #include "gui/core/guiControl.h"
 #include "gui/core/guiTSControl.h"
 #include "console/consoleTypes.h"

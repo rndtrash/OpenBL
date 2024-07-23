@@ -355,9 +355,6 @@
     <ClCompile Include="..\engine\dgl\gFont.cc">
       <Filter>Source Files\dgl</Filter>
     </ClCompile>
-    <ClCompile Include="..\engine\dgl\gNewFont.cc">
-      <Filter>Source Files\dgl</Filter>
-    </ClCompile>
     <ClCompile Include="..\engine\dgl\gPalette.cc">
       <Filter>Source Files\dgl</Filter>
     </ClCompile>
@@ -1456,9 +1453,6 @@
       <Filter>Source Files\dgl</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\dgl\gFont.h">
-      <Filter>Source Files\dgl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\dgl\gNewFont.h">
       <Filter>Source Files\dgl</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\dgl\gPalette.h">
