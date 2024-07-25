@@ -261,6 +261,10 @@ struct ShapeBaseImageData: public GameBaseData {
    ProjectileData* projectile;      ///< Information about what projectile this
                                     ///  image fires.
 
+   bool doColorShift;               ///< Color shift our image?
+   ColorF colorShiftColor;          ///< What color to color shift?
+   bool firstPersonParticles;       ///< unknown
+
    F32   mass;                      ///< Mass!
    bool  usesEnergy;                ///< Does this use energy instead of ammo?
    F32   minEnergy;                 ///< Minimum energy for the weapon to be operable.

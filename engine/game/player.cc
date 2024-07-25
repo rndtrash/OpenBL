@@ -3850,6 +3850,10 @@ void Player::renderMountedImage(SceneState* state, ShapeImageRenderImage* rimage
       MatrixF mat;
       getRenderImageTransform(rimage->mIndex, &mat);
       glPushMatrix();
+      
+      if (image.dataBlock->doColorShift)
+         for (S32 i = 0; i < image.shapeInstance->mNodeColorData.size(); i++)
+            image.shapeInstance->mNodeColorData[i] = { true, image.dataBlock->colorShiftColor };
 
       if (rimage->mIndex == 0 && mWeaponBackFraction != 0.0 && getDamageState() == Enabled) {
          MatrixF nmat;

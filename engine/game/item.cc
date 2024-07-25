@@ -67,6 +67,12 @@ ItemData::ItemData()
    lightColor.set(1.f,1.f,1.f,1.f);
    lightTime = 1000;
    lightRadius = 10.f;
+                   
+   category        = "";
+   uiName          = "";
+   iconName        = "";
+   doColorShift    = false;
+   colorShiftColor = ColorF(1.0, 1.0, 1.0, 1.0);
 }
 
 static EnumTable::Enums itemLightEnum[] =
@@ -95,6 +101,12 @@ void ItemData::initPersistFields()
    addField("lightTime",   TypeS32,    Offset(lightTime,          ItemData));
    addField("lightRadius", TypeF32,    Offset(lightRadius,        ItemData));
    addField("lightOnlyStatic", TypeBool, Offset(lightOnlyStatic,  ItemData));
+   
+   addField("category",        TypeString,     Offset(category,       ItemData));
+   addField("uiName",          TypeCaseString, Offset(uiName,         ItemData));
+   addField("iconName",        TypeFilename,   Offset(iconName,       ItemData));
+   addField("doColorShift",    TypeBool,       Offset(doColorShift,   ItemData));
+   addField("colorShiftColor", TypeColorF,     Offset(colorShiftColor,ItemData));
 }
 
 void ItemData::packData(BitStream* stream)
@@ -122,6 +134,13 @@ void ItemData::packData(BitStream* stream)
       stream->write(lightRadius);
       stream->writeFlag(lightOnlyStatic);
    }
+
+   stream->writeString(category);
+   stream->writeString(uiName);
+   stream->writeString(iconName);
+   
+   if (stream->writeFlag(doColorShift != false))
+      stream->write(colorShiftColor);
 }
 
 void ItemData::unpackData(BitStream* stream)
@@ -154,6 +173,16 @@ void ItemData::unpackData(BitStream* stream)
    }
    else
       lightType = Item::NoLight;
+
+   category = stream->readSTString();
+   uiName   = stream->readSTString();
+   iconName = stream->readSTString();
+   
+   if (stream->readFlag()) // doColorShift
+   {
+      doColorShift = true;
+      stream->read(&colorShiftColor);
+   }
 }
 
 

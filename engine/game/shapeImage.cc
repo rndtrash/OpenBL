@@ -158,6 +158,9 @@ ShapeBaseImageData::ShapeBaseImageData()
    shellExitVariance = 20.0;
    shellVelocity = 1.0;
 
+   doColorShift         = false;
+   colorShiftColor      = ColorF(0.0, 0.0, 0.0, 0.0);
+   firstPersonParticles = true;
 }
 
 ShapeBaseImageData::~ShapeBaseImageData()
@@ -421,6 +424,10 @@ void ShapeBaseImageData::initPersistFields()
    addField("stateEmitterNode", TypeString, Offset(stateEmitterNode, ShapeBaseImageData), MaxStates);
    addField("stateIgnoreLoadedForReady", TypeBool, Offset(stateIgnoreLoadedForReady, ShapeBaseImageData), MaxStates);
    addField("computeCRC", TypeBool, Offset(computeCRC, ShapeBaseImageData));
+
+   addField("doColorShift",         TypeBool,   Offset(doColorShift, ShapeBaseImageData));
+   addField("colorShiftColor",      TypeColorF, Offset(colorShiftColor, ShapeBaseImageData));
+   addField("firstPersonParticles", TypeBool,   Offset(firstPersonParticles, ShapeBaseImageData));
 }
 
 void ShapeBaseImageData::packData(BitStream* stream)
@@ -528,6 +535,11 @@ void ShapeBaseImageData::packData(BitStream* stream)
             stream->writeRangedU32(packed? SimObjectId(s.sound):
                                    s.sound->getId(),DataBlockObjectIdFirst,DataBlockObjectIdLast);
       }
+
+   if (stream->writeFlag(doColorShift != false))
+      stream->write(colorShiftColor);
+
+   stream->writeFlag(firstPersonParticles);
 }
 
 void ShapeBaseImageData::unpackData(BitStream* stream)
@@ -646,6 +658,14 @@ void ShapeBaseImageData::unpackData(BitStream* stream)
       }
    }
    statesLoaded = true;
+
+   if (stream->readFlag()) // doColorShift
+   {
+      doColorShift = true;
+      stream->read(&colorShiftColor);
+   }
+
+   firstPersonParticles = stream->readFlag();
 }
 
 void ShapeBase::MountedImage::registerImageLights(LightManager * lightManager, bool lightingScene, const Point3F &objectPosition, U32 startTime)

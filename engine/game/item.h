@@ -38,6 +38,12 @@ struct ItemData: public ShapeBaseData {
    S32         lightTime;
    F32         lightRadius;
 
+   const char* category;
+   const char* uiName;
+   const char* iconName;
+   bool doColorShift;
+   ColorF colorShiftColor;
+
    ItemData();
    DECLARE_CONOBJECT(ItemData);
    static void initPersistFields();
