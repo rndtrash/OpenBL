@@ -340,7 +340,6 @@
     <ClCompile Include="..\engine\gui\controls\guiDirectoryTreeCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\guiMLTextCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\guiMLTextEditCtrl.cc" />
-    <ClCompile Include="..\engine\gui\controls\guiObjectView.cc" />
     <ClCompile Include="..\engine\gui\controls\guiPopUpCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\guiRadioCtrl.cc" />
     <ClCompile Include="..\engine\gui\controls\guiSliderCtrl.cc" />
@@ -369,6 +368,7 @@
     <ClCompile Include="..\engine\gui\game\guiChunkedBitmapCtrl.cc" />
     <ClCompile Include="..\engine\gui\game\guiFadeinBitmapCtrl.cc" />
     <ClCompile Include="..\engine\gui\game\guiMessageVectorCtrl.cc" />
+    <ClCompile Include="..\engine\gui\game\guiObjectView.cc" />
     <ClCompile Include="..\engine\gui\game\guiProgressCtrl.cc" />
     <ClCompile Include="..\engine\gui\shiny\guiEffectCanvas.cc" />
     <ClCompile Include="..\engine\gui\shiny\guiTheoraCtrl.cc" />
@@ -697,7 +697,6 @@
     <ClInclude Include="..\engine\gui\controls\guiDirectoryTreeCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\guiMLTextCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\guiMLTextEditCtrl.h" />
-    <ClInclude Include="..\engine\gui\controls\guiObjectView.h" />
     <ClInclude Include="..\engine\gui\controls\guiPopUpCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\guiRadioCtrl.h" />
     <ClInclude Include="..\engine\gui\controls\guiSliderCtrl.h" />
@@ -723,6 +722,7 @@
     <ClInclude Include="..\engine\gui\editor\guiMenuBar.h" />
     <ClInclude Include="..\engine\gui\game\guiAviBitmapCtrl.h" />
     <ClInclude Include="..\engine\gui\game\guiMessageVectorCtrl.h" />
+    <ClInclude Include="..\engine\gui\game\guiObjectView.h" />
     <ClInclude Include="..\engine\gui\game\guiProgressCtrl.h" />
     <ClInclude Include="..\engine\gui\shiny\guiEffectCanvas.h" />
     <ClInclude Include="..\engine\gui\shiny\guiTheoraCtrl.h" />

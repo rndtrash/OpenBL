@@ -215,6 +215,8 @@ struct PlayerData: public ShapeBaseData {
 
    ParticleEmitterData* splashEmitterList[NUM_SPLASH_EMITTERS];
    S32 splashEmitterIDList[NUM_SPLASH_EMITTERS];
+
+   F32 airControl;
    /// @}
 
    //

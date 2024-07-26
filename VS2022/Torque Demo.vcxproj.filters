@@ -1213,8 +1213,8 @@
     <ClCompile Include="..\engine\gui\controls\guiSwatchCtrl.cc">
       <Filter>Source Files\gui\controls</Filter>
     </ClCompile>
-    <ClCompile Include="..\engine\gui\controls\guiObjectView.cc">
-      <Filter>Source Files\gui\controls</Filter>
+    <ClCompile Include="..\engine\gui\game\guiObjectView.cc">
+      <Filter>Source Files\gui\game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2211,8 +2211,8 @@
     <ClInclude Include="..\engine\gui\controls\guiSwatchCtrl.h">
       <Filter>Source Files\gui\controls</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\gui\controls\guiObjectView.h">
-      <Filter>Source Files\gui\controls</Filter>
+    <ClInclude Include="..\engine\gui\game\guiObjectView.h">
+      <Filter>Source Files\gui\game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

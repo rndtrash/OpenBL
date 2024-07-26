@@ -239,6 +239,8 @@ PlayerData::PlayerData()
    groundImpactShakeAmp.set( 20.0, 20.0, 20.0 );
    groundImpactShakeDuration = 1.0;
    groundImpactShakeFalloff = 10.0;
+
+   airControl = 0.1f;
 }
 
 bool PlayerData::preload(bool server, char errorBuffer[256])
@@ -436,6 +438,15 @@ void PlayerData::initPersistFields()
    addField("runSurfaceAngle", TypeF32, Offset(runSurfaceAngle, PlayerData));
    addField("minImpactSpeed", TypeF32, Offset(minImpactSpeed, PlayerData));
 
+   // maxForwardCrouchSpeed
+   // maxBackwardCrouchSpeed
+   // maxSideCrouchSpeed
+
+   addField("airControl", TypeF32, Offset(airControl, PlayerData));
+
+   // cameraTilt
+   // cameraVerticalOffset
+
    addField("recoverDelay", TypeS32, Offset(recoverDelay, PlayerData));
    addField("recoverRunForceScale", TypeF32, Offset(recoverRunForceScale, PlayerData));
 
@@ -447,7 +458,13 @@ void PlayerData::initPersistFields()
    addField("jumpSurfaceAngle", TypeF32, Offset(jumpSurfaceAngle, PlayerData));
    addField("jumpDelay", TypeS32, Offset(jumpDelay, PlayerData));
 
+   // jetEnergyDrain
+   // minJetEnergy
+   // canJet
+
    addField("boundingBox", TypePoint3F, Offset(boxSize, PlayerData));
+   // crouchBoundingBox
+   
    addField("boxHeadPercentage", TypeF32, Offset(boxHeadPercentage, PlayerData));
    addField("boxTorsoPercentage", TypeF32, Offset(boxTorsoPercentage, PlayerData));
    addField("boxHeadLeftPercentage", TypeS32, Offset(boxHeadLeftPercentage, PlayerData));
@@ -466,10 +483,16 @@ void PlayerData::initPersistFields()
    addField("decalData",         TypeDecalDataPtr, Offset(decalData, PlayerData));
    addField("decalOffset",TypeF32, Offset(decalOffset, PlayerData));
 
+   // jetEmitter
+   // jetGroundEmitter
+   // jetGroundDistance
+
    addField("footPuffEmitter",   TypeParticleEmitterDataPtr,   Offset(footPuffEmitter,    PlayerData));
    addField("footPuffNumParts",  TypeS32,                      Offset(footPuffNumParts,   PlayerData));
    addField("footPuffRadius",    TypeF32,                      Offset(footPuffRadius,     PlayerData));
    addField("dustEmitter",       TypeParticleEmitterDataPtr,   Offset(dustEmitter,        PlayerData));
+
+   // JumpSound
 
    addField("FootSoftSound",       TypeAudioProfilePtr, Offset(sound[FootSoft],          PlayerData));
    addField("FootHardSound",       TypeAudioProfilePtr, Offset(sound[FootHard],          PlayerData));
@@ -510,6 +533,9 @@ void PlayerData::initPersistFields()
    addField("groundImpactShakeAmp",       TypePoint3F,   Offset(groundImpactShakeAmp,        PlayerData));
    addField("groundImpactShakeDuration",  TypeF32,       Offset(groundImpactShakeDuration,   PlayerData));
    addField("groundImpactShakeFalloff",   TypeF32,       Offset(groundImpactShakeFalloff,    PlayerData));
+
+   // uiName
+   // rideable
 }
 
 void PlayerData::packData(BitStream* stream)
@@ -538,6 +564,8 @@ void PlayerData::packData(BitStream* stream)
 
    stream->write(recoverDelay);
    stream->write(recoverRunForceScale);
+
+   stream->write(airControl);  
 
    stream->write(jumpForce);
    stream->write(jumpEnergyDrain);
@@ -647,6 +675,8 @@ void PlayerData::unpackData(BitStream* stream)
 
    stream->read(&recoverDelay);
    stream->read(&recoverRunForceScale);
+
+   stream->read(&airControl);
 
    stream->read(&jumpForce);
    stream->read(&jumpEnergyDrain);
@@ -1570,7 +1600,37 @@ void Player::updateMove(const Move* move)
          mActionAnimation.action = PlayerData::NullAnimation;
    }
    else
+   {
       mContactTimer++;
+      if (mDataBlock->airControl > 0.0f && !inLiquid)
+      {
+         if (mSqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y) < moveSpeed || (mVelocity.z * moveVec.z + mVelocity.y * moveVec.y + mVelocity.x * moveVec.x <= 0.0))
+         {
+            VectorF runAcc;
+            VectorF pv;
+            pv = moveVec;
+
+            F32 pvl = pv.len();
+
+            if (pvl) {
+               pv.x = (moveSpeed / pvl) * pv.x;
+               pv.y = pv.y * (moveSpeed / pvl);
+            }
+
+            runAcc.x = pv.x * mDataBlock->airControl;
+            runAcc.y = pv.y * mDataBlock->airControl;
+            runAcc.z = 0.0;
+
+            F32 maxAcc = (mDataBlock->runForce / mMass) * mDataBlock->airControl * TickSec;
+            F32 runSpeed = runAcc.len();
+
+            if (runSpeed > maxAcc)
+               runAcc *= maxAcc / runSpeed;
+            acc += runAcc;
+         }
+      }
+   }
+      
 
    // Acceleration from Jumping
    if (move->trigger[2] && !isMounted() && canJump())

@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 
 #include "gui/core/guiCanvas.h"
-#include "gui/controls/guiObjectView.h"
+#include "gui/game/guiObjectView.h"
 #include "console/consoleTypes.h"
 #include "sceneGraph/sceneGraph.h"
 extern SceneGraph* gClientSceneGraph;
