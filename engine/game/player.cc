@@ -3947,7 +3947,12 @@ void Player::renderMountedImage(SceneState* state, ShapeImageRenderImage* rimage
 
       image.shapeInstance->setupFog(fogAmount,state->getFogColor());
       image.shapeInstance->animate();
-      image.shapeInstance->render();
+
+      // Blockland uses LOD 0 for rendering first-person weapon animations
+      if (isFirstPerson())
+         image.shapeInstance->render(0);
+      else
+         image.shapeInstance->render();
 
       // easiest just to shut it off here.  If we're cloaked on the next frame,
       //  we don't want envmaps...

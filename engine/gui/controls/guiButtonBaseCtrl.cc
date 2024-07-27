@@ -183,6 +183,7 @@ void GuiButtonBaseCtrl::onMouseEnter(const GuiEvent &event)
       }
       mMouseOver = true;
    }
+   Con::executef(this, 1, "onMouseEnter");
 }
 
 void GuiButtonBaseCtrl::onMouseLeave(const GuiEvent &)
@@ -191,6 +192,7 @@ void GuiButtonBaseCtrl::onMouseLeave(const GuiEvent &)
    if(isMouseLocked())
       mDepressed = false;
    mMouseOver = false;
+   Con::executef(this, 1, "onMouseLeave");
 }
 
 void GuiButtonBaseCtrl::onMouseUp(const GuiEvent &)
