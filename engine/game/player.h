@@ -52,6 +52,10 @@ struct PlayerData: public ShapeBaseData {
    F32 maxUnderwaterBackwardSpeed; ///< Maximum underwater backward speed when running
    F32 maxUnderwaterSideSpeed;     ///< Maximum underwater side speed when running
 
+   F32 maxForwardCrouchSpeed;     ///< Maximum forward speed when crouching
+   F32 maxBackwardCrouchSpeed;    ///< Maximum backward speed when crouching
+   F32 maxSideCrouchSpeed;        ///< Maximum side speed when crouching
+
    F32 maxStepHeight;         ///< Maximum height the player can step up
    F32 runSurfaceAngle;       ///< Maximum angle from vertical in degrees the player can run up
 
@@ -122,6 +126,7 @@ struct PlayerData: public ShapeBaseData {
    AudioProfile* sound[MaxSounds];
 
    Point3F boxSize;           ///< Width, depth, height
+   Point3F crouchBoxSize;           ///< Width, depth, height
 
    /// Animation and other data intialized in onAdd
    struct ActionAnimationDef {
@@ -148,6 +153,10 @@ struct PlayerData: public ShapeBaseData {
       BackBackwardAnim,
       SideLeftAnim,
 
+      CrouchRunForwardAnim,
+      CrouchBackBackwardAnim,
+      CrouchSideLeftAnim,
+
       // These are set explicitly based on player actions
       FallAnim,
       JumpAnim,
@@ -155,11 +164,11 @@ struct PlayerData: public ShapeBaseData {
       LandAnim,
 
       //
-      NumMoveActionAnims = SideLeftAnim + 1,
+      NumMoveActionAnims = CrouchSideLeftAnim + 1,
       NumTableActionAnims = LandAnim + 1,
-      NumExtraActionAnims = 512,
+      NumExtraActionAnims = 60,
       NumActionAnims = NumTableActionAnims + NumExtraActionAnims,
-      ActionAnimBits = 9,
+      ActionAnimBits = 8,
       NullAnimation = (1 << ActionAnimBits) - 1
    };
 
@@ -217,6 +226,9 @@ struct PlayerData: public ShapeBaseData {
    S32 splashEmitterIDList[NUM_SPLASH_EMITTERS];
 
    F32 airControl;
+
+   S32 mHeadUpSeq;
+   S32 mCrouchSeq;
    /// @}
 
    //
@@ -308,6 +320,9 @@ protected:
    };
    ActionState mState;              ///< What is the player doing? @see ActionState
    bool mFalling;                   ///< Falling in mid-air?
+
+   bool mCrouching;
+
    S32  mJumpDelay;                 ///< Delay till next jump
    S32  mContactTimer;              ///< Ticks since last contact
 
@@ -346,6 +361,7 @@ protected:
    TSThread* mHeadVThread;
    TSThread* mHeadHThread;
    TSThread* mHeadUpThread;
+   TSThread* mCrouchThread;
    TSThread* mRecoilThread;
    static Range mArmRange;
    static Range mHeadVRange;

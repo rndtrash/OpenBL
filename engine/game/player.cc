@@ -124,6 +124,10 @@ PlayerData::ActionAnimationDef PlayerData::ActionAnimationList[NumTableActionAni
    { "back", { 0,-1,0 } },       // BackBackwardAnim
    { "side", { -1,0,0 } },       // SideLeftAnim,
 
+   { "crouchRun",  { 0,+1,0 } },       // CrouchRunForwardAnim,
+   { "crouchBack", { 0,-1,0 } },       // CrouchBackBackwardAnim
+   { "crouchSide", { -1,0,0 } },       // CrouchSideLeftAnim,
+
    // These are set explicitly based on player actions
    { "fall" },       // FallAnim
    { "jump" },       // JumpAnim
@@ -438,9 +442,9 @@ void PlayerData::initPersistFields()
    addField("runSurfaceAngle", TypeF32, Offset(runSurfaceAngle, PlayerData));
    addField("minImpactSpeed", TypeF32, Offset(minImpactSpeed, PlayerData));
 
-   // maxForwardCrouchSpeed
-   // maxBackwardCrouchSpeed
-   // maxSideCrouchSpeed
+   addField("maxForwardCrouchSpeed", TypeF32, Offset(maxForwardCrouchSpeed, PlayerData));
+   addField("maxBackwardCrouchSpeed", TypeF32, Offset(maxBackwardCrouchSpeed, PlayerData));
+   addField("maxSideCrouchSpeed", TypeF32, Offset(maxSideCrouchSpeed, PlayerData));
 
    addField("airControl", TypeF32, Offset(airControl, PlayerData));
 
@@ -463,7 +467,7 @@ void PlayerData::initPersistFields()
    // canJet
 
    addField("boundingBox", TypePoint3F, Offset(boxSize, PlayerData));
-   // crouchBoundingBox
+   addField("crouchBoundingBox", TypePoint3F, Offset(crouchBoxSize, PlayerData));
    
    addField("boxHeadPercentage", TypeF32, Offset(boxHeadPercentage, PlayerData));
    addField("boxTorsoPercentage", TypeF32, Offset(boxTorsoPercentage, PlayerData));
@@ -560,6 +564,11 @@ void PlayerData::packData(BitStream* stream)
    stream->write(maxUnderwaterForwardSpeed);
    stream->write(maxUnderwaterBackwardSpeed);
    stream->write(maxUnderwaterSideSpeed);
+
+   stream->write(maxForwardCrouchSpeed);
+   stream->write(maxBackwardCrouchSpeed);
+   stream->write(maxSideCrouchSpeed);
+
    stream->write(runSurfaceAngle);
 
    stream->write(recoverDelay);
@@ -605,6 +614,10 @@ void PlayerData::packData(BitStream* stream)
    stream->write(boxSize.x);
    stream->write(boxSize.y);
    stream->write(boxSize.z);
+
+   stream->write(crouchBoxSize.x);
+   stream->write(crouchBoxSize.y);
+   stream->write(crouchBoxSize.z);
 
    if( stream->writeFlag( footPuffEmitter ) )
    {
@@ -671,6 +684,11 @@ void PlayerData::unpackData(BitStream* stream)
    stream->read(&maxUnderwaterForwardSpeed);
    stream->read(&maxUnderwaterBackwardSpeed);
    stream->read(&maxUnderwaterSideSpeed);
+
+   stream->read(&maxForwardCrouchSpeed);
+   stream->read(&maxBackwardCrouchSpeed);
+   stream->read(&maxSideCrouchSpeed);
+
    stream->read(&runSurfaceAngle);
 
    stream->read(&recoverDelay);
@@ -718,6 +736,10 @@ void PlayerData::unpackData(BitStream* stream)
    stream->read(&boxSize.x);
    stream->read(&boxSize.y);
    stream->read(&boxSize.z);
+
+   stream->read(&crouchBoxSize.x);
+   stream->read(&crouchBoxSize.y);
+   stream->read(&crouchBoxSize.z);
 
    if( stream->readFlag() )
    {
@@ -805,6 +827,7 @@ Player::Player()
    mActionAnimation.atEnd = false;
    mState = MoveState;
    mFalling = false;
+   mCrouching = false;
    mContactTimer = 0;
    mJumpDelay = 0;
    mJumpSurfaceLastContact = 0;
@@ -998,15 +1021,24 @@ bool Player::onNewDataBlock(GameBaseData* dptr)
    else
       mHeadHThread = 0;
 
-   headSeq = shape->findSequence("headUp");
-   if (headSeq != -1) {
+   mDataBlock->mHeadUpSeq = shape->findSequence("headUp");
+   if (mDataBlock->mHeadUpSeq != -1) {
        mHeadUpThread = mShapeInstance->addThread();
        mShapeInstance->setBlendEnabled(mHeadUpThread, true);
-       mShapeInstance->setSequence(mHeadUpThread, headSeq, 0);
+       mShapeInstance->setSequence(mHeadUpThread, mDataBlock->mHeadUpSeq, 0);
        mShapeInstance->setTimeScale(mHeadUpThread, 0);
    }
    else
        mHeadUpThread = 0;
+
+   mDataBlock->mCrouchSeq = shape->findSequence("crouch");
+   if (mDataBlock->mCrouchSeq != -1) {
+      mCrouchThread = mShapeInstance->addThread();
+      mShapeInstance->setSequence(mCrouchThread, mDataBlock->mCrouchSeq, 0.0f);
+      mShapeInstance->setTimeScale(mCrouchThread, 0.0f);
+   }
+   else
+      mCrouchThread = 0;
 
    // Recoil thread. The server player does not play this animation.
    mRecoilThread = 0;
@@ -1027,9 +1059,19 @@ bool Player::onNewDataBlock(GameBaseData* dptr)
    mActionAnimation.thread = mShapeInstance->addThread();
    updateAnimationTree(!isGhost());
 
-   mObjBox.max.x = mDataBlock->boxSize.x * 0.5;
-   mObjBox.max.y = mDataBlock->boxSize.y * 0.5;
-   mObjBox.max.z = mDataBlock->boxSize.z;
+   if (mCrouching)
+   {
+      mObjBox.max.x = mDataBlock->crouchBoxSize.x * 0.5;
+      mObjBox.max.y = mDataBlock->crouchBoxSize.y * 0.5;
+      mObjBox.max.z = mDataBlock->crouchBoxSize.z;
+   }
+   else
+   {
+      mObjBox.max.x = mDataBlock->boxSize.x * 0.5;
+      mObjBox.max.y = mDataBlock->boxSize.y * 0.5;
+      mObjBox.max.z = mDataBlock->boxSize.z;
+   }
+
    mObjBox.min.x = -mObjBox.max.x;
    mObjBox.min.y = -mObjBox.max.y;
    mObjBox.min.z = 0;
@@ -1436,6 +1478,35 @@ void Player::updateMove(const Move* move)
       setImageTriggerState(1,move->trigger[1]);
    }
 
+   if (move->trigger[3] || mWaterCoverage >= 1.0)
+   {
+      if (!mCrouching)
+      {
+         mObjBox.max.z = mDataBlock->crouchBoxSize.z;
+         onScaleChanged();
+         mConvexList->nukeList();
+         mCrouching = true;
+         setMaskBits(MoveMask);
+      }
+
+      if (mCrouchThread != NULL && mShapeInstance->getTimeScale(mCrouchThread) != 1.0) {
+         mShapeInstance->setSequence(this->mCrouchThread, mDataBlock->mCrouchSeq, 0.0);
+         mShapeInstance->setTimeScale(mCrouchThread, 1.0);
+      }
+   }
+   else
+   {
+      if (mCrouching)
+      {
+         mObjBox.max.z = mDataBlock->boxSize.z;
+         onScaleChanged();
+         mConvexList->nukeList();
+         mCrouching = false;
+         setMaskBits(MoveMask);
+         mShapeInstance->setTimeScale(mCrouchThread, -1.0);
+      }
+   }
+
    // Update current orientation
    if (mDamageState == Enabled) {
       F32 prevZRot = mRot.z;
@@ -1504,8 +1575,12 @@ void Player::updateMove(const Move* move)
             moveSpeed = getMax(mDataBlock->maxUnderwaterForwardSpeed * move->y,
                                mDataBlock->maxUnderwaterSideSpeed * mFabs(move->x));
          else
-            moveSpeed = getMax(mDataBlock->maxForwardSpeed * move->y,
-                               mDataBlock->maxSideSpeed * mFabs(move->x));
+            if (mCrouching)
+               moveSpeed = getMax(mDataBlock->maxForwardCrouchSpeed * move->y,
+                  mDataBlock->maxSideCrouchSpeed * mFabs(move->x));
+            else
+               moveSpeed = getMax(mDataBlock->maxForwardSpeed * move->y,
+                  mDataBlock->maxSideSpeed * mFabs(move->x));
       }
       else
       {
@@ -1513,8 +1588,12 @@ void Player::updateMove(const Move* move)
             moveSpeed = getMax(mDataBlock->maxUnderwaterBackwardSpeed * mFabs(move->y),
                                mDataBlock->maxUnderwaterSideSpeed * mFabs(move->x));
          else
-            moveSpeed = getMax(mDataBlock->maxBackwardSpeed * mFabs(move->y),
-                               mDataBlock->maxSideSpeed * mFabs(move->x));
+            if (mCrouching)
+               moveSpeed = getMax(mDataBlock->maxBackwardCrouchSpeed * mFabs(move->y),
+                  mDataBlock->maxSideCrouchSpeed * mFabs(move->x));
+            else
+               moveSpeed = getMax(mDataBlock->maxBackwardSpeed * mFabs(move->y),
+                  mDataBlock->maxSideSpeed * mFabs(move->x));
       }
 
       // Cancel any script driven animations if we are going to move.
@@ -2321,6 +2400,18 @@ void Player::pickActionAnimation()
                      action = i;
                      forward = false;
                   }
+
+                  if (mCrouching)
+                  {
+                     if (action == PlayerData::RunForwardAnim)
+                        action = PlayerData::CrouchRunForwardAnim;
+
+                     else if (action == PlayerData::BackBackwardAnim)
+                        action = PlayerData::CrouchBackBackwardAnim;
+
+                     else if (action == PlayerData::SideLeftAnim)
+                        action = PlayerData::CrouchSideLeftAnim;
+                  }
                }
             }
          }
@@ -2366,6 +2457,17 @@ void Player::updateAnimation(F32 dt)
 
    if (mHeadUpThread)
        mShapeInstance->advanceTime(dt, mHeadUpThread);
+
+   if (mCrouchThread)
+   {
+      mShapeInstance->advanceTime(dt, mCrouchThread);
+
+      F32 crouchPos = mShapeInstance->getPos(mCrouchThread);
+      F32 crouchTimescale = mShapeInstance->getTimeScale(mCrouchThread);
+      
+      if (crouchPos == 0.0 && crouchTimescale != 1.0) 
+         mShapeInstance->setSequence(this->mCrouchThread, 0, 0.0);
+   }
 
    // If we are the client's player on this machine, then we need
    // to make sure the transforms are up to date as they are used
@@ -3517,6 +3619,11 @@ U32 Player::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
 {
    U32 retMask = Parent::packUpdate(con, mask, stream);
 
+   if (stream->writeFlag(mask & ThreadMask))
+   {
+      stream->writeFlag(mHeadUp);
+   }
+
    if (stream->writeFlag(mask & IFLChangeMask))
    {
        stream->writeString(mFaceName);
@@ -3558,6 +3665,7 @@ U32 Player::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
    if (stream->writeFlag(mask & MoveMask))
    {
       stream->writeFlag(mFalling);
+      stream->writeFlag(mCrouching);
 
       stream->writeInt(mState,NumStateBits);
       if (stream->writeFlag(mState == RecoverState))
@@ -3586,11 +3694,6 @@ U32 Player::packUpdate(NetConnection *con, U32 mask, BitStream *stream)
    // Ghost need energy to predict reliably
    stream->writeFloat(getEnergyLevel() / mDataBlock->maxEnergy,EnergyLevelBits);
 
-   if (stream->writeFlag(mask & ThreadMask))
-   {
-       stream->writeFlag(mHeadUp);
-   }
-
    return retMask;
 }
 
@@ -3598,6 +3701,12 @@ void Player::unpackUpdate(NetConnection *con, BitStream *stream)
 {
    Parent::unpackUpdate(con,stream);
 
+   if (stream->readFlag()) // ThreadMask
+   {
+      mHeadUp = stream->readFlag();
+      setHeadUp(mHeadUp);
+      updateLookAnimation();
+   }
 
    if (stream->readFlag()) // IFLChangeMask
    {
@@ -3667,6 +3776,32 @@ void Player::unpackUpdate(NetConnection *con, BitStream *stream)
    if (stream->readFlag()) {
       mPredictionCount = sMaxPredictionTicks;
       mFalling = stream->readFlag();
+      mCrouching = stream->readFlag();
+
+      if (mCrouching)
+      {
+         mObjBox.max.z = mDataBlock->crouchBoxSize.z;
+         onScaleChanged();
+         mConvexList->nukeList();
+         if (mShapeInstance != NULL && mCrouchThread != NULL)
+         {
+            if (mShapeInstance->getTimeScale(mCrouchThread) != 1.0)
+            {
+               mShapeInstance->setSequence(mCrouchThread, mDataBlock->mCrouchSeq, 0.0);
+               mShapeInstance->setTimeScale(mCrouchThread, 1.0);
+            }
+         }
+      }
+      else if (mCrouching == 0)
+      {
+         mObjBox.max.z = mDataBlock->boxSize.z;
+         onScaleChanged();
+         mConvexList->nukeList();
+         if (mShapeInstance != NULL && mCrouchThread != NULL)
+         {
+            mShapeInstance->setTimeScale(mCrouchThread, -1.0);
+         }
+      }
 
       ActionState actionState = (ActionState)stream->readInt(NumStateBits);
       if (stream->readFlag()) {
@@ -3756,13 +3891,6 @@ void Player::unpackUpdate(NetConnection *con, BitStream *stream)
    }
    F32 energy = stream->readFloat(EnergyLevelBits) * mDataBlock->maxEnergy;
    setEnergyLevel(energy);
-
-   if (stream->readFlag()) // ThreadMask
-   {
-       mHeadUp = stream->readFlag();
-       setHeadUp(mHeadUp);
-       updateLookAnimation();
-   }
 }
 
 
@@ -4453,9 +4581,10 @@ void Player::setHeadUp(bool headUp)
     mShapeInstance->setPos(this->mHeadUpThread, pos);
 }
 
-ConsoleMethod(Player, setHeadUp, void, 3, 3, "(bool)")
+ConsoleMethod(Player, setHeadUp, bool, 3, 3, "(bool)")
 {
     object->setHeadUp(dAtob(argv[2]));
+    return 1;
 }
 
 ConsoleMethod(Player, setFaceName, void, 3, 3, "(string imageName)")
