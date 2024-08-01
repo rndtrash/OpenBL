@@ -462,9 +462,9 @@ void PlayerData::initPersistFields()
    addField("jumpSurfaceAngle", TypeF32, Offset(jumpSurfaceAngle, PlayerData));
    addField("jumpDelay", TypeS32, Offset(jumpDelay, PlayerData));
 
-   // jetEnergyDrain
-   // minJetEnergy
-   // canJet
+   addField("jetEnergyDrain", TypeF32,  Offset(jetEnergyDrain, PlayerData));
+   addField("minJetEnergy",   TypeF32,  Offset(minJetEnergy, PlayerData));
+   addField("canJet",         TypeBool, Offset(canJet, PlayerData));
 
    addField("boundingBox", TypePoint3F, Offset(boxSize, PlayerData));
    addField("crouchBoundingBox", TypePoint3F, Offset(crouchBoxSize, PlayerData));
@@ -538,8 +538,8 @@ void PlayerData::initPersistFields()
    addField("groundImpactShakeDuration",  TypeF32,       Offset(groundImpactShakeDuration,   PlayerData));
    addField("groundImpactShakeFalloff",   TypeF32,       Offset(groundImpactShakeFalloff,    PlayerData));
 
-   // uiName
-   // rideable
+   addField("uiName",   TypeCaseString, Offset(uiName,   PlayerData));
+   addField("rideable", TypeBool,       Offset(rideable, PlayerData));
 }
 
 void PlayerData::packData(BitStream* stream)
@@ -660,6 +660,9 @@ void PlayerData::packData(BitStream* stream)
    stream->write(groundImpactShakeAmp.z);
    stream->write(groundImpactShakeDuration);
    stream->write(groundImpactShakeFalloff);
+
+   stream->writeString(uiName);
+   stream->writeFlag(rideable);
 }
 
 void PlayerData::unpackData(BitStream* stream)
@@ -782,6 +785,9 @@ void PlayerData::unpackData(BitStream* stream)
    stream->read(&groundImpactShakeAmp.z);
    stream->read(&groundImpactShakeDuration);
    stream->read(&groundImpactShakeFalloff);
+
+   uiName = stream->readSTString();
+   rideable = stream->readFlag();
 }
 
 
@@ -1681,7 +1687,7 @@ void Player::updateMove(const Move* move)
    else
    {
       mContactTimer++;
-      if (mDataBlock->airControl > 0.0f && !inLiquid)
+      if (mDataBlock->airControl > 0.0f && !inLiquid && !mJetting)
       {
          if (mSqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y) < moveSpeed || (mVelocity.z * moveVec.z + mVelocity.y * moveVec.y + mVelocity.x * moveVec.x <= 0.0))
          {
@@ -1763,6 +1769,54 @@ void Player::updateMove(const Move* move)
       else
          mJumpSurfaceLastContact++;
 
+   // Jetting
+   if ( !move->trigger[4] || isMounted() || !mDataBlock->canJet || mEnergy < mDataBlock->minJetEnergy )
+   {
+      this->mJetting = false;
+   }
+   else
+   {
+      if (mDataBlock->minJetEnergy <= mEnergy)
+         mJetting = true;
+
+      if (mJetting)
+         mEnergy -= mDataBlock->jetEnergyDrain;
+   }
+
+   if (mJetting) {
+      VectorF pv;
+      VectorF runAcc;
+
+      pv = moveVec;
+
+      F32 pvl = pv.len();
+
+      if (pvl)
+         pv.z = moveVec.z + 0.7;
+      else
+         pv.z = moveVec.z + 1.0;
+
+      pv.normalize();
+
+      if (mCrouching)
+      {
+         pv.x = mObjToWorld[1];
+         pv.y = mObjToWorld[5];
+         pv.z = mObjToWorld[9];
+      }
+
+      if (mMass < 90.0)
+      {
+         runAcc = pv * 0.704;
+      }
+      else
+      {
+         F32 maxAcc = (2000.0f / mMass) * TickSec;
+         runAcc = pv * maxAcc;
+      }
+
+      acc += runAcc;
+   }
 
    // Add in force from physical zones...
    acc += (mAppliedForce / mMass) * TickSec;
@@ -1812,7 +1866,7 @@ void Player::updateMove(const Move* move)
 
    if (!isGhost()) {
       // Vehicle Dismount
-      if(move->trigger[2] && isMounted())
+      if(move->trigger[4] && isMounted())
          Con::executef(mDataBlock,2,"doDismount",scriptThis());
 
       if(!inLiquid && mWaterCoverage != 0.0f) {

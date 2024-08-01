@@ -77,6 +77,11 @@ struct PlayerData: public ShapeBaseData {
    F32 maxJumpSpeed;          ///< Maximum speed before the player can no longer jump
    F32 jumpSurfaceAngle;      ///< Angle from vertical in degrees where the player can jump
    S32 jumpDelay;             ///< Delay time in ticks between jumps
+   
+   F32 jetEnergyDrain;
+   F32 minJetEnergy;
+   bool canJet;
+
    /// @}
 
    /// @name Hitboxes
@@ -229,6 +234,10 @@ struct PlayerData: public ShapeBaseData {
 
    S32 mHeadUpSeq;
    S32 mCrouchSeq;
+
+   StringTableEntry uiName;
+   bool rideable;
+
    /// @}
 
    //
@@ -322,6 +331,7 @@ protected:
    bool mFalling;                   ///< Falling in mid-air?
 
    bool mCrouching;
+   bool mJetting;
 
    S32  mJumpDelay;                 ///< Delay till next jump
    S32  mContactTimer;              ///< Ticks since last contact
