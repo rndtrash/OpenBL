@@ -678,7 +678,7 @@ bool Explosion::onAdd()
    }
 
    // shake camera
-   if( mDataBlock->shakeCamera && isClientObject() )
+   if( mDataBlock->shakeCamera )
    {
       // first check if explosion is near player
       GameConnection* connection = GameConnection::getConnectionToServer();
