@@ -181,6 +181,19 @@ void GuiTextCtrl::onRender(Point2I offset, const RectI &updateRect)
    renderChildControls(offset, updateRect);
 }
 
+//------------------------------------------------------------------------------
+
+S32 GuiTextCtrl::getPixelWidth()
+{
+   return mFont->getStrWidth((const UTF8*)mText);
+}
+
+ConsoleMethod(GuiTextCtrl, getPixelWidth, S32, 2, 2, "obj.getPixelWidth()")
+{
+   return object->getPixelWidth();
+}
+
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- //
 
 const char *GuiTextCtrl::getScriptValue()

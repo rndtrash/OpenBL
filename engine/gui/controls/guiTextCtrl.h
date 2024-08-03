@@ -49,6 +49,7 @@ public:
    virtual void setTextID(S32 id);
    virtual void setTextID(const char *id);
    const char *getText() { return (const char*)mText; }
+   S32 getPixelWidth();
 
    void inspectPostApply();
    //rendering methods
