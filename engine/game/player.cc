@@ -178,6 +178,11 @@ PlayerData::PlayerData()
    jumpDelay = 30;
    minJumpSpeed = 500;
    maxJumpSpeed = 2 * minJumpSpeed;
+   jetEnergyDrain = 0;
+   minJetEnergy = 0;
+   canJet = 1;
+   rideable = 0;
+   airControl = 0.1f;
 
    horizMaxSpeed = 80;
    horizResistSpeed = 38;
@@ -210,6 +215,17 @@ PlayerData::PlayerData()
 
    for (S32 i = 0; i < MaxSounds; i++)
       sound[i] = 0;
+
+   jetEmitter = NULL;
+   jetID = 0;
+
+   jetGroundEmitter = NULL;
+   jetGroundID = 0;
+
+   leftFootNode = -1;
+   rightFootNode = -1;
+
+   jetGroundDistance = 10.0f;
 
    footPuffEmitter = NULL;
    footPuffID = 0;
@@ -244,7 +260,7 @@ PlayerData::PlayerData()
    groundImpactShakeDuration = 1.0;
    groundImpactShakeFalloff = 10.0;
 
-   airControl = 0.1f;
+   uiName = "";
 }
 
 bool PlayerData::preload(bool server, char errorBuffer[256])
@@ -362,6 +378,17 @@ bool PlayerData::preload(bool server, char errorBuffer[256])
       if( !splashEmitterList[i] && splashEmitterIDList[i] != 0 )
          if( Sim::findObject( splashEmitterIDList[i], splashEmitterList[i] ) == false)
             Con::errorf(ConsoleLogEntry::General, "PlayerData::onAdd - Invalid packet, bad datablockId(particle emitter): 0x%x", splashEmitterIDList[i]);
+      
+   if (!jetEmitter && jetID != 0)
+      if (!Sim::findObject(jetID, jetEmitter))
+         Con::errorf(ConsoleLogEntry::General, "PlayerData::preload - Invalid packet, bad datablockId(jetEmitter): 0x%x", dustID);
+
+   if (!jetGroundEmitter && jetGroundID != 0)
+      if (!Sim::findObject(jetGroundID, jetGroundEmitter))
+         Con::errorf(ConsoleLogEntry::General, "PlayerData::preload - Invalid packet, bad datablockId(jetGroundEmitter): 0x%x", dustID);
+
+   leftFootNode  = shape->findNode("LFoot");
+   rightFootNode = shape->findNode("RFoot");
 
    return true;
 }
@@ -487,9 +514,9 @@ void PlayerData::initPersistFields()
    addField("decalData",         TypeDecalDataPtr, Offset(decalData, PlayerData));
    addField("decalOffset",TypeF32, Offset(decalOffset, PlayerData));
 
-   // jetEmitter
-   // jetGroundEmitter
-   // jetGroundDistance
+   addField("jetEmitter",        TypeParticleEmitterDataPtr,   Offset(jetEmitter, PlayerData));
+   addField("jetGroundEmitter",  TypeParticleEmitterDataPtr,   Offset(jetGroundEmitter, PlayerData));
+   addField("jetGroundDistance", TypeF32,                      Offset(jetGroundDistance, PlayerData));
 
    addField("footPuffEmitter",   TypeParticleEmitterDataPtr,   Offset(footPuffEmitter,    PlayerData));
    addField("footPuffNumParts",  TypeS32,                      Offset(footPuffNumParts,   PlayerData));
@@ -619,6 +646,18 @@ void PlayerData::packData(BitStream* stream)
    stream->write(crouchBoxSize.y);
    stream->write(crouchBoxSize.z);
 
+   if (stream->writeFlag(jetEmitter))
+   {
+      stream->writeRangedU32(jetEmitter->getId(), DataBlockObjectIdFirst, DataBlockObjectIdLast);
+   }
+
+   if (stream->writeFlag(jetGroundEmitter))
+   {
+      stream->writeRangedU32(jetGroundEmitter->getId(), DataBlockObjectIdFirst, DataBlockObjectIdLast);
+   }
+
+   stream->write(jetGroundDistance);
+
    if( stream->writeFlag( footPuffEmitter ) )
    {
       stream->writeRangedU32( footPuffEmitter->getId(), DataBlockObjectIdFirst,  DataBlockObjectIdLast );
@@ -744,6 +783,18 @@ void PlayerData::unpackData(BitStream* stream)
    stream->read(&crouchBoxSize.y);
    stream->read(&crouchBoxSize.z);
 
+   if (stream->readFlag())
+   {
+      jetID = (S32)stream->readRangedU32(DataBlockObjectIdFirst, DataBlockObjectIdLast);
+   }
+
+   if (stream->readFlag())
+   {
+      jetGroundID = (S32)stream->readRangedU32(DataBlockObjectIdFirst, DataBlockObjectIdLast);
+   }
+
+   stream->read(&jetGroundDistance);
+
    if( stream->readFlag() )
    {
       footPuffID = (S32) stream->readRangedU32(DataBlockObjectIdFirst, DataBlockObjectIdLast);
@@ -847,6 +898,7 @@ Player::Player()
    mReversePending = 0;
 
    mLastPos.set( 0.0, 0.0, 0.0 );
+   mHasLastPosition = false;
 
    mMoveBubbleHandle = 0;
    mWaterBreathHandle = 0;
@@ -924,6 +976,42 @@ bool Player::onAdd()
    }
    else
    {
+      mJetEmitterL = new ParticleEmitter;
+      mJetEmitterL->onNewDataBlock(mDataBlock->jetEmitter);
+      if (!mJetEmitterL->registerObject())
+      {
+         Con::warnf(ConsoleLogEntry::General, "Could not register particle emitter for class: %s", mDataBlock->getName());
+         delete mJetEmitterL;
+         mJetEmitterL = NULL;
+      }
+
+      mJetGroundEmitterL = new ParticleEmitter;
+      mJetGroundEmitterL->onNewDataBlock(mDataBlock->jetGroundEmitter);
+      if (!mJetGroundEmitterL->registerObject())
+      {
+         Con::warnf(ConsoleLogEntry::General, "Could not register particle emitter for class: %s", mDataBlock->getName());
+         delete mJetGroundEmitterL;
+         mJetGroundEmitterL = NULL;
+      }
+
+      mJetEmitterR = new ParticleEmitter;
+      mJetEmitterR->onNewDataBlock(mDataBlock->jetEmitter);
+      if (!mJetEmitterR->registerObject())
+      {
+         Con::warnf(ConsoleLogEntry::General, "Could not register particle emitter for class: %s", mDataBlock->getName());
+         delete mJetEmitterR;
+         mJetEmitterR = NULL;
+      }
+
+      mJetGroundEmitterR = new ParticleEmitter;
+      mJetGroundEmitterR->onNewDataBlock(mDataBlock->jetGroundEmitter);
+      if (!mJetGroundEmitterR->registerObject())
+      {
+         Con::warnf(ConsoleLogEntry::General, "Could not register particle emitter for class: %s", mDataBlock->getName());
+         delete mJetGroundEmitterR;
+         mJetGroundEmitterR = NULL;
+      }
+
       U32 i;
       for( i=0; i<PlayerData::NUM_SPLASH_EMITTERS; i++ )
       {
@@ -1298,6 +1386,49 @@ void Player::advanceTime(F32 dt)
    updateSplash();
    updateFroth(dt);
    updateWaterSounds(dt);
+
+   // Renders player jet emitters. There is one emitter per foot, decompiler suggests it isn't looped like other similar implementations of emitters.
+   // mJetEmitter is the fiery emitter
+   // mJetGroundEmitter is dust-like particles that show when you're close to the ground.
+   
+   if (mJetting)
+   {
+      if (mJetEmitterL != 0 && mJetEmitterR != 0)
+      {
+         // Left foot
+         MatrixF lMat = getRenderTransform();
+         Point3F lPos, lAxis;
+
+         lMat.mul(mShapeInstance->mNodeTransforms[mDataBlock->leftFootNode]);
+         lMat.getColumn(1, &lAxis);
+         lMat.getColumn(3, &lPos);
+
+         if (!mHasLastPosition)
+            mJetEmitterL->emitParticles(lPos, false, lAxis, mVelocity, (U32)(dt * 1000));
+         else                                                                      
+            mJetEmitterL->emitParticles(lPos, true , lAxis, mVelocity, (U32)(dt * 1000));
+
+         // Right foot
+         MatrixF rMat = getRenderTransform();
+         Point3F rPos, rAxis;
+         rMat.mul(mShapeInstance->mNodeTransforms[mDataBlock->rightFootNode]);
+         rMat.getColumn(1, &rAxis);
+         rMat.getColumn(3, &rPos);
+
+         if (!mHasLastPosition)       
+            mJetEmitterR->emitParticles(rPos, false, rAxis, mVelocity, (U32)(dt * 1000));
+         else                         
+            mJetEmitterR->emitParticles(rPos, true , rAxis, mVelocity, (U32)(dt * 1000));
+                                     
+         mHasLastPosition = true;
+      }
+
+      // TODO: jetGroundEmitter
+   }
+   else
+   {
+      mHasLastPosition = false;
+   }
 
    mLastPos = getPosition();
 
@@ -1689,7 +1820,7 @@ void Player::updateMove(const Move* move)
       mContactTimer++;
       if (mDataBlock->airControl > 0.0f && !inLiquid && !mJetting)
       {
-         if (mSqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y) < moveSpeed || (mVelocity.z * moveVec.z + mVelocity.y * moveVec.y + mVelocity.x * moveVec.x <= 0.0))
+         if (mSqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y) < moveSpeed || (mDot(mVelocity, moveVec) <= 0.0))
          {
             VectorF runAcc;
             VectorF pv;
@@ -1697,10 +1828,8 @@ void Player::updateMove(const Move* move)
 
             F32 pvl = pv.len();
 
-            if (pvl) {
-               pv.x = (moveSpeed / pvl) * pv.x;
-               pv.y = pv.y * (moveSpeed / pvl);
-            }
+            if (pvl)
+               pv = (moveSpeed / pvl) * pv;
 
             runAcc.x = pv.x * mDataBlock->airControl;
             runAcc.y = pv.y * mDataBlock->airControl;
@@ -1799,11 +1928,7 @@ void Player::updateMove(const Move* move)
       pv.normalize();
 
       if (mCrouching)
-      {
-         pv.x = mObjToWorld[1];
-         pv.y = mObjToWorld[5];
-         pv.z = mObjToWorld[9];
-      }
+         getTransform().getColumn(1, &pv);
 
       if (mMass < 90.0)
       {
@@ -2415,7 +2540,7 @@ void Player::pickActionAnimation()
 
    bool forward = true;
    U32 action = PlayerData::RootAnim;
-   if (mFalling)
+   if (mFalling && !mJetting)
    {
       // Not in contact with any surface and falling
       action = PlayerData::FallAnim;
@@ -2465,6 +2590,10 @@ void Player::pickActionAnimation()
 
                      else if (action == PlayerData::SideLeftAnim)
                         action = PlayerData::CrouchSideLeftAnim;
+                  }
+
+                  if (mJetting && !mCrouching) {
+                     action = PlayerData::RootAnim;
                   }
                }
             }

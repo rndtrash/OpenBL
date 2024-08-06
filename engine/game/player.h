@@ -39,6 +39,12 @@ struct PlayerData: public ShapeBaseData {
    F32 maxLookAngle;          ///< Highest angle (radians) the player can look
    F32 maxFreelookAngle;      ///< Max left/right angle the player can look
 
+   S32 mHeadUpSeq;
+   S32 mCrouchSeq;
+
+   StringTableEntry uiName;
+   bool rideable;
+
    /// @name Physics constants
    /// @{
 
@@ -81,6 +87,8 @@ struct PlayerData: public ShapeBaseData {
    F32 jetEnergyDrain;
    F32 minJetEnergy;
    bool canJet;
+
+   F32 airControl;
 
    /// @}
 
@@ -186,6 +194,9 @@ struct PlayerData: public ShapeBaseData {
    F32 runSurfaceCos;         ///< Angle from vertical in cos(runSurfaceAngle)
    F32 jumpSurfaceCos;        ///< Angle from vertical in cos(jumpSurfaceAngle)
 
+   S32 leftFootNode;
+   S32 rightFootNode;
+
    enum Impacts {
       ImpactNone,
       ImpactNormal,
@@ -208,6 +219,14 @@ struct PlayerData: public ShapeBaseData {
    S32 footPuffNumParts;
    F32 footPuffRadius;
 
+   ParticleEmitterData* jetEmitter;
+   S32 jetID;
+
+   ParticleEmitterData* jetGroundEmitter;
+   S32 jetGroundID;
+
+   F32 jetGroundDistance;
+
    DecalData* decalData;
    S32 decalID;
 
@@ -229,14 +248,6 @@ struct PlayerData: public ShapeBaseData {
 
    ParticleEmitterData* splashEmitterList[NUM_SPLASH_EMITTERS];
    S32 splashEmitterIDList[NUM_SPLASH_EMITTERS];
-
-   F32 airControl;
-
-   S32 mHeadUpSeq;
-   S32 mCrouchSeq;
-
-   StringTableEntry uiName;
-   bool rideable;
 
    /// @}
 
@@ -281,6 +292,12 @@ protected:
    };
 
    ParticleEmitter *mSplashEmitter[PlayerData::NUM_SPLASH_EMITTERS];
+
+   ParticleEmitter* mJetEmitterL;
+   ParticleEmitter* mJetEmitterR;
+   ParticleEmitter* mJetGroundEmitterL;
+   ParticleEmitter* mJetGroundEmitterR;
+
    F32 mBubbleEmitterTime;
 
    /// Client interpolation/warp data
@@ -332,6 +349,8 @@ protected:
 
    bool mCrouching;
    bool mJetting;
+
+   bool mHasLastPosition;
 
    S32  mJumpDelay;                 ///< Delay till next jump
    S32  mContactTimer;              ///< Ticks since last contact
