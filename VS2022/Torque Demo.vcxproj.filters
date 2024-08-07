@@ -1216,6 +1216,9 @@
     <ClCompile Include="..\engine\gui\game\guiObjectView.cc">
       <Filter>Source Files\gui\game</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\game\fx\fxDTSBrick.cc">
+      <Filter>Source Files\game\fx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\collision\abstractPolyList.h">
@@ -2213,6 +2216,9 @@
     </ClInclude>
     <ClInclude Include="..\engine\gui\game\guiObjectView.h">
       <Filter>Source Files\gui\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\game\fx\fxDTSBrick.h">
+      <Filter>Source Files\game\fx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
