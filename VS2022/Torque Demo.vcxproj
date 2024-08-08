@@ -266,6 +266,7 @@
     <ClCompile Include="..\engine\game\fx\cameraFXMgr.cc" />
     <ClCompile Include="..\engine\game\fx\explosion.cc" />
     <ClCompile Include="..\engine\game\fx\fxDTSBrick.cc" />
+    <ClCompile Include="..\engine\game\fx\fxDTSBrickData.cc" />
     <ClCompile Include="..\engine\game\fx\fxFoliageReplicator.cc" />
     <ClCompile Include="..\engine\game\fx\fxLight.cc" />
     <ClCompile Include="..\engine\game\fx\fxShapeReplicator.cc" />
@@ -633,6 +634,7 @@
     <ClInclude Include="..\engine\game\fx\cameraFXMgr.h" />
     <ClInclude Include="..\engine\game\fx\explosion.h" />
     <ClInclude Include="..\engine\game\fx\fxDTSBrick.h" />
+    <ClInclude Include="..\engine\game\fx\fxDTSBrickData.h" />
     <ClInclude Include="..\engine\game\fx\fxFoliageReplicator.h" />
     <ClInclude Include="..\engine\game\fx\fxLight.h" />
     <ClInclude Include="..\engine\game\fx\fxShapeReplicator.h" />

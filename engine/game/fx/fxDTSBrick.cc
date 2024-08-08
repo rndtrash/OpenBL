@@ -6,10 +6,49 @@
 
 #include "game/fx/fxDTSBrick.h"
 #include "console/consoleTypes.h"
+#include "game/gameBase.h"
 
 StringTableEntry fxDTSBrick::sprayCanDivisionName[16];
 S32              fxDTSBrick::sprayCanDivisionSlot[64];
 ColorF           fxDTSBrick::colorIDTable[64];
+
+IMPLEMENT_CO_NETOBJECT_V1(fxDTSBrick);
+
+fxDTSBrick::fxDTSBrick()
+{
+   mDataBlock   = NULL;
+   colorID      = 5;
+   printID      = 0;
+   colorFxID    = 0;
+   shapeFxID    = 0;
+   isBasePlate  = false;
+   isPlanted    = false;
+   client       = -1;
+   stackBL_ID   = -1;
+}
+
+fxDTSBrick::~fxDTSBrick()
+{
+}
+
+void fxDTSBrick::initPersistFields()
+{
+   Parent::initPersistFields();
+   addGroup("fxDTSBrick Stuff");
+
+   addField("dataBlock",   TypeGameBaseDataPtr, Offset(mDataBlock,  fxDTSBrick));
+   addField("angleID",     TypeS8,              Offset(angleID,     fxDTSBrick));
+   addField("colorID",     TypeS8,              Offset(colorID,     fxDTSBrick));
+   addField("printID",     TypeS32,             Offset(printID,     fxDTSBrick));
+   addField("colorFxID",   TypeS8,              Offset(colorFxID,   fxDTSBrick));
+   addField("shapeFxID",   TypeS8,              Offset(shapeFxID,   fxDTSBrick));
+   addField("isBasePlate", TypeBool,            Offset(isBasePlate, fxDTSBrick));
+   addField("isPlanted",   TypeBool,            Offset(isPlanted,   fxDTSBrick));
+   addField("client",      TypeS32,             Offset(client,      fxDTSBrick));
+   addField("stackBL_ID",  TypeS32,             Offset(stackBL_ID,  fxDTSBrick));
+
+   endGroup("fxDTSBrick Stuff");
+}
 
 // --------------------------------------------
 // Functions to help with the spray can GUI

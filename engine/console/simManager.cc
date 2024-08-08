@@ -523,3 +523,45 @@ bool SimObject::registerObject(const char *name, U32 id)
    assignName(name);
    return registerObject();
 }
+
+//---------------------------------------------------------------------------
+
+ConsoleFunction(getDataBlockGroupSize, S32, 1, 1, "Returns the number of datablocks in the datablockgroup")
+{
+   SimDataBlockGroup* dataBlockGroup = Sim::getDataBlockGroup();
+   if (dataBlockGroup == NULL)
+   {
+      SimObject* connection = Sim::findObject("ServerConnection");
+      if (connection == NULL)
+      {
+         Con::errorf("Error: getDataBlockGroupSize() - No group not found.");
+         return 0;
+      }
+   }
+
+   return dataBlockGroup->size();
+}
+
+ConsoleFunction(getDataBlock, S32, 2, 2, "Get a single datablock from the datablock group")
+{
+   S32 datablockIndex = dAtoi(argv[1]);
+   SimDataBlockGroup* dataBlockGroup = Sim::getDataBlockGroup();
+   if (dataBlockGroup == NULL)
+   {
+      SimObject* connection = Sim::findObject("ServerConnection");
+      if (connection == NULL)
+      {
+         Con::errorf("Error: getDataBlock() - No group found.");
+         return 0;
+      }
+   }
+   if (datablockIndex > dataBlockGroup->size() && datablockIndex < 0)
+   {
+      Con::errorf("Error: getDataBlock() - Index \'%d\' out of range (only %d datablocks", datablockIndex, dataBlockGroup->size());
+      return 0;
+   }
+   else
+   {
+      return datablockIndex;
+   }
+}

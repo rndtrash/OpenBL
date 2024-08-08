@@ -1219,6 +1219,9 @@
     <ClCompile Include="..\engine\game\fx\fxDTSBrick.cc">
       <Filter>Source Files\game\fx</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\game\fx\fxDTSBrickData.cc">
+      <Filter>Source Files\game\fx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\collision\abstractPolyList.h">
@@ -2218,6 +2221,9 @@
       <Filter>Source Files\gui\game</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\game\fx\fxDTSBrick.h">
+      <Filter>Source Files\game\fx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\game\fx\fxDTSBrickData.h">
       <Filter>Source Files\game\fx</Filter>
     </ClInclude>
   </ItemGroup>
