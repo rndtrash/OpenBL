@@ -56,12 +56,13 @@ enum SimObjectTypes
    StaticTSObjectType =          BIT(24),
    AIObjectType =                BIT(25),
    StaticRenderedObjectType =    BIT(26),
+   fxDTSBrickObjectType     =    BIT(27),
    /// @}
 
    /// @name Other
    /// The following are allowed types that can be set on datablocks for static shapes
    /// @{
-   DamagableItemObjectType =     BIT(27),
+   DamagableItemObjectType =     BIT(28),
    /// @}
 };
 

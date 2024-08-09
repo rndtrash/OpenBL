@@ -1,21 +1,40 @@
 // ----------------------------------------------------------------
 // fxDTSBrick
+// 
 // The back-end for bricks. Handles bricks, their connections and 
 // attributes, then sends them off to the oct tree for rendering. 
+//
+// fxDTSBricks initially get sent to the SceneGraph simply to
+// be registered in the scene. They are then removed from the 
+// SceneGraph, sent to fxBrickBatcher, then to the oct tree. I think.
+//
+// This stuff is really messy for now. It's probably going to be
+// messy for a while, until it's at a point where it's fully
+// operational and it's worth cleaning it up.
 // ----------------------------------------------------------------
 
 #include "game/fx/fxDTSBrick.h"
 #include "console/consoleTypes.h"
 #include "game/gameBase.h"
+#include "sceneGraph/sceneGraph.h"
+#include "sceneGraph/sceneState.h"
+#include "game/shapeBase.h"
+#include "dgl/dgl.h"
+#include "core/bitStream.h"
+#include "sim/netConnection.h"
 
 StringTableEntry fxDTSBrick::sprayCanDivisionName[16];
 S32              fxDTSBrick::sprayCanDivisionSlot[64];
 ColorF           fxDTSBrick::colorIDTable[64];
+S32              fxDTSBrick::brickCount;
 
 IMPLEMENT_CO_NETOBJECT_V1(fxDTSBrick);
 
 fxDTSBrick::fxDTSBrick()
 {
+   mTypeMask |= fxDTSBrickObjectType;
+   mNetFlags.set(Ghostable);
+
    mDataBlock   = NULL;
    colorID      = 5;
    printID      = 0;
@@ -25,7 +44,11 @@ fxDTSBrick::fxDTSBrick()
    isPlanted    = false;
    client       = -1;
    stackBL_ID   = -1;
-}
+
+   worldPos     = Point3F(0.0, 0.0, 0.0);
+
+   ang          = AngAxisF();
+}                                                                                                      
 
 fxDTSBrick::~fxDTSBrick()
 {
@@ -48,6 +71,224 @@ void fxDTSBrick::initPersistFields()
    addField("stackBL_ID",  TypeS32,             Offset(stackBL_ID,  fxDTSBrick));
 
    endGroup("fxDTSBrick Stuff");
+}
+
+
+// -------------------------------------------------------------------------------------
+// SceneObject overrides
+
+bool fxDTSBrick::onAdd()
+{
+   if (Parent::onAdd() == false)
+      return false;
+
+
+   if (mDataBlock != NULL)
+   {
+      mObjBox.min = -mDataBlock->brickDimensions;
+      mObjBox.max = mDataBlock->brickDimensions;
+
+      resetWorldBox();
+      setTransform(mObjToWorld);
+   }
+
+   addToScene();
+
+   fxDTSBrick::brickCount++;
+
+   return true;
+}
+
+void fxDTSBrick::onRemove()
+{
+   removeFromScene();
+   Parent::onRemove();
+   fxDTSBrick::brickCount--;
+}
+
+
+void fxDTSBrick::addToScene()
+{
+   if (isClientObject())
+   {
+      if (!isPlanted /* && (*PTR_smClientTree_00539444 == 0)*/)
+      {
+         //mNetFlags |= 0x2000;
+         gClientContainer.addObject(this);
+      }
+
+      gClientSceneGraph->addObjectToScene(this);
+      return;
+   }
+
+   gServerSceneGraph->addObjectToScene(this);
+   return;
+}
+
+
+// Some boilerplate prepRenderImage code. This is used in the final game as well with stuff appended to it
+
+bool fxDTSBrick::prepRenderImage(SceneState* state, const U32 stateKey, const U32 startZone, const bool modifyBaseZoneState)
+{
+   // Return if last state.
+   if (isLastState(state, stateKey)) return false;
+   // Set Last State.
+   setLastState(state, stateKey);
+
+   // Is Object Rendered?
+   if (state->isObjectRendered(this))
+   {
+      // Yes, so get a SceneRenderImage.
+      SceneRenderImage* image = new SceneRenderImage;
+      // Populate it.
+      image->obj = this;
+      image->isTranslucent = false;
+      image->sortType = SceneRenderImage::Normal;
+
+      // Insert it into the scene images.
+      state->insertRenderImage(image);
+   }
+
+   return false;
+}
+
+
+// If we're holding a tool that draws brick wireframes, this will draw the wireframes.
+// Otherwise, we submit the brick to fxBrickBatcher.
+void fxDTSBrick::renderObject(SceneState* state, SceneRenderImage*)
+{
+   // super duper placeholder for the time being just to demonstrate that 
+   // fxDTSBricks are being created and their values can be used
+   glPushMatrix();
+   dglMultMatrix(&mObjToWorld);
+   glScalef(mObjScale.x, mObjScale.y, mObjScale.z);
+   ShapeBase::wireCube(mObjBox.max, Point3F(0, 0, 0));
+   glPopMatrix();
+}
+
+void fxDTSBrick::setTransform(const MatrixF& mat)
+{
+   Parent::setTransform(mat);
+   setMaskBits(PositionMask);
+}
+
+
+// -------------------------------------------------------------------------------------
+// net stuff
+
+U32 fxDTSBrick::packUpdate(NetConnection* con, U32 mask, BitStream* stream)
+{
+   U32 retMask = Parent::packUpdate(con, mask, stream);
+
+   if (stream->writeFlag((mask & DataBlockMask) && mDataBlock != NULL)) {
+      stream->writeRangedU32(mDataBlock->getId(), DataBlockObjectIdFirst,DataBlockObjectIdLast);
+   }
+
+   // I think blockland uses something similar to writeCompressedPoint when dealing with
+   // fxDTSBrick positions.
+   
+   // There's usage of fxDTSBrick::bitProfileXY and fxDTSBrick::bitProfileZ when the 
+   // position mask is set, but it looks pretty horrifying... won't touch it for now.
+
+   ang.set(mObjToWorld);
+   if (stream->writeFlag(mask & PositionMask))
+   {
+      mObjToWorld.getColumn(3, &worldPos);
+      stream->writeCompressedPoint(worldPos);
+   }
+
+   return(retMask);
+}
+
+void fxDTSBrick::unpackUpdate(NetConnection* con, BitStream* stream)
+{
+   Parent::unpackUpdate(con, stream);
+
+   // DataBlockMask
+   if (stream->readFlag()) {
+      fxDTSBrickData* dptr = 0;
+      SimObjectId id = stream->readRangedU32(DataBlockObjectIdFirst,
+         DataBlockObjectIdLast);
+
+      if (!Sim::findObject(id, dptr) || !setDataBlock(dptr))
+         con->setLastError("Invalid packet fxDTSBrick::unpackUpdate()");
+   }
+
+   // PositionMask
+   if (stream->readFlag())
+   {
+      stream->readCompressedPoint(&worldPos);
+      mObjToWorld.setPosition(worldPos);
+   }
+}
+
+
+// -------------------------------------------------------------------------------------
+// datablock data processing stuff
+
+bool fxDTSBrick::onNewDataBlock(fxDTSBrickData* dptr)
+{
+   mDataBlock = dynamic_cast<fxDTSBrickData*>(dptr);
+   if (mDataBlock != NULL)
+   {
+      topArea    = mDataBlock->topArea;
+      bottomArea = mDataBlock->bottomArea;
+      northArea  = mDataBlock->northArea;
+      eastArea   = mDataBlock->eastArea;
+      southArea  = mDataBlock->southArea;
+      westArea   = mDataBlock->westArea;
+
+      if (topArea == 0)
+         topArea = 9999;
+
+      if (bottomArea == 0)
+         bottomArea = 9999;
+
+      mObjBox.min = -mDataBlock->brickDimensions;
+      mObjBox.max = mDataBlock->brickDimensions;
+      
+      SceneObject::resetWorldBox();
+      setRenderTransform(mObjToWorld);
+      return true;
+   }
+   Con::errorf("ERROR: fxDTSBrick::onNewDataBlock() - invalid datablock");
+   return false;
+}
+
+
+bool fxDTSBrick::setDataBlock(fxDTSBrickData* dptr)
+{
+   if (isGhost() || isProperlyAdded()) {
+      if (mDataBlock != dptr) {
+         // this lets clients pick up on mDataBlock's data
+         setMaskBits(DataBlockMask);
+         return onNewDataBlock(dptr);
+      }
+   }
+   else
+      mDataBlock = dptr;
+   return true;
+}
+
+
+
+// --------------------------------------------
+// fxDTSBrick console methods
+// --------------------------------------------
+ConsoleMethod(fxDTSBrick, getDataBlock, S32, 2, 2, "()Return the datablock this fxBrickDB is using.")
+{
+   if (object->mDataBlock != NULL)
+      return object->mDataBlock->getId();
+}
+
+ConsoleMethod(fxDTSBrick, setDataBlock, bool, 3, 3, "(datablock)")
+{
+   fxDTSBrickData* data;
+   if (Sim::findObject(argv[2], data)) {
+      return object->setDataBlock(data);
+   }
+   Con::errorf("Could not find data block \"%s\"", argv[2]);
+   return false;
 }
 
 // --------------------------------------------

@@ -13,6 +13,7 @@
 #include "platform/event.h"
 #include "platform/gameInterface.h"
 #include "platform/platformInput.h"
+#include "platform/platform.h"
 
 // This is a temporary hack to get tools using the library to
 // link in this module which contains no other references.
@@ -1268,6 +1269,31 @@ ConsoleFunction(filePath, const char *, 2, 2, "filePath(fileName)")
    dStrncpy(ret, argv[1], len);
    ret[len] = 0;
    return ret;
+}
+
+ConsoleFunction(getFileModifiedTime, const char*, 2, 2, "getFileModifiedTime(fileName)")
+{
+   argc;
+
+   char buf[64];
+
+   FileTime localTime, modifyTime;
+   Platform::LocalTime fileTime;
+
+   Con::expandScriptFilename(scriptFilenameBuffer, sizeof(scriptFilenameBuffer), argv[1]);
+
+   Platform::getFileTimes(scriptFilenameBuffer, &localTime, &modifyTime);
+   Platform::fileToLocalTime(modifyTime, &fileTime);
+
+   // torque filetime years are in "current year minus 1900" format...
+   U16 year = fileTime.year;
+   if (100 < year)
+      year -= 100;
+
+   dSprintf(buf, 64, "%d/%d/%02d - %02d:%02d:%02d", fileTime.month, fileTime.monthday, year, fileTime.hour, fileTime.min, fileTime.sec);
+   dStrcpy(Con::getReturnBuffer(dStrlen(buf)), buf);
+
+   return buf;
 }
 
 ConsoleFunctionGroupEnd( FileSystem );

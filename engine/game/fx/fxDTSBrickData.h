@@ -5,6 +5,10 @@
 #include "game/gameBase.h"
 #endif
 
+#ifndef _TSSHAPEINSTANCE_H
+#include "ts/tsShapeInstance.h"
+#endif
+
 class fxDTSBrickData : public GameBaseData
 {
 public:
@@ -19,9 +23,7 @@ public:
 
    bool isWaterBrick;
 
-   S32 brickSizeX;
-   S32 brickSizeY;
-   S32 brickSizeZ;
+   Point3I brickSize;
 
    S32 topArea;
    S32 bottomArea;
@@ -51,10 +53,20 @@ public:
    Point3F brickDimensions;
    Point3F unk_point_1;
 
+   // Collision
+   Resource<TSShape> collisionShape;
+   TSShapeInstance*  collisionShapeInstance;
+
+   S32   collisionDetails[8];
+   Box3F collisionBounds[8]; 
+   S32   LOSDetails[8];    
+
    static void initPersistFields();
 
    void packData(BitStream* stream);
    void unpackData(BitStream* stream);
+
+   bool preload(bool server, char errorBuffer[256]);
 };
 
 DECLARE_CONSOLETYPE(fxDTSBrickData)

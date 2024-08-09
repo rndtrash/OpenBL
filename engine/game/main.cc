@@ -293,6 +293,7 @@ bool initGame(int argc, const char **argv)
    Con::setIntVariable("$TypeMasks::StaticRenderedObjectType", StaticRenderedObjectType);
    Con::setIntVariable("$TypeMasks::DamagableItemObjectType",  DamagableItemObjectType);
    Con::setIntVariable("$TypeMasks::InteriorMapObjectType",    InteriorMapObjectType);
+   Con::setIntVariable("$TypeMasks::FxBrickObjectType",        fxDTSBrickObjectType);
 
    //
 #ifdef TORQUE_GATHER_METRICS
