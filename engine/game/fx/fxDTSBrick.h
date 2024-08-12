@@ -14,25 +14,6 @@ class fxDTSBrick : public SceneObject
 private:
 	typedef SceneObject Parent;
 
-	S8              angleID;
-	S8              colorID;
-	S8              printID;
-	S8              colorFxID;
-	S8              shapeFxID;
-	bool            isBasePlate;
-	bool            isPlanted;
-	S32             client;
-	S32             stackBL_ID;
-
-	Point3F         worldPos;
-			          
-	S32             topArea;
-	S32             bottomArea;
-	S32             northArea;
-	S32             eastArea;
-	S32             southArea;
-	S32             westArea;
-
 public:
 
 	enum fxDTSBrickMasks {
@@ -56,14 +37,31 @@ public:
 	bool setDataBlock(fxDTSBrickData* dptr);
 	bool onNewDataBlock(fxDTSBrickData* dptr);
 
-	AngAxisF ang;
 
 	// fxDTSBrick stuff
 	fxDTSBrick();
 	~fxDTSBrick();
 
-	// usually mDataBlock would be private, but the consolemethod needs to access it
 	fxDTSBrickData* mDataBlock;
+	S8              angleID;
+	S8              colorID;
+	S8              printID;
+	S8              colorFxID;
+	S8              shapeFxID;
+	bool            isBasePlate;
+	bool            isPlanted;
+	S32             client;
+	S32             stackBL_ID;
+
+	Point3F         worldPos;
+			          
+	S32             topArea;
+	S32             bottomArea;
+	S32             northArea;
+	S32             eastArea;
+	S32             southArea;
+	S32             westArea;
+	AngAxisF        ang;
 
 	static void initPersistFields();
 

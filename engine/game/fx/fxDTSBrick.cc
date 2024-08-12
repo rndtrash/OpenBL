@@ -111,9 +111,8 @@ void fxDTSBrick::addToScene()
 {
    if (isClientObject())
    {
-      if (!isPlanted /* && (*PTR_smClientTree_00539444 == 0)*/)
+      if (!isPlanted /* && !octTree::smClientTree*/)
       {
-         //mNetFlags |= 0x2000;
          gClientContainer.addObject(this);
       }
 
@@ -168,7 +167,26 @@ void fxDTSBrick::renderObject(SceneState* state, SceneRenderImage*)
 
 void fxDTSBrick::setTransform(const MatrixF& mat)
 {
-   Parent::setTransform(mat);
+   MatrixF workingMatrix;
+   AngAxisF workingAng;
+
+   workingMatrix = mat;
+   workingAng.set(workingMatrix);
+
+   angleID = 0;
+   if (workingAng.axis.z != 0.0)
+   {
+      if (1.1 <= workingAng.axis.z || workingAng.axis.z <= 0.9)
+      {
+         angleID = 3;
+      }
+      else
+      {
+         angleID = (1.5 <= workingAng.angle / 1.570796) + 1;
+      }
+   }
+
+   Parent::setTransform(workingMatrix);
    setMaskBits(PositionMask);
 }
 
@@ -190,11 +208,22 @@ U32 fxDTSBrick::packUpdate(NetConnection* con, U32 mask, BitStream* stream)
    // There's usage of fxDTSBrick::bitProfileXY and fxDTSBrick::bitProfileZ when the 
    // position mask is set, but it looks pretty horrifying... won't touch it for now.
 
-   ang.set(mObjToWorld);
    if (stream->writeFlag(mask & PositionMask))
    {
       mObjToWorld.getColumn(3, &worldPos);
       stream->writeCompressedPoint(worldPos);
+
+      if (mDataBlock->hasBrickFile == 0)
+      {
+         stream->writeInt(angleID, 2);
+      }
+      else if (mDataBlock->brickSize.x != mDataBlock->brickSize.y)
+      {
+         if (angleID == 0 || angleID == 2)
+            stream->writeFlag(0);
+         else
+            stream->writeFlag(1);
+      }
    }
 
    return(retMask);
@@ -217,8 +246,57 @@ void fxDTSBrick::unpackUpdate(NetConnection* con, BitStream* stream)
    // PositionMask
    if (stream->readFlag())
    {
+      AngAxisF workingAng;
+      MatrixF workingMatrix;
+      workingMatrix = mObjToWorld;
+
+      workingAng.set(workingMatrix);
+
+      // Brick position
       stream->readCompressedPoint(&worldPos);
-      mObjToWorld.setPosition(worldPos);
+      workingMatrix.setPosition(worldPos);
+
+      // Brick rotation
+      if (mDataBlock->hasBrickFile == 0)
+      {
+         angleID = stream->readInt(2);
+      }
+      else if (mDataBlock->brickSize.x == mDataBlock->brickSize.y)
+      {
+         angleID = 0;
+      }
+      else
+      {
+         angleID = stream->readFlag() != 0;
+      }
+
+      workingAng.axis = Point3F(0.0, 0.0, 0.0);
+      workingAng.angle = 0.0;
+
+      if (angleID == 1)
+      {
+         workingAng.axis.z = 1.0;
+         workingAng.angle = 1.5708;
+      }
+      else if (angleID == 0)
+      {
+         workingAng.axis.x = 1.0;
+         workingAng.angle = 0.0;
+      }
+      else if (angleID == 2)
+      {
+         workingAng.axis.z = 1.0;
+         workingAng.angle = 3.14159;
+      }
+      else if (angleID == 3)
+      {
+         workingAng.axis.z = -1.0;
+         workingAng.angle = 1.5708;
+      }
+
+      workingAng.setMatrix(&workingMatrix);
+      workingMatrix.setPosition(worldPos);
+      setTransform(workingMatrix);
    }
 }
 
@@ -248,7 +326,7 @@ bool fxDTSBrick::onNewDataBlock(fxDTSBrickData* dptr)
       mObjBox.max = mDataBlock->brickDimensions;
       
       SceneObject::resetWorldBox();
-      setRenderTransform(mObjToWorld);
+      setTransform(mObjToWorld);
       return true;
    }
    Con::errorf("ERROR: fxDTSBrick::onNewDataBlock() - invalid datablock");
@@ -289,6 +367,11 @@ ConsoleMethod(fxDTSBrick, setDataBlock, bool, 3, 3, "(datablock)")
    }
    Con::errorf("Could not find data block \"%s\"", argv[2]);
    return false;
+}
+
+ConsoleMethod(fxDTSBrick, getAngleID, S32, 2, 2, "()")
+{
+   return object->angleID;
 }
 
 // --------------------------------------------
