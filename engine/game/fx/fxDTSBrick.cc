@@ -173,6 +173,7 @@ void fxDTSBrick::setTransform(const MatrixF& mat)
    workingMatrix = mat;
    workingAng.set(workingMatrix);
 
+   // brick rotation state
    angleID = 0;
    if (workingAng.axis.z != 0.0)
    {
@@ -185,6 +186,39 @@ void fxDTSBrick::setTransform(const MatrixF& mat)
          angleID = (1.5 <= workingAng.angle / 1.570796) + 1;
       }
    }
+
+   // alignment to brick grid
+   
+   if (!mDataBlock)
+      return;
+
+   F32 mX = floorf((workingMatrix[3] + workingMatrix[3]) + 0.25) * 0.5;
+   F32 mY = floorf((workingMatrix[7] + workingMatrix[7]) + 0.25) * 0.5;
+   F32 mZ = floorf((workingMatrix[11] * 5.0) + 0.25) / 5.0;
+
+   if ( angleID == 1 || angleID == 3 )
+   {
+      if ( mDataBlock->brickSize.y % 2 == 1 )
+         mX += 0.25;                       
+                                           
+      if ( mDataBlock->brickSize.x % 2 == 1 )
+         mY += 0.25;
+   }
+   else if ( angleID == 0 || angleID == 2 )
+   {
+      if ( mDataBlock->brickSize.x % 2 == 1 )
+         mX += 0.25;                        
+                                            
+      if ( mDataBlock->brickSize.y % 2 == 1 )
+         mY += 0.25;                        
+   }
+
+   if ( mDataBlock->brickSize.z % 2 == 1 )
+      mZ += 0.1;
+
+   workingMatrix[3] = mX;
+   workingMatrix[7] = mY;
+   workingMatrix[11] = mZ;
 
    Parent::setTransform(workingMatrix);
    setMaskBits(PositionMask);
